@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">UniMiBike</string>
+    <string name="LogoScritta">UniMiBike</string>
+    <string name="accedi">Login</string>
+    <string name="utente_mail">Insert email</string>
+    <string name="utente_password">Insert password</string>
+    <string name="sblocco_bici">Unlock</string>
+    <!--
+        Nomi delle stringhe utilizzate per creare il bottom app navigator
+    -->
+    <string name="noleggio">Rental</string>
+    <string name="rastrelliere">Racks</string>
+    <string name="segnala_guasto">Trouble</string>
+    <string name="profilo">Profile</string>
+    <string name="storico_noleggi">Historical</string>
+    <string name="title_activity_fragment_pagina_noleggio">Map</string>
+    <string name="_logout">Logout</string>
+    <string name="u_bicocca_campus_unimib_it">u.bicocca@campus.unimib.it</string>
+    <string name="ub">UB</string>
+    <string name="admin_modifica_posizione">Modify bike\'s position</string>
+    <string name="admin_aggiungi_posizione">Add new bike</string>
+    <string name="internet_connection_dialog_title">Internet connection</string>
+    <string name="check_internet">
+        Make sure you\'re connected to Wi-Fi connection or data connection
+    </string>
+    <string name="unlock_bike">Unlock bike</string>
+    <string name="insert_bike_id">Insert bike ID</string>
+    <string name="remove_bike">Remove bike</string>
+    <string name="fault_type">Fault type</string>
+    <string name="fault_description">Fault description</string>
+    <string name="send_fault_report">Send fault report</string>
+    <string name="optional">Optional</string>
+    <string name="send_fix_report">Notify fixed bike</string>
+    <string name="select_end_rack">Select end rack</string>
+    <string name="select_initial_rack">Select initial rack</string>
+    <string name="apply_position_changes">Apply position changes</string>
+</resources>

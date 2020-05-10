@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/id_noleggio"
+        android:icon="@drawable/icona_bici"
+        android:title="@string/noleggio"
+    />
+    <item
+        android:id="@+id/id_rastrelliere"
+        android:icon="@drawable/rastrelliera"
+        android:title="@string/rastrelliere"
+        />
+    <item
+        android:id="@+id/id_storico"
+        android:icon="@drawable/noleggio_storico"
+        android:title="@string/noleggio"
+    />
+    <item
+        android:id="@+id/id_guasti"
+        android:icon="@drawable/guasti"
+        android:title="@string/segnala_guasto"
+    />
+    <item
+        android:id="@+id/id_utente"
+        android:icon="@drawable/immagine_profilo"
+        android:title="@string/profilo"
+    />
+</menu>
