@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UniMiBike</string>
+    <string name="LogoScritta">UniMiBike</string>
+    <string name="utente_mail">Inserisci email</string>
+    <string name="utente_password">Inserisci password</string>
+    <string name="sblocco_bici">Sblocca</string>
+    <string name="noleggio">Noleggio</string>
+    <string name="rastrelliere">Rastrelliere</string>
+    <string name="segnala_guasto">Guasti</string>
+    <string name="profilo">Profilo</string>
+    <string name="storico_noleggi">Storico</string>
+    <string name="title_activity_fragment_pagina_noleggio">Mappa</string>
+    <string name="_logout">Logout</string>
+    <string name="u_bicocca_campus_unimib_it">u.bicocca@campus.unimib.it</string>
+    <string name="ub">UB</string>
+    <string name="admin_modifica_posizione">Modifica posizione bicicletta</string>
+    <string name="admin_aggiungi_posizione">Aggiungi nuova bicicletta</string>
+    <string name="accedi">Accedi</string>
+    <string name="check_internet">Assicurati di essere connesso ad una rete Wi-Fi o la tua connessione dati sia attiva</string>
+    <string name="internet_connection_dialog_title">Connessione internet</string>
+    <string name="unlock_bike">Sblocca bici</string>
+    <string name="insert_bike_id">Inserire ID bicicletta</string>
+    <string name="remove_bike">Rimuovi bicicletta</string>
+    <string name="fault_type">Tipo guasto</string>
+    <string name="fault_description">Descrizione guasto</string>
+    <string name="send_fault_report">Invia segnalazione guasto</string>
+    <string name="optional">Opzionale</string>
+    <string name="send_fix_report">Notifica avvenuta riparazione</string>
+    <string name="select_end_rack">Seleziona rastrelliera finale</string>
+    <string name="select_initial_rack">Seleziona rastrelliera iniziale</string>
+    <string name="apply_position_changes">Applica modifica posizione</string>
+    <string name="flat_tire">Pneumatico bucato</string>
+    <string name="broken_pedal">Pedale rotto</string>
+    <string name="broken_chain">Catena rotta</string>
+    <string name="saddle_absent">Sella assente</string>
+    <string name="absent_tire">Pneumatico assente</string>
+    <string name="malfunctioning_breaks">Freni malfunzionanti</string>
+    <string name="altro_guasto">Altro</string>
+    <string name="report_sent">Segnalazione avvenuta</string>
+    <string name="report_sent_body">La segnalazione è andata a buon fine. Un nostro tecnico risolverà il problema, ti invitiamo ad usare un\'altra bicicletta.</string>
+</resources>
