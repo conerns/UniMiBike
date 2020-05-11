@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#a71e3b</color>
-    <color name="colorAccent">#a71e3b</color>
+<resources>
 
-    <color name="unimib">#a71e3b</color>
-    <color name="coloreBianco">#FFFFFF</color>
-    <color name="grigioChiaro">#808080</color>
+    <!-- primary -->
+    <color name="purple_link">#6200EE</color>
+    <color name="purple_link_variant">#6200E2</color>
+    <color name="red_unimib">#a71e3b</color>
+    <color name="red_unimib_variant">#a71e3b</color>
 
+    <!--secondary -->
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_grey">#808080</color>
+    <color name="color_black">#000000</color>
 </resources>

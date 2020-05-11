@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">UniMiBike</string>
     <string name="LogoScritta">UniMiBike</string>
-    <string name="utente_mail">Inserisci email</string>
-    <string name="utente_password">Inserisci password</string>
+    <string name="utente_mail">Inserire email</string>
+    <string name="utente_password">Inserire password</string>
     <string name="sblocco_bici">Sblocca</string>
     <string name="noleggio">Noleggio</string>
     <string name="rastrelliere">Rastrelliere</string>
@@ -39,4 +39,7 @@
     <string name="altro_guasto">Altro</string>
     <string name="report_sent">Segnalazione avvenuta</string>
     <string name="report_sent_body">La segnalazione è andata a buon fine. Un nostro tecnico risolverà il problema, ti invitiamo ad usare un\'altra bicicletta.</string>
+    <string name="apply_bike_added">Applica aggiunta bici</string>
+    <string name="select_bike_position">Seleziona posizione bici</string>
+    <string name="insert_unlock_code">Inserire codice sblocco</string>
 </resources>

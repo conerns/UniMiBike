@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     if (controlla_email(email) & controlla_pass(password))
                         effettua_login(email, password);
                 }else {
-                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(MainActivity.this);
+                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(MainActivity.this,R.style.Theme_MyTheme_Dialog);
                     mMaterialDialog
                         .setTitle(R.string.internet_connection_dialog_title)
                         .setMessage(R.string.check_internet)

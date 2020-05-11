@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/coloreBianco">
+    android:layout_height="match_parent">
 
     <TextView
+        style="@style/Widget.MyTheme.TextView"
         android:id="@+id/nome_utente_pagina"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,6 @@
         android:background="@drawable/user_circe"
         android:gravity="center"
         android:text="@string/ub"
-        android:textColor="@color/coloreBianco"
         android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/nome_utente_pagina">
 
         <TextView
+            style="@style/Widget.MyTheme.TextViewButton"
             android:id="@+id/credenziali"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,13 +50,12 @@
             android:layout_marginRight="8dp"
             android:gravity="start|center_horizontal|center_vertical"
             android:text="@string/u_bicocca_campus_unimib_it"
-            android:textColor="@android:color/black"
             android:textSize="24sp" />
 
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.Icon"
+        style="@style/Widget.MyTheme.MaterialButtonAdmin"
         android:id="@+id/admin_button_bici_mod"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,19 +64,17 @@
         android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:backgroundTint="@android:color/white"
         android:gravity="left|center_vertical"
         android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"
         android:drawableRight="@drawable/baseline_keyboard_arrow_right_24"
-        android:drawableTint="@color/grigioChiaro"
-        android:textColor="@android:color/black"
         android:text="@string/admin_modifica_posizione"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mail_utente"
         android:visibility="gone"/>
+
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.Icon"
+        style="@style/Widget.MyTheme.MaterialButtonAdmin"
         android:id="@+id/admin_button_bici_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -89,17 +86,14 @@
         android:gravity="left|center_vertical"
         android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"
         android:drawableRight="@drawable/baseline_keyboard_arrow_right_24"
-        android:drawableTint="@color/grigioChiaro"
         android:text="@string/admin_aggiungi_posizione"
-        android:textColor="@android:color/black"
-        app:backgroundTint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admin_button_bici_mod"
         android:visibility="gone"/>
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.Icon"
+        style="@style/Widget.MyTheme.MaterialButtonAdmin"
         android:id="@+id/admin_button_bici_remove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -112,21 +106,17 @@
         android:drawableRight="@drawable/baseline_keyboard_arrow_right_24"
         android:gravity="left|center_vertical"
         android:text="@string/remove_bike"
-        android:textColor="@android:color/black"
-        app:backgroundTint="@android:color/white"
-        app:drawableTint="@color/grigioChiaro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admin_button_bici_add"
         android:visibility="gone"/>
     <Button
+        style="@style/Widget.MyTheme.Button"
         android:id="@+id/logout_utente"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
         android:text="@string/_logout"
-        android:textColor="@android:color/white"
-        app:backgroundTint="@color/unimib"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"

@@ -8,7 +8,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/bike_code_fault"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MyTheme.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -17,17 +17,13 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:hint="@string/insert_bike_id"
-        app:boxStrokeColor="@color/grigioChiaro"
         app:helperTextEnabled="false"
-        app:hintTextColor="@color/unimib"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
         app:endIconMode="custom"
         app:endIconDrawable="@drawable/baseline_center_focus_weak_24"
         app:endIconCheckable="true"
-        app:endIconTint="@color/grigioChiaro"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -40,7 +36,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/type_fault_report"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        style="@style/Widget.MyTheme.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -50,8 +46,6 @@
         android:layout_marginRight="16dp"
         android:hint="@string/fault_type"
         app:boxStrokeColor="@null"
-        app:endIconTint="@color/grigioChiaro"
-        app:hintTextColor="@color/unimib"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bike_code_fault">
@@ -65,7 +59,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/bike_falut_desciption"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MyTheme.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -74,9 +68,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:hint="@string/fault_description"
-        app:boxStrokeColor="@color/grigioChiaro"
         app:helperText="@string/optional"
-        app:hintTextColor="@color/unimib"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,6 +86,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        style="@style/Widget.MyTheme.Button"
         android:id="@+id/send_fault_report"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,8 +96,6 @@
         android:layout_marginEnd="162dp"
         android:layout_marginRight="162dp"
         android:text="@string/send_fault_report"
-        android:textColor="@android:color/white"
-        app:backgroundTint="@color/unimib"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bike_falut_desciption" />
@@ -126,7 +117,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/bike_code_fixed"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MyTheme.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -135,8 +126,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:hint="@string/insert_bike_id"
-        app:boxStrokeColor="@color/grigioChiaro"
-        app:hintTextColor="@color/unimib"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2"
@@ -144,7 +133,6 @@
         app:endIconMode="custom"
         app:endIconDrawable="@drawable/baseline_center_focus_weak_24"
         app:endIconCheckable="true"
-        app:endIconTint="@color/grigioChiaro"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -156,6 +144,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        style="@style/Widget.MyTheme.Button"
         android:id="@+id/send_fixed_report"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -165,8 +154,6 @@
         android:layout_marginEnd="162dp"
         android:layout_marginRight="162dp"
         android:text="@string/send_fix_report"
-        android:textColor="@android:color/white"
-        app:backgroundTint="@color/unimib"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bike_code_fixed"

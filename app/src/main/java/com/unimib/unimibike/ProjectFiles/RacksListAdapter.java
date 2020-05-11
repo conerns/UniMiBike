@@ -77,9 +77,9 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
 
         holder.getRackAvailableBikes().setText(String.valueOf(mRacks.get(position).getAvailableBikes()));
         if (mRacks.get(position).getAvailableBikes() > 0) {
-            holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.colorAccent));
+            holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.color_black));
         } else {
-            holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.colorPrimary));
+            holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.color_black));
         }
 
         /*holder.getGoToButton().setOnClickListener(new View.OnClickListener() {

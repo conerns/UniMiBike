@@ -60,19 +60,20 @@ public class FrameUtente extends Fragment {
             mModBike.setVisibility(View.VISIBLE);
             mRemBike = view.findViewById(R.id.admin_button_bici_remove);
             mRemBike.setVisibility(View.VISIBLE);
+            mModBike.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    apri_modifica_posizione();
+                }
+            });
+            mAddNewBike.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    apri_aggiungi_biciletta();
+                }
+            });
         }
-        mModBike.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                apri_modifica_posizione();
-            }
-        });
-        mAddNewBike.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                apri_aggiungi_biciletta();
-            }
-        });
+
     }
 
     public void apr_activity(){

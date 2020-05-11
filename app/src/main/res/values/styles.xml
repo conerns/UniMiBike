@@ -1,10 +1,67 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <!-- Components -->
+
+    <!-- Bottom Navigation View -->
+    <style name="Widget.MyTheme.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="itemBackground">?attr/colorPrimary</item>
+        <item name="itemIconTint">?attr/colorOnPrimary</item>
+        <item name="itemTextColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="Widget.MyTheme.BottomNavigationView.Dark" parent="Widget.MaterialComponents.BottomNavigationView">
+
+    </style>
+
+    <style name="Widget.MyTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.MyTheme.MaterialButtonAdmin" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+    </style>
+
+    <style name="Widget.MyTheme.Button" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.MyTheme.Button.OutlinedButton" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+    </style>
+    <!-- Text Button -->
+    <style name="Widget.MyTheme.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
+    <!-- Text Input Layout Outlined -->
+    <style name="Widget.MyTheme.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">?attr/colorOnSurface</item>
+        <item name="endIconTint">?attr/colorOnSurface</item>
+        <item name="hintTextColor">?attr/colorPrimary</item>
+        <item name="passwordToggleTint">?attr/colorOnSurface</item>
+    </style>
+    <style name="Widget.MyTheme.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">?attr/colorOnSurface</item>
+        <item name="endIconTint">?attr/colorOnSurface</item>
+        <item name="hintTextColor">?attr/colorPrimary</item>
+    </style>
+
+    <!-- Date Picker -->
+    <style name="Theme.MyTheme.Dialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorPrimary">?attr/colorOnSurface</item>
+        <item name="colorPrimaryDark">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="Widget.MyTheme.TextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">?attr/colorSurface</item>
+    </style>
+
+    <style name="Widget.MyTheme.TextViewButton" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 </resources>
