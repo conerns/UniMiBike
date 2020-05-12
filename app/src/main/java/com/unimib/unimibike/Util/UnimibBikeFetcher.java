@@ -111,7 +111,29 @@ public class UnimibBikeFetcher {
         });
     }
 
+    /**
+     * Calls GET /racks/{id} endpoint
+     *
+     * @param context                      context where the method is called
+     * @param rackID                       id of the requested rack
+     * @param serverResponseParserCallback interface used to get the response
+     */
+    public static void getRack(final Context context, final int rackID,
+                               final ServerResponseParserCallback<Rack> serverResponseParserCallback) {
+        String url = ServerRoutes.RACKS + "/" + rackID;
+        Log.d(TAG, url);
+        ServerRequest.getInstance(context).getBasicRequest(url, new NetworkCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                serverResponseParserCallback.onSuccess(getRackFromJSONObject(response));
+            }
 
+            @Override
+            public void onError(int statusCode, JSONObject cache) {
+                serverResponseParserCallback.onError(getErrorTitle(statusCode), getErrorMessage(statusCode));
+            }
+        });
+    }
 
     /**
      * Calls POST /reports endpoint
@@ -187,6 +209,20 @@ public class UnimibBikeFetcher {
                 e.printStackTrace();
             }
             return user;
+        }
+        return null;
+    }
+
+    private static Rack getRackFromJSONObject(JSONObject response) {
+        if (response != null) {
+            Rack rack = new Rack();
+            try {
+                JSONObject mJson = response.getJSONObject("rack");
+                rack = createRackFromJSONObject(mJson);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return rack;
         }
         return null;
     }

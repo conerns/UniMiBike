@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/go_to_rack_textview_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:textAllCaps="true"
+        android:textColor="@color/color_black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rack_position_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:tint="@color/color_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/go_to_rack_textview_title"
+        app:srcCompat="@drawable/baseline_room_24" />
+
+    <ImageView
+        android:id="@+id/rack_bike_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:tint="@color/color_grey"
+        app:layout_constraintStart_toStartOf="@+id/rack_position_icon"
+        app:layout_constraintTop_toBottomOf="@+id/rack_position_icon"
+        app:srcCompat="@drawable/icona_bici" />
+
+    <ImageView
+        android:id="@+id/rack_distance_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:tint="@color/color_grey"
+        app:layout_constraintStart_toStartOf="@+id/rack_bike_icon"
+        app:layout_constraintTop_toBottomOf="@+id/rack_bike_icon"
+        app:srcCompat="@drawable/baseline_directions_24" />
+
+    <TextView
+        android:id="@+id/rack_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintStart_toEndOf="@+id/rack_position_icon"
+        app:layout_constraintTop_toTopOf="@+id/rack_position_icon" />
+
+    <TextView
+        android:id="@+id/rack_bike_avaible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintStart_toEndOf="@+id/rack_bike_icon"
+        app:layout_constraintTop_toTopOf="@+id/rack_bike_icon" />
+
+    <TextView
+        android:id="@+id/rack_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintStart_toEndOf="@+id/rack_distance_icon"
+        app:layout_constraintTop_toTopOf="@+id/rack_distance_icon" />
+
+    <Button
+        android:id="@+id/button_go_to_rack"
+        style="@style/Widget.MyTheme.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/go_to"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rack_distance" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

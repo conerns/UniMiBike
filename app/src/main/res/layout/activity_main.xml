@@ -100,4 +100,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/icona_bici" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/main_activity_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000"
+        android:elevation="8dp"
+        android:visibility="gone"
+        android:gravity="center|center_horizontal|center_vertical">
+
+        <ProgressBar
+            android:id="@+id/pBar"
+            android:theme="@style/Theme.MyApp.UnimibAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

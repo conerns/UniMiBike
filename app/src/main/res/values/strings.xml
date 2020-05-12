@@ -46,4 +46,7 @@
     <string name="apply_bike_added">Apply bike added</string>
     <string name="select_bike_position">select bike position</string>
     <string name="insert_unlock_code">insert unlock code</string>
+
+    <string name="go_to">Go to</string>
+    <string name="avaible_bikes">avaible bikes</string>
 </resources>

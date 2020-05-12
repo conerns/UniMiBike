@@ -40,8 +40,14 @@ public class MainActivity extends AppCompatActivity {
                 if(CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))){
                     email = activity_layout.testoEmail.getText().toString();
                     password = activity_layout.testoPassword.getText().toString();
-                    if (controlla_email(email) & controlla_pass(password))
+                    if (controlla_email(email) & controlla_pass(password)) {
+                        activity_layout.mainActivityRelativeLayout.setVisibility(View.VISIBLE);
+                        activity_layout.pBar.setVisibility(View.VISIBLE);
+                        activity_layout.testoEmail.setFocusable(false);
+                        activity_layout.testoPassword.setFocusable(false);
+                        activity_layout.accediUtente.setClickable(false);
                         effettua_login(email, password);
+                    }
                 }else {
                     MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(MainActivity.this,R.style.Theme_MyTheme_Dialog);
                     mMaterialDialog
@@ -104,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(String errorTitle, String errorMessage) {
+                activity_layout.mainActivityRelativeLayout.setVisibility(View.GONE);
+                activity_layout.pBar.setVisibility(View.GONE);
+                activity_layout.testoEmail.setFocusableInTouchMode(true);
+                activity_layout.testoPassword.setFocusableInTouchMode(true);
+                activity_layout.accediUtente.setClickable(true);
                 activity_layout.userEmail.setError("email potrebbe essere errata");
                 activity_layout.userPassword.setError("password potrebbe essere errata");
                 activity_layout.accediUtente.setEnabled(true);
