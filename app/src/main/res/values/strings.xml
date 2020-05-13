@@ -49,4 +49,9 @@
 
     <string name="go_to">Go to</string>
     <string name="avaible_bikes">avaible bikes</string>
+    <string name="unlock_id_header">Unlock code</string>
+    <string name="unlock_first_half_message">"The unock code for this bike is: "</string>
+    <string name="unlock_second_half_message">, use it to unlock the bike and enjoy your ride.</string>
+    <string name="unlock_bike_not_avaible">This bike is not avaible</string>
+    <string name="not_avaible_message">We are sorry to announce that this bike is not avaible. Use one of our another bikes instead.</string>
 </resources>

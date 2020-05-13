@@ -11,4 +11,12 @@
     <color name="color_white">#FFFFFF</color>
     <color name="color_grey">#808080</color>
     <color name="color_black">#000000</color>
+
+    <!-- dark mode -->
+    <color name="errorOnBlack">#B388ff</color>
+    <color name="backgroundDark">#212121</color>
+    <color name="strokesDark">#6200ee</color>
+
+    <color name="unimibDark">#665289</color>
+    <color name="unimibDarkVariant">#7f6d9d</color>
 </resources>

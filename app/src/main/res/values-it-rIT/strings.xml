@@ -44,4 +44,7 @@
     <string name="insert_unlock_code">Inserire codice sblocco</string>
     <string name="go_to">Naviga</string>
     <string name="avaible_bikes">biciclette disponibili</string>
+    <string name="unlock_id_header">Codice di sblocco</string>
+    <string name="unlock_first_half_message">"Il codice di sblocco per la bicicletta desiderata è: "</string>
+    <string name="unlock_second_half_message">, usa questo codice per eseguire la procedura di sblocco e goditi il viaggio.</string>
 </resources>

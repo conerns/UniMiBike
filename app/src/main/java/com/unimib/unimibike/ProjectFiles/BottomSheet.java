@@ -2,7 +2,6 @@ package com.unimib.unimibike.ProjectFiles;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,11 +23,13 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
+import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.QReader;
+import com.unimib.unimibike.Util.MyAlertDialogFragment;
+import com.unimib.unimibike.Util.ServerResponseParserCallback;
+import com.unimib.unimibike.Util.UnimibBikeFetcher;
 
 import java.io.IOException;
 
@@ -51,8 +51,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 if(editComment.getText().length()!=0){
-                    //fai cose
-
+                    Log.d("tag", editComment.getText().toString());
+                    functionGetBike(Integer.parseInt(editComment.getText().toString()));
                 }
             }
         });
@@ -77,6 +77,33 @@ public class BottomSheet extends BottomSheetDialogFragment {
         });
 
         return w;
+    }
+
+    private void functionGetBike(int idBike) {
+        UnimibBikeFetcher.getBike(getActivity().getApplicationContext(), idBike, new ServerResponseParserCallback<Bike>() {
+            @Override
+            public void onSuccess(Bike response) {
+                DialogFragment newFragment;
+                Log.d("ehenr", response.getUnlockCode() + "");
+                if(response.getBikeState().getDescription().equals("Disponibile")) {
+                    newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),
+                            getString(R.string.unlock_first_half_message) + response.getUnlockCode() +
+                                    getString(R.string.unlock_second_half_message));
+                    newFragment.show(getFragmentManager(), "dialog");
+                }
+                else {
+                    newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
+                            getString(R.string.not_avaible_message));
+                    newFragment.show(getFragmentManager(), "dialog");
+                }
+                dismiss();
+            }
+
+            @Override
+            public void onError(String errorTitle, String errorMessage) {
+
+            }
+        });
     }
 
     private void method_called() {
