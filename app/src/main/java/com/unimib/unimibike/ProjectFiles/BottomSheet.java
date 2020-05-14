@@ -1,14 +1,12 @@
 package com.unimib.unimibike.ProjectFiles;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +14,18 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
+import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
-
-import java.io.IOException;
 
 public class BottomSheet extends BottomSheetDialogFragment {
     private SurfaceView         surfaceView;
@@ -64,10 +58,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (editComment.getRight() - editComment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        editComment.setVisibility(View.INVISIBLE);
-                        mButton.setVisibility(View.INVISIBLE);
-                        surfaceView = view.findViewById(R.id.surface_area);
-                        surfaceView.setVisibility(View.VISIBLE);
+                        //editComment.setVisibility(View.INVISIBLE);
+                        //mButton.setVisibility(View.INVISIBLE);
+                        //surfaceView = view.findViewById(R.id.surface_area);
+                        //surfaceView.setVisibility(View.VISIBLE);
                         method_called();
                         return true;
                     }
@@ -107,60 +101,30 @@ public class BottomSheet extends BottomSheetDialogFragment {
     }
 
     private void method_called() {
-        barcodeDetector = new BarcodeDetector.Builder(getActivity().getApplicationContext())
-                .setBarcodeFormats(Barcode.QR_CODE).build();
+        Intent intent = new Intent(getActivity().getApplicationContext(), QrReaderActivity.class);
+        //getActivity().overridePendingTransition(0, 0);
+        startActivityForResult(intent, 0);
+        //getActivity().overridePendingTransition(0, 0);
+    }
 
-        cameraSource = new CameraSource.Builder(getActivity().getApplicationContext(), barcodeDetector)
-                .setRequestedPreviewSize(640, 480).build();
-
-        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    return;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (0) : {
+                if (resultCode == Activity.RESULT_OK && !(data.getBooleanExtra("flag", true))) {
+                    // TODO Extract the data returned from the child Activity.
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    editComment.setText(String.valueOf(returnValue));
                 }
-                try {
-                    cameraSource.start(holder);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                else if(resultCode == Activity.RESULT_OK &&
+                        data.getBooleanExtra("flag", true)){
+                    Log.d("ONACTIVITYRESULTQR", "qui ci arriva");
+                    method_called();
                 }
+
+                break;
             }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                cameraSource.stop();
-            }
-        });
-
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-            @Override
-            public void release() {
-
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                final SparseArray<Barcode> qrCode = detections.getDetectedItems();
-                if (qrCode.size() != 0) {
-                    editComment.post(new Runnable() {
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void run() {
-                            editComment.setText(String.valueOf((qrCode.valueAt(0).displayValue)));
-                            cameraSource.stop();
-                            editComment.setVisibility(View.VISIBLE);
-                            surfaceView.setVisibility(View.GONE);
-                            mButton.setVisibility(View.VISIBLE);
-                        }
-                    });
-                }
-            }
-        });
-
+        }
     }
 }
