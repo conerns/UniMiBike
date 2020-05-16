@@ -29,12 +29,10 @@ public class QrReaderActivity extends AppCompatActivity {
     private TextView textView;
     private CameraSource cameraSource;
     private BarcodeDetector barcodeDetector;
-    private Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_reader);
-        activity = this;
         surfaceView = (SurfaceView) findViewById(R.id.surface_area2);
         surfaceView.setVisibility(View.VISIBLE);
         textView = (TextView) findViewById(R.id.textViewForCamera);
@@ -42,39 +40,10 @@ public class QrReaderActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
-        Log.d("BOTTOMSHEETIF", "on request permission result");
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("flag", true);
-                    setResult(Activity.RESULT_OK, resultIntent);
-                    finish();
-                } else {
-                    Log.d("ELSE", "qui ci arriva");
-                    //overridePendingTransition(0, 0);
-                    finish();
-                    //overridePendingTransition(0, 0);
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
-    }
-
-
     public void camerScan(){
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                    ActivityCompat.requestPermissions(activity, new String[] {Manifest.permission.CAMERA}, 1);
                 try {
                     cameraSource.start(holder);
                 } catch (IOException e) {
@@ -118,7 +87,6 @@ public class QrReaderActivity extends AppCompatActivity {
                             Intent resultIntent = new Intent();
                             Bundle returnData = new Bundle();
                             returnData.putInt("qr_code_detection", Integer.parseInt(qrCode.valueAt(0).displayValue));
-                            resultIntent.putExtra("flag", false);
                             resultIntent.putExtra("data_detect", returnData);
                             setResult(Activity.RESULT_OK, resultIntent);
                             finish();

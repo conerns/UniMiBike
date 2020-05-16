@@ -1,8 +1,10 @@
 package com.unimib.unimibike.ProjectFiles;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.vision.CameraSource;
@@ -58,10 +61,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (editComment.getRight() - editComment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        //editComment.setVisibility(View.INVISIBLE);
-                        //mButton.setVisibility(View.INVISIBLE);
-                        //surfaceView = view.findViewById(R.id.surface_area);
-                        //surfaceView.setVisibility(View.VISIBLE);
                         method_called();
                         return true;
                     }
@@ -101,10 +100,14 @@ public class BottomSheet extends BottomSheetDialogFragment {
     }
 
     private void method_called() {
-        Intent intent = new Intent(getActivity().getApplicationContext(), QrReaderActivity.class);
-        //getActivity().overridePendingTransition(0, 0);
-        startActivityForResult(intent, 0);
-        //getActivity().overridePendingTransition(0, 0);
+        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(getActivity().getApplicationContext(), QrReaderActivity.class);
+            startActivityForResult(intent, 0);
+        }else{
+            DialogFragment newFragment;
+            newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),"Non hai dato i permessi per utilizzare la fotocamera");
+            newFragment.show(getFragmentManager(), "dialog");
+        }
     }
 
     @Override
@@ -112,17 +115,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode) {
             case (0) : {
-                if (resultCode == Activity.RESULT_OK && !(data.getBooleanExtra("flag", true))) {
+                if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
                     int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
                     editComment.setText(String.valueOf(returnValue));
                 }
-                else if(resultCode == Activity.RESULT_OK &&
-                        data.getBooleanExtra("flag", true)){
-                    Log.d("ONACTIVITYRESULTQR", "qui ci arriva");
-                    method_called();
-                }
-
                 break;
             }
         }
