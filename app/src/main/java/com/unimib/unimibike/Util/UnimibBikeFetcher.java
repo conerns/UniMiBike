@@ -10,6 +10,7 @@ import org.json.JSONObject;
 //da ricordare di dover fare la import anche dei restanti
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.BikeState;
+import com.unimib.unimibike.Model.Rental;
 import com.unimib.unimibike.Model.Report;
 import com.unimib.unimibike.Model.User;
 import com.unimib.unimibike.Model.Building;
@@ -138,6 +139,31 @@ public class UnimibBikeFetcher {
     }
 
     /**
+     * Calls GET /bikes/{id} endpoint
+     *
+     * @param context                      context where the method is called
+     * @param bikeID                       id of the requested bike
+     * @param serverResponseParserCallback interface used to get the response
+     */
+    public static void getBike(final Context context, final int bikeID,
+                               final ServerResponseParserCallback<Bike> serverResponseParserCallback) {
+        String url = ServerRoutes.BIKES + "/" + bikeID;
+        Log.d(TAG, url);
+        ServerRequest.getInstance(context).getBasicRequest(url, new NetworkCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                serverResponseParserCallback.onSuccess(getBikeFromJSONObject(response));
+            }
+
+            @Override
+            public void onError(int statusCode, JSONObject cache) {
+                serverResponseParserCallback.onError(getErrorTitle(statusCode), getErrorMessage(statusCode));
+            }
+        });
+    }
+
+
+    /**
      * Calls POST /reports endpoint
      *
      * @param context                      context where the method is called
@@ -151,6 +177,69 @@ public class UnimibBikeFetcher {
             @Override
             public void onSuccess(JSONObject response) {
                 serverResponseParserCallback.onSuccess(getReportFromJSONObject(response));
+            }
+
+            @Override
+            public void onError(int statusCode, JSONObject cache) {
+                serverResponseParserCallback.onError(getErrorTitle(statusCode), getErrorMessage(statusCode));
+            }
+        });
+    }
+
+    /**
+     * Calls POST /rentals endpoint
+     *
+     * @param context                      context where the method is called
+     * @param bikeID                       id of the bike to rent
+     * @param serverResponseParserCallback interface used to get the response
+     */
+    public static void postRental(final Context context, int bikeID, int userID,
+                                  final ServerResponseParserCallback<Rental> serverResponseParserCallback) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("user_id", userID);
+            jsonObject.put("bike_id", bikeID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, jsonObject.toString());
+        ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.RENTALS, jsonObject, new NetworkCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                serverResponseParserCallback.onSuccess(getRentalFromJSONObject(response));
+            }
+
+            @Override
+            public void onError(int statusCode, JSONObject cache) {
+                serverResponseParserCallback.onError(getErrorTitle(statusCode), getErrorMessage(statusCode));
+            }
+        });
+    }
+
+
+
+    /**
+     * Calls PUT /rentals/{id} endpoint
+     *
+     * @param context                      context where the method is called
+     * @param rentalID                     id of the rental to be ended
+     * @param rackID                       id of the rack where end the rental
+     * @param serverResponseParserCallback interface used to get the response
+     */
+    public static void putRental(final Context context, int rentalID, int rackID,
+                                 final ServerResponseParserCallback<Rental> serverResponseParserCallback) {
+        String url = ServerRoutes.RENTALS + "/" + rentalID;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("rack_id", rackID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, jsonObject.toString());
+        ServerRequest.getInstance(context).putBasicRequest(url, jsonObject, new NetworkCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                serverResponseParserCallback.onSuccess(getRentalFromJSONObject(response));
             }
 
             @Override
@@ -186,18 +275,6 @@ public class UnimibBikeFetcher {
 
 
 
-
-    private static JSONObject createJSONLogin(String email,String password){
-        JSONObject mJson = new JSONObject();
-        try{
-            mJson.put("email", email);
-            mJson.put("password", password);
-            return mJson;
-        }catch (JSONException e){
-            e.getCause();
-        }
-        return null;
-    }
 
     private static User getUserFromJSONObject(JSONObject response) {
         if (response.length() != 0) {
@@ -245,6 +322,72 @@ public class UnimibBikeFetcher {
         return null;
     }
 
+    private static Rental getRentalFromJSONObject(JSONObject response) {
+        if (response != null) {
+            Rental rental = new Rental();
+            try {
+                JSONObject mJson = response.getJSONObject("rental");
+                rental = createRentalFromJSONObject(mJson);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return rental;
+        }
+        return null;
+    }
+
+
+    private static Report getReportFromJSONObject(JSONObject response) {
+        if (response != null) {
+            Report report = new Report();
+            try {
+                JSONObject mJson = response.getJSONObject("report");
+                report.setBikeId(mJson.getInt("bike_id"));
+                report.setUserId(mJson.getInt("user_id"));
+                report.setType(mJson.getInt("type"));
+                report.setDescription(mJson.getString("description"));
+                report.setCreatedOn(mJson.getString("created_on"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return report;
+        }
+        return null;
+    }
+
+    private static Bike getBikeFromJSONObject(JSONObject response) {
+        if (response != null) {
+            Bike bike = new Bike();
+            try {
+                JSONObject mJson = response.getJSONObject("bike");
+                bike = createBikeFromJSONObject(mJson);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return bike;
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+    private static JSONObject createJSONLogin(String email,String password){
+        JSONObject mJson = new JSONObject();
+        try{
+            mJson.put("email", email);
+            mJson.put("password", password);
+            return mJson;
+        }catch (JSONException e){
+            e.getCause();
+        }
+        return null;
+    }
+
+
     private static Rack createRackFromJSONObject(JSONObject mJson) {
         if (mJson != null) {
             Rack rack = new Rack();
@@ -288,6 +431,90 @@ public class UnimibBikeFetcher {
         return null;
     }
 
+
+    private static JSONObject createJSONObjectFromReport(Report report) {
+        if (report != null) {
+            JSONObject mJson = new JSONObject();
+            try {
+                mJson.put("bike_id", report.getBikeId());
+                mJson.put("description", report.getDescription());
+                mJson.put("user_id", report.getUserId());
+                mJson.put("type", report.getType());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return mJson;
+        }
+        return null;
+    }
+
+
+
+    private static Rental createRentalFromJSONObject(JSONObject mJson) {
+        if (mJson != null) {
+            Rental rental = new Rental();
+            try {
+                rental.setId(mJson.getInt("id"));
+                rental.setBike(createBikeFromJSONObject(mJson.getJSONObject("bike")));
+                rental.setStartedOn(mJson.getString("started_on"));
+                rental.setStartRack(createRackFromJSONObject(mJson.getJSONObject("start_rack")));
+                if (mJson.has("completed_on")) {
+                    rental.setCompletedOn(mJson.getString("completed_on"));
+                }
+                if (mJson.has("end_rack")) {
+                    rental.setEndRack(createRackFromJSONObject(mJson.getJSONObject("end_rack")));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return rental;
+        }
+        return null;
+    }
+
+
+
+    private static Bike createBikeFromJSONObject(JSONObject mJson) {
+        if (mJson != null) {
+            Bike bike = new Bike();
+            try {
+                bike.setId(mJson.getInt("id"));
+                bike.setUnlockCode(mJson.getInt("unlock_code"));
+                if (mJson.has("bike_state")) {
+                    bike.setBikeState(createBikeStateFromJSONObject(mJson.getJSONObject("bike_state")));
+                }
+                if (mJson.has("rack")) {
+                    bike.setRack(createRackFromJSONObject(mJson.getJSONObject("rack")));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return bike;
+        }
+        return null;
+    }
+
+    private static BikeState createBikeStateFromJSONObject(JSONObject mJson) {
+        if (mJson != null) {
+            BikeState bikeState = new BikeState();
+            try {
+                //bikeState.setId(mJson.getInt("id"));
+                bikeState.setDescription(mJson.getString("description"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return bikeState;
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
     private static String getErrorTitle(int statusCode) {
         String errorTitle = "Errore";
         switch (statusCode) {
@@ -318,110 +545,5 @@ public class UnimibBikeFetcher {
         }
         return errorMessage;
     }
-
-    private static JSONObject createJSONObjectFromReport(Report report) {
-        if (report != null) {
-            JSONObject mJson = new JSONObject();
-            try {
-                mJson.put("bike_id", report.getBikeId());
-                mJson.put("description", report.getDescription());
-                mJson.put("user_id", report.getUserId());
-                mJson.put("type", report.getType());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return mJson;
-        }
-        return null;
-    }
-
-    private static Report getReportFromJSONObject(JSONObject response) {
-        if (response != null) {
-            Report report = new Report();
-            try {
-                JSONObject mJson = response.getJSONObject("report");
-                report.setBikeId(mJson.getInt("bike_id"));
-                report.setUserId(mJson.getInt("user_id"));
-                report.setType(mJson.getInt("type"));
-                report.setDescription(mJson.getString("description"));
-                report.setCreatedOn(mJson.getString("created_on"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return report;
-        }
-        return null;
-    }
-
-    /**
-     * Calls GET /bikes/{id} endpoint
-     *
-     * @param context                      context where the method is called
-     * @param bikeID                       id of the requested bike
-     * @param serverResponseParserCallback interface used to get the response
-     */
-    public static void getBike(final Context context, final int bikeID,
-                               final ServerResponseParserCallback<Bike> serverResponseParserCallback) {
-        String url = ServerRoutes.BIKES + "/" + bikeID;
-        Log.d(TAG, url);
-        ServerRequest.getInstance(context).getBasicRequest(url, new NetworkCallback<JSONObject>() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                serverResponseParserCallback.onSuccess(getBikeFromJSONObject(response));
-            }
-
-            @Override
-            public void onError(int statusCode, JSONObject cache) {
-                serverResponseParserCallback.onError(getErrorTitle(statusCode), getErrorMessage(statusCode));
-            }
-        });
-    }
-    private static Bike getBikeFromJSONObject(JSONObject response) {
-        if (response != null) {
-            Bike bike = new Bike();
-            try {
-                JSONObject mJson = response.getJSONObject("bike");
-                bike = createBikeFromJSONObject(mJson);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return bike;
-        }
-        return null;
-    }
-    private static Bike createBikeFromJSONObject(JSONObject mJson) {
-        if (mJson != null) {
-            Bike bike = new Bike();
-            try {
-                bike.setId(mJson.getInt("id"));
-                bike.setUnlockCode(mJson.getInt("unlock_code"));
-                if (mJson.has("bike_state")) {
-                    bike.setBikeState(createBikeStateFromJSONObject(mJson.getJSONObject("bike_state")));
-                }
-                if (mJson.has("rack")) {
-                    bike.setRack(createRackFromJSONObject(mJson.getJSONObject("rack")));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return bike;
-        }
-        return null;
-    }
-    private static BikeState createBikeStateFromJSONObject(JSONObject mJson) {
-        if (mJson != null) {
-            BikeState bikeState = new BikeState();
-            try {
-                //bikeState.setId(mJson.getInt("id"));
-                bikeState.setDescription(mJson.getString("description"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return bikeState;
-        }
-        return null;
-    }
-
-
 
 }

@@ -14,9 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -41,34 +43,49 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Rack;
+import com.unimib.unimibike.Model.Rental;
 import com.unimib.unimibike.R;
 
+import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class FrameNoleggio extends Fragment implements OnMapReadyCallback {
+public class FrameNoleggio extends Fragment implements OnMapReadyCallback, FragmentCallback {
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mHashMap = new HashMap<>();
     private LatLng mCurrentPosition;
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private Button btn;
+    private Button mButtonEndRental;
+    private CardView mRentalCardView;
+    private FragmentCallback rentalCallback;
+    private View view;
+    private int user_id;
     FusedLocationProviderClient mFusedLocationClient;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_noleggio,container, false);
-        Button btn = (Button) view.findViewById(R.id.sblocca_bici);
+        view =  inflater.inflate(R.layout.fragment_noleggio,container, false);
+        btn = (Button) view.findViewById(R.id.sblocca_bici);
+        mRentalCardView = view.findViewById(R.id.rental_up_cardview);
+        rentalCallback = this;
+        user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                BottomSheet bsdf = new BottomSheet();
+                BottomSheet bsdf = new BottomSheet(rentalCallback);
                 assert getFragmentManager() != null;
                 bsdf.show(getFragmentManager() ,"bottomsheetlayout");
+
             }
         });
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
@@ -236,5 +253,68 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
+    @Override
+    public void callbackMethod(boolean rental_start, Bike bike_used) {
+        startRental(bike_used);
+    }
+
+    public void startRental(final Bike bike_used){
+
+        UnimibBikeFetcher.postRental(getActivity().getApplicationContext(),
+                bike_used.getId(), user_id,
+                new ServerResponseParserCallback<Rental>() {
+                    @Override
+                    public void onSuccess(Rental response) {
+                        update_view_rental_in_progress(bike_used, response);
+                    }
+
+                    @Override
+                    public void onError(String errorTitle, String errorMessage) {
+
+                    }
+                });
+    }
+
+    public void update_view_rental_in_progress(Bike bike_used, final Rental rental){
+        TextView starting_rack = view.findViewById(R.id.rental_up_starting_rack);
+        String[] splitTmp = bike_used.getRack().getLocationDescription().split(" ");
+        String rack_description = getString(R.string.start_rental_rack)+splitTmp[1];
+        starting_rack.setText(rack_description);
+
+        TextView starting_time = view.findViewById(R.id.rental_up_starting_time);
+        SimpleDateFormat  formatter = new SimpleDateFormat("hh:mm:ss");
+        Date tmp = new Date();
+        String strDate = getString(R.string.start_rental_time)+formatter.format(tmp);
+
+        starting_time.setText(strDate);
+
+        mRentalCardView = view.findViewById(R.id.rental_up_cardview);
+        mRentalCardView.setVisibility(View.VISIBLE);
+        mButtonEndRental = view.findViewById(R.id.rental_up_button_end_procedure);
+        mButtonEndRental.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ending_rental(rental);
+            }
+        });
+    }
+
+    public void ending_rental(Rental rental){
+        UnimibBikeFetcher.putRental(getActivity().getApplicationContext(),
+                rental.getId(), 4,
+                new ServerResponseParserCallback<Rental>() {
+                    @Override
+                    public void onSuccess(Rental response) {
+                        mRentalCardView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError(String errorTitle, String errorMessage) {
+
+                    }
+                });
+    }
+
 }
 
