@@ -85,7 +85,7 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
             holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.color_white));
         }
 
-        /*holder.getGoToButton().setOnClickListener(new View.OnClickListener() {
+        holder.getGoToButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String mUri = "https://www.google.com/maps/search/?api=1&query="
@@ -94,7 +94,7 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUri));
                 v.getContext().startActivity(intent);
             }
-        });*/
+        }); //funziona
     }
 
     @Override

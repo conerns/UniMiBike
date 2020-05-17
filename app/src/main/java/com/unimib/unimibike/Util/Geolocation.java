@@ -29,9 +29,7 @@ public class Geolocation extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.layout_empty);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
         getLastLocation();
 
     }
@@ -87,7 +85,7 @@ public class Geolocation extends AppCompatActivity {
     private LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
-            //Location mLastLocation = locationResult.getLastLocation();
+            Location mLastLocation = locationResult.getLastLocation();
         }
     };
 

@@ -1,6 +1,5 @@
 package com.unimib.unimibike.ProjectFiles;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
@@ -9,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.unimib.unimibike.Model.User;
@@ -26,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding activity_layout;
     private String email;
     private String password;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         activity_layout = ActivityMainBinding.inflate(getLayoutInflater());
         View view = activity_layout.getRoot();
         setContentView(view);
-
         activity_layout.accediUtente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
