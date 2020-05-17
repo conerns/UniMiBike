@@ -47,4 +47,10 @@
     <string name="unlock_id_header">Codice di sblocco</string>
     <string name="unlock_first_half_message">"Il codice di sblocco per la bicicletta desiderata è: "</string>
     <string name="unlock_second_half_message">, usa questo codice per eseguire la procedura di sblocco e goditi il viaggio.</string>
+    <string name="unlock_bike_not_avaible">Questa bicicletta non è disponibile</string>
+    <string name="not_avaible_message">Siamo spiacenti di comunicare che questa bicicletta non è disponibile. Usi un\'altra delle nostre biciclette</string>
+    <string name="rental_in_progress">Noleggio in corso</string>
+    <string name="start_rental_time">"Orario di partenza: "</string>
+    <string name="start_rental_rack">"Rastrelliera di partenza: "</string>
+    <string name="end_rental">concludi</string>
 </resources>

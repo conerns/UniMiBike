@@ -54,4 +54,8 @@
     <string name="unlock_second_half_message">, use it to unlock the bike and enjoy your ride.</string>
     <string name="unlock_bike_not_avaible">This bike is not avaible</string>
     <string name="not_avaible_message">We are sorry to announce that this bike is not avaible. Use one of our another bikes instead.</string>
+    <string name="rental_in_progress">Rental in progress</string>
+    <string name="start_rental_time">Starting time</string>
+    <string name="start_rental_rack">Starting rack</string>
+    <string name="end_rental">end procedure</string>
 </resources>

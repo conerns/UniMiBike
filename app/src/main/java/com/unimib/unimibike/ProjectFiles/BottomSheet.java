@@ -9,34 +9,32 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
-
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 
+import java.util.List;
+
 public class BottomSheet extends BottomSheetDialogFragment {
-    private SurfaceView         surfaceView;
-    private CameraSource        cameraSource;
-    private BarcodeDetector     barcodeDetector;
     private TextInputEditText   editComment;
     private Button              mButton;
     private View                w;
+    private FragmentCallback    rentalCallback;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
@@ -72,6 +70,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return w;
     }
 
+    public BottomSheet(FragmentCallback rentalCallback){
+        this.rentalCallback=rentalCallback;
+    }
+
+
     private void functionGetBike(int idBike) {
         UnimibBikeFetcher.getBike(getActivity().getApplicationContext(), idBike, new ServerResponseParserCallback<Bike>() {
             @Override
@@ -83,6 +86,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             getString(R.string.unlock_first_half_message) + response.getUnlockCode() +
                                     getString(R.string.unlock_second_half_message));
                     newFragment.show(getFragmentManager(), "dialog");
+
+                    rentalCallback.callbackMethod(true, response);
                 }
                 else {
                     newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),

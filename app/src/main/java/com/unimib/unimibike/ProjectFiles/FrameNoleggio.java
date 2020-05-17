@@ -150,6 +150,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private void requestNewLocationData(){
+
         @SuppressLint("RestrictedApi") LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(0);
