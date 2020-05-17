@@ -1,5 +1,6 @@
 package com.unimib.unimibike.ProjectFiles;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -15,13 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.Geolocation;
 
 
 public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.RackViewHolder> {
     private List<Rack> mRacks;
-
+    Geolocation prova;
     public static class RackViewHolder extends RecyclerView.ViewHolder {
         private final TextView mRackBuilding;
         private final TextView mRackAddress;
@@ -76,15 +79,7 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
         holder.getRackBuilding().setText(mRacks.get(position).getLocationDescription());
         holder.getRackAddress().setText(mRacks.get(position).getStreetAddress());
         holder.getRackDistance().setText(mRacks.get(position).getDistanceString());
-
-
         holder.getRackAvailableBikes().setText(String.valueOf(mRacks.get(position).getAvailableBikes()));
-        if (mRacks.get(position).getAvailableBikes() > 0) {
-            holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.color_black));
-        } else {
-            holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.color_white));
-        }
-
         holder.getGoToButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

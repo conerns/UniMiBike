@@ -25,6 +25,9 @@ public class Geolocation{
         this.geolocationCallback = geolocationCallback;
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.activity);
     }
+    public Geolocation(){
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(new Activity());
+    }
 
     @SuppressLint("MissingPermission")
     public void getLastLocation(){
@@ -67,6 +70,7 @@ public class Geolocation{
         }
     };
 
+
     public static double distance(LatLng first_position, LatLng second_position){
         final int R = 6371; // Radius of the earth
 
@@ -82,6 +86,5 @@ public class Geolocation{
 
         return Math.sqrt(distance);
     }
-
 
 }

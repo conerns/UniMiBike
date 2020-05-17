@@ -52,5 +52,5 @@
     <string name="rental_in_progress">Noleggio in corso</string>
     <string name="start_rental_time">"Orario di partenza: "</string>
     <string name="start_rental_rack">"Rastrelliera di partenza: "</string>
-    <string name="end_rental">concludi</string>
+    <string name="end_rental">Concludi</string>
 </resources>

@@ -1,14 +1,20 @@
 package com.unimib.unimibike.Model;
 
+import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.unimib.unimibike.Util.Geolocation;
+import com.unimib.unimibike.Util.GeolocationCallback;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
-public class Rack implements Parcelable {
-
+public class Rack implements Parcelable{
+    private LatLng mCurrentPosition;
     private int mId;
     private int mAvailableStands, mAvailableBikes;
     private double mLatitude, mLongitude;
@@ -186,4 +192,5 @@ public class Rack implements Parcelable {
         s += ", distance=" + mDistance + '}';
         return s;
     }
+
 }
