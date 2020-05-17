@@ -1,69 +1,45 @@
 package com.unimib.unimibike.Util;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.os.Looper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class Geolocation extends AppCompatActivity {
+public class Geolocation{
 
-    int PERMISSION_ID = 44;
-    FusedLocationProviderClient mFusedLocationClient;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Activity activity;
+    private GeolocationCallback geolocationCallback;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //setContentView(R.layout.layout_empty);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        getLastLocation();
-
+    public Geolocation(Activity activity, GeolocationCallback geolocationCallback){
+        this.activity = activity;
+        this.geolocationCallback = geolocationCallback;
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.activity);
     }
 
     @SuppressLint("MissingPermission")
-    private void getLastLocation(){
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-                mFusedLocationClient.getLastLocation().addOnCompleteListener(
-                        new OnCompleteListener<Location>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Location> task) {
-                                Location location = task.getResult();
-                                if (location == null) {
-                                    requestNewLocationData();
-                                } else {
-                                    Intent resultIntent = new Intent();
-                                    Bundle returnData = new Bundle();
-                                    returnData.putDouble("lat",location.getLatitude());
-                                    returnData.putDouble("lon",location.getLongitude());
-                                    resultIntent.putExtra("LatLon", returnData);
-                                    setResult(Activity.RESULT_OK, resultIntent);
-                                    overridePendingTransition(0, 0);
-                                    finish();
-                                }
-                            }
-                        }
-                );
-            } else {
-
-            }
-        }
+    public void getLastLocation(){
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(
+                new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        Location location = task.getResult();
+                        if (location == null) {
+                            requestNewLocationData();
+                        } else
+                            geolocationCallback.positionCallback(location);
+                    }
+                }
+        );
     }
 
 
@@ -76,7 +52,7 @@ public class Geolocation extends AppCompatActivity {
         mLocationRequest.setFastestInterval(0);
         mLocationRequest.setNumUpdates(1);
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         mFusedLocationClient.requestLocationUpdates(
                 mLocationRequest, mLocationCallback,
                 Looper.myLooper()
@@ -87,33 +63,25 @@ public class Geolocation extends AppCompatActivity {
     private LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
-            //Location mLastLocation = locationResult.getLastLocation();
+
         }
     };
 
-    private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
+    public static double distance(LatLng first_position, LatLng second_position){
+        final int R = 6371; // Radius of the earth
+
+        double latDistance = Math.toRadians(second_position.latitude - first_position.latitude);
+        double lonDistance = Math.toRadians(second_position.longitude - first_position.longitude);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(first_position.latitude)) * Math.cos(Math.toRadians(second_position.latitude))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
+
+        distance = Math.pow(distance, 2);
+
+        return Math.sqrt(distance);
     }
 
 
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER
-        );
-    }
-
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        if (checkPermissions()) {
-            getLastLocation();
-        }
-
-    }
 }
