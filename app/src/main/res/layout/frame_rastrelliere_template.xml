@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<LinearLayout
     android:id="@+id/LinearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardViewListRacks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp">
@@ -121,5 +127,130 @@
                 app:layout_constraintTop_toBottomOf="@+id/rack_bike_icon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
+</ScrollView>-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:id="@+id/imageView"
+    android:layout_marginTop="13dp"
+    android:layout_marginBottom="13dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/rack_building"
+            style="@style/Base.Widget.MaterialComponents.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="20dp"
+            android:text="Title goes here"
+            app:layout_constraintStart_toEndOf="@+id/rack_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rack_address"
+            style="@style/Base.Widget.MaterialComponents.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Subtitle goes here"
+            app:layout_constraintStart_toEndOf="@+id/rack_position_icon"
+            app:layout_constraintTop_toBottomOf="@+id/rack_building" />
+
+        <TextView
+            android:id="@+id/rack_available"
+            style="@style/Base.Widget.MaterialComponents.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Subtitle goes here"
+            app:layout_constraintStart_toEndOf="@+id/rack_bike_icon"
+            app:layout_constraintTop_toBottomOf="@+id/rack_distance" />
+
+        <TextView
+            android:id="@+id/rack_distance"
+            style="@style/Base.Widget.MaterialComponents.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="20dp"
+            android:text="Subtitle goes here"
+            app:layout_constraintStart_toEndOf="@+id/rack_distance_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_naviga"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="NAVIGA"
+            android:textAppearance="
+            @style/TextAppearance.MaterialComponents.Headline6"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rack_bike_icon" />
+
+        <ImageView
+            android:id="@+id/rack_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:tint="@color/red_unimib"
+            app:layout_constraintStart_toStartOf="@+id/rack_position_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rastrelliera" />
+
+        <ImageView
+            android:id="@+id/rack_distance_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:tint="@color/red_unimib"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/baseline_directions_24" />
+
+        <ImageView
+            android:id="@+id/rack_position_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:tint="@color/red_unimib"
+            app:layout_constraintStart_toStartOf="@+id/button_naviga"
+            app:layout_constraintTop_toBottomOf="@+id/rack_icon"
+            app:srcCompat="@drawable/baseline_room_24" />
+
+        <ImageView
+            android:id="@+id/rack_bike_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:tint="@color/red_unimib"
+            app:layout_constraintStart_toStartOf="@+id/rack_distance_icon"
+            app:layout_constraintTop_toBottomOf="@+id/rack_distance_icon"
+            app:srcCompat="@drawable/icona_bici" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

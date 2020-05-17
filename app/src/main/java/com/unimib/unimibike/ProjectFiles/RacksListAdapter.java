@@ -2,6 +2,7 @@ package com.unimib.unimibike.ProjectFiles;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,8 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
     @NonNull
     @Override
     public RackViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.frame_lista_rastrelliere, parent, false);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View view = layoutInflater.inflate(R.layout.frame_rastrelliere_template, parent, false);
         return new RackViewHolder(view);
     }
 
@@ -75,11 +77,12 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
         holder.getRackAddress().setText(mRacks.get(position).getStreetAddress());
         holder.getRackDistance().setText(mRacks.get(position).getDistanceString());
 
+
         holder.getRackAvailableBikes().setText(String.valueOf(mRacks.get(position).getAvailableBikes()));
         if (mRacks.get(position).getAvailableBikes() > 0) {
             holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.color_black));
         } else {
-            holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.color_black));
+            holder.getRackAvailableBikes().setTextColor(ContextCompat.getColor(holder.mRackAvailableBikes.getContext(), R.color.color_white));
         }
 
         /*holder.getGoToButton().setOnClickListener(new View.OnClickListener() {
@@ -97,6 +100,7 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
     @Override
     public int getItemCount() {
         if (mRacks != null) {
+            Log.d("totale", ""+mRacks.size());
             return mRacks.size();
         }
         return 0;

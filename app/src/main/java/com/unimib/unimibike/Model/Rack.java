@@ -16,7 +16,9 @@ public class Rack implements Parcelable {
     private List<Building> mBuildings;
     private double mDistance;
 
-    public Rack(int mId, int mAvailableStands, int mAvailableBikes, double mLatitude, double mLongitude, String mAddressLocality, String mStreetAddress, String mLocationDescription, List<Building> mBuildings) {
+    public Rack(int mId, int mAvailableStands, int mAvailableBikes, double mLatitude,
+                double mLongitude, String mAddressLocality, String mStreetAddress,
+                String mLocationDescription, List<Building> mBuildings) {
         this.mId = mId;
         this.mAvailableStands = mAvailableStands;
         this.mAvailableBikes = mAvailableBikes;
