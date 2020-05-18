@@ -8,9 +8,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.unimib.unimibike.Model.User;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 
 import java.util.ArrayList;
@@ -31,11 +34,19 @@ public class Principal extends AppCompatActivity {
     private int id;
     private final String TAG = "PRINCIPAL_ACTIVITY";
     private final int REQUEST_ID_MULTIPLE_PERMISSIONS = 0;
+    private int counter = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.initial_page_bottom);
         checkAndRequestPermissions();
+        /*if (!isLocationEnabled() && counter == 0) {
+            Geolocation geo = new Geolocation(this);
+            geo.displayLocationSettingsRequest(this.getApplicationContext());
+            counter++;
+        }*/
+
+
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(listener);
         utente = getIntent().getStringExtra("USER-MAIL");
@@ -46,6 +57,7 @@ public class Principal extends AppCompatActivity {
                 new FrameNoleggio()).commit();
 
     }
+
     private BottomNavigationView.OnNavigationItemSelectedListener listener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -136,5 +148,12 @@ public class Principal extends AppCompatActivity {
         }
 
     }
+
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+                LocationManager.NETWORK_PROVIDER);
+    }
+
 
 }

@@ -1,6 +1,5 @@
 package com.unimib.unimibike.ProjectFiles;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -11,20 +10,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.Geolocation;
 
 
 public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.RackViewHolder> {
     private List<Rack> mRacks;
-    Geolocation prova;
     public static class RackViewHolder extends RecyclerView.ViewHolder {
         private final TextView mRackBuilding;
         private final TextView mRackAddress;
@@ -60,6 +55,7 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
         public Button getGoToButton() {
             return mGoToButton;
         }
+
     }
 
     public RacksListAdapter(List<Rack> racks) {
@@ -78,7 +74,10 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
     public void onBindViewHolder(@NonNull final RackViewHolder holder, int position) {
         holder.getRackBuilding().setText(mRacks.get(position).getLocationDescription());
         holder.getRackAddress().setText(mRacks.get(position).getStreetAddress());
-        holder.getRackDistance().setText(mRacks.get(position).getDistanceString());
+        if(mRacks.get(position).getDistance() == -1)
+            holder.getRackDistance().setText("-");
+        else
+            holder.getRackDistance().setText(mRacks.get(position).getDistanceString());
         holder.getRackAvailableBikes().setText(String.valueOf(mRacks.get(position).getAvailableBikes()));
         holder.getGoToButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,4 +99,6 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
         }
         return 0;
     }
+
+
 }

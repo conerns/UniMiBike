@@ -2,6 +2,7 @@ package com.unimib.unimibike.ProjectFiles;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,9 +33,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (SaveSharedPreference.getUserName(getApplicationContext()).length() != 0) {
-            Intent mPagina = new Intent(this, Principal.class);
-            startActivity(mPagina);
-            finish();
+            getUserRole(SaveSharedPreference.getUserName(getApplicationContext()));
+
         } else {
             activity_layout = ActivityMainBinding.inflate(getLayoutInflater());
             View view = activity_layout.getRoot();
@@ -163,4 +163,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    public void getUserRole(String user_email){
+        UnimibBikeFetcher.getUserId(getApplicationContext(), user_email, new ServerResponseParserCallback<User>() {
+            @Override
+            public void onSuccess(User response) {
+                SaveSharedPreference.clearUserName(getApplicationContext());
+                SaveSharedPreference.setUserName(getApplicationContext(),response.getEmail(),response.getmRole(),response.getmId());
+                Intent mPagina = new Intent(getApplicationContext(), Principal.class);
+                startActivity(mPagina);
+                finish();
+            }
+
+            @Override
+            public void onError(String errorTitle, String errorMessage) {
+
+            }
+        });
+    }
 }
