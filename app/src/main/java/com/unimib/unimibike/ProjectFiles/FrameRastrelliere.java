@@ -60,7 +60,7 @@ public class FrameRastrelliere extends Fragment implements GeolocationCallback {
                     elemento_neutro = response.get(i);
                     elemento_neutro.setDistance(-1);
                     if (checkPermissions())
-                        if (isLocationEnabled()) {
+                        if (isLocationEnabled() && mCurrentPosition != null) {
                             double distance = Geolocation.distance(mCurrentPosition,
                                     new LatLng(elemento_neutro.getLatitude(), elemento_neutro.getLongitude())
                             );
@@ -92,13 +92,6 @@ public class FrameRastrelliere extends Fragment implements GeolocationCallback {
             if (isLocationEnabled()) {
                 Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
                 geo.getLastLocation();
-            } else {
-                if(counter == 0) {
-                    Geolocation geo = new Geolocation(getActivity());
-                    geo.displayLocationSettingsRequest(getActivity().getApplicationContext());
-                    counter++;
-                    getUserPosition();
-                }
             }
         }
     }

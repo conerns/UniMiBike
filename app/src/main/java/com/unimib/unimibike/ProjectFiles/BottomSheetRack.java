@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ import com.unimib.unimibike.Util.GeolocationCallback;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 
-public class BottomSheetRack extends BottomSheetDialogFragment{
+public class BottomSheetRack extends BottomSheetDialogFragment implements GeolocationCallback{
     private TextView rack_description;
     private TextView rack_distance;
     private TextView rack_position;
@@ -36,7 +37,7 @@ public class BottomSheetRack extends BottomSheetDialogFragment{
     private Button rack_go_to;
     private LatLng rack_map_position;
     private LatLng mCurrentPosition;
-
+    private GeolocationCallback geolocationCallback;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
@@ -47,16 +48,9 @@ public class BottomSheetRack extends BottomSheetDialogFragment{
         rack_position = w.findViewById(R.id.rack_address);
         rack_avaiable_bike = w.findViewById(R.id.rack_bike_avaible);
         rack_go_to = w.findViewById(R.id.button_go_to_rack);
-        //GeolocationCallback geolocationCallback = this;
+        geolocationCallback = this;
 
-        /*if (checkPermissions())
-            if (isLocationEnabled()) {
-                Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
-                geo.getLastLocation();
-            }
-            else */getRackId(getArguments().getInt("Rack_id"));
-
-
+        getRackId(getArguments().getInt("Rack_id"));
 
         rack_go_to.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,12 +73,11 @@ public class BottomSheetRack extends BottomSheetDialogFragment{
                 String avaible_bike = String.valueOf(response.getAvailableBikes())+" "+getString(R.string.avaible_bikes);
                 rack_avaiable_bike.setText(avaible_bike);
                 rack_map_position = new LatLng(response.getLatitude(),response.getLongitude());
-                /*if(mCurrentPosition != null) {
-                    response.setDistance(Geolocation.distance(mCurrentPosition,
-                                                            new LatLng(response.getLatitude(), response.getLongitude())));
-                    rack_distance.setText(response.getDistanceString());
+                if (checkPermissions() && isLocationEnabled()){
+                    Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
+                    geo.getLastLocation();
                 }
-                else */rack_distance.setText("-");
+                else rack_distance.setText("-");
             }
 
             @Override
@@ -94,10 +87,13 @@ public class BottomSheetRack extends BottomSheetDialogFragment{
         });
     }
 
-    /*@Override
+    @Override
     public void positionCallback(Location mCurrentPosition) {
         this.mCurrentPosition = new LatLng(mCurrentPosition.getLatitude(), mCurrentPosition.getLongitude());
-        getRackId(getArguments().getInt("Rack_id"));
+        double distance = Geolocation.distance(new LatLng(mCurrentPosition.getLatitude(), mCurrentPosition.getLongitude()), rack_map_position);
+        Rack tmp = new Rack();
+        tmp.setDistance(distance);
+        rack_distance.setText(tmp.getDistanceString());
     }
 
 
@@ -113,5 +109,5 @@ public class BottomSheetRack extends BottomSheetDialogFragment{
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
                 LocationManager.NETWORK_PROVIDER);
-    }*/
+    }
 }

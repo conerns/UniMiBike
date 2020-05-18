@@ -18,7 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -54,7 +53,6 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private GeolocationCallback geolocationCallback;
     private View view;
     private int user_id;
-    private int counter = 0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -110,13 +108,6 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
             if (isLocationEnabled()) {
                 Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
                 geo.getLastLocation();
-            } else {
-                if(counter == 0) {
-                    Geolocation geo = new Geolocation(getActivity());
-                    geo.displayLocationSettingsRequest(getActivity().getApplicationContext());
-                    counter++;
-                    getUserPosition();
-                }
             }
         }
     }
@@ -235,7 +226,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     @Override
     public void positionCallback(Location mCurrentPosition) {
         this.mCurrentPosition = new LatLng(mCurrentPosition.getLatitude(), mCurrentPosition.getLongitude());
-
+        Log.d("aa", mCurrentPosition+"");
     }
 }
 
