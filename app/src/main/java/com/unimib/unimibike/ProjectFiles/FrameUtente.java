@@ -21,6 +21,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.unimib.unimibike.Model.User;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.SaveSharedPreference;
 
 public class FrameUtente extends Fragment {
     private String get_email;
@@ -33,9 +34,14 @@ public class FrameUtente extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View user = inflater.inflate(R.layout.fragment_utente,container, false);
         Button get_out = (Button) user.findViewById(R.id.logout_utente);
-        get_role = getArguments().getString("USER-ROLE");
-        get_email = getArguments().getString("USER-MAIL");
-
+        if(SaveSharedPreference.getUserName(getContext().getApplicationContext()).length() != 0) {
+            get_email = SaveSharedPreference.getUserName(getContext().getApplicationContext());
+            get_role = SaveSharedPreference.getPrefUserRole(getContext().getApplicationContext());
+        }
+        else {
+            get_role = getArguments().getString("USER-ROLE");
+            get_email = getArguments().getString("USER-MAIL");
+        }
         get_out.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,6 +83,7 @@ public class FrameUtente extends Fragment {
     }
 
     public void apr_activity(){
+        SaveSharedPreference.clearUserName(getContext().getApplicationContext());
         Intent mPagina = new Intent(getActivity(), MainActivity.class);
         startActivity(mPagina);
         Activity activity = getActivity();

@@ -83,7 +83,7 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
         holder.getGoToButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mUri = "https://www.google.com/maps/search/?api=1&query="
+                String mUri = "http://maps.google.com/maps?daddr="
                         + mRacks.get(holder.getAdapterPosition()).getLatitude()
                         + "," + mRacks.get(holder.getAdapterPosition()).getLongitude();
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUri));

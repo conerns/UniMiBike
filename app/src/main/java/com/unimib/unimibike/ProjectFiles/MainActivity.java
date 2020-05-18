@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.unimib.unimibike.Model.User;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.CheckForInternet;
+import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 import com.unimib.unimibike.databinding.ActivityMainBinding;
@@ -29,40 +31,45 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (SaveSharedPreference.getUserName(getApplicationContext()).length() != 0) {
+            Intent mPagina = new Intent(this, Principal.class);
+            startActivity(mPagina);
+            finish();
+        } else {
+            activity_layout = ActivityMainBinding.inflate(getLayoutInflater());
+            View view = activity_layout.getRoot();
+            setContentView(view);
+            activity_layout.accediUtente.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))) {
+                        email = activity_layout.testoEmail.getText().toString();
+                        password = activity_layout.testoPassword.getText().toString();
+                        if (controlla_email(email) & controlla_pass(password)) {
+                            activity_layout.mainActivityRelativeLayout.setVisibility(View.VISIBLE);
+                            activity_layout.pBar.setVisibility(View.VISIBLE);
+                            activity_layout.testoEmail.setFocusable(false);
+                            activity_layout.testoPassword.setFocusable(false);
+                            activity_layout.accediUtente.setClickable(false);
+                            effettua_login(email, password);
+                        }
+                    } else {
+                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(MainActivity.this, R.style.Theme_MyTheme_Dialog);
+                        mMaterialDialog
+                                .setTitle(R.string.internet_connection_dialog_title)
+                                .setMessage(R.string.check_internet)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-        activity_layout = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = activity_layout.getRoot();
-        setContentView(view);
-        activity_layout.accediUtente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))){
-                    email = activity_layout.testoEmail.getText().toString();
-                    password = activity_layout.testoPassword.getText().toString();
-                    if (controlla_email(email) & controlla_pass(password)) {
-                        activity_layout.mainActivityRelativeLayout.setVisibility(View.VISIBLE);
-                        activity_layout.pBar.setVisibility(View.VISIBLE);
-                        activity_layout.testoEmail.setFocusable(false);
-                        activity_layout.testoPassword.setFocusable(false);
-                        activity_layout.accediUtente.setClickable(false);
-                        effettua_login(email, password);
+                                    }
+                                })
+                                .show();
                     }
-                }else {
-                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(MainActivity.this,R.style.Theme_MyTheme_Dialog);
-                    mMaterialDialog
-                        .setTitle(R.string.internet_connection_dialog_title)
-                        .setMessage(R.string.check_internet)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        })
-                        .show();
                 }
-            }
-        });
+            });
 
+        }
     }
     //questo metodo fa partire una nuova activity
     public void apr_activity(User user){
@@ -71,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         pagina.putExtra("USER-ID", user.getmId());
         pagina.putExtra("USER-MAIL", user.getEmail());
         pagina.putExtra("USER-PERISSION", user.getmRole());
+        SaveSharedPreference.setUserName(getApplicationContext(),user.getEmail(),user.getmRole(),user.getmId());
         startActivity(pagina);
         finish();
     }

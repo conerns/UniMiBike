@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.unimib.unimibike.Model.Report;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
+import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 
@@ -41,9 +42,15 @@ public class FrameGuasti extends Fragment {
                                             getString(R.string.broken_pedal), getString(R.string.saddle_absent),
                                             getString(R.string.absent_tire), getString(R.string.malfunctioning_breaks), getString(R.string.altro_guasto)
                             };
-        get_role = getArguments().getString("USER-ROLE");
-        get_email = getArguments().getString("USER-MAIL");
-        get_id = getArguments().getInt("USER-ID");
+        if(SaveSharedPreference.getUserName(getContext().getApplicationContext()).length() != 0) {
+            get_email = SaveSharedPreference.getUserName(getContext().getApplicationContext());
+            get_role = SaveSharedPreference.getPrefUserRole(getContext().getApplicationContext());
+            get_id = SaveSharedPreference.getUserID(getContext().getApplicationContext());
+        }else {
+            get_role = getArguments().getString("USER-ROLE");
+            get_email = getArguments().getString("USER-MAIL");
+            get_id = getArguments().getInt("USER-ID");
+        }
         w = inflater.inflate(R.layout.fragment_guasti,container, false);
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
