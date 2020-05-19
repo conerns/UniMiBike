@@ -146,10 +146,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User response) {
                 SaveSharedPreference.clearUserName(getApplicationContext());
-                SaveSharedPreference.setUserName(getApplicationContext(),response.getEmail(),response.getmRole(),response.getmId());
+                /*SaveSharedPreference.setUserName(getApplicationContext(),response.getEmail(),response.getmRole(),response.getmId());
                 Intent mPagina = new Intent(getApplicationContext(), Principal.class);
                 startActivity(mPagina);
-                finish();
+                finish();*/
+                apr_activity(response);
             }
 
             @Override
