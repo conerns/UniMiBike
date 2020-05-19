@@ -29,6 +29,7 @@ public class Geolocation{
     private FusedLocationProviderClient mFusedLocationClient;
     private Activity activity;
     private GeolocationCallback geolocationCallback;
+    private OnGeolocationActive geolocationActive;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     public Geolocation(Activity activity, GeolocationCallback geolocationCallback){
@@ -44,6 +45,11 @@ public class Geolocation{
         this.activity = activity;
     }
 
+    public Geolocation(Activity activity, OnGeolocationActive geolocationActive){
+        this.geolocationActive = geolocationActive;
+        this.activity =activity;
+    }
+
     @SuppressLint("MissingPermission")
     public void getLastLocation(){
         mFusedLocationClient.getLastLocation().addOnCompleteListener(
@@ -53,8 +59,10 @@ public class Geolocation{
                         Location location = task.getResult();
                         if (location == null) {
                             requestNewLocationData();
-                        } else
+                        } else {
+                            Log.d("if", "ci arriva");
                             geolocationCallback.positionCallback(location);
+                        }
                     }
                 }
         );
@@ -82,6 +90,9 @@ public class Geolocation{
         @Override
         public void onLocationResult(LocationResult locationResult) {
 
+            Log.d("if", "ci arriva male");
+
+            geolocationCallback.positionCallback(locationResult.getLastLocation());
         }
     };
 
@@ -136,6 +147,9 @@ public class Geolocation{
                         resolvable.startResolutionForResult(activity,
                                 REQUEST_CHECK_SETTINGS);
 
+                        if(geolocationActive != null)
+                            geolocationActive.onGeolocationActiveCallback();
+
                     } catch (IntentSender.SendIntentException sendEx) {
                         // Ignore the error.
                     }
@@ -143,4 +157,6 @@ public class Geolocation{
             }
         });
     }
+
+
 }

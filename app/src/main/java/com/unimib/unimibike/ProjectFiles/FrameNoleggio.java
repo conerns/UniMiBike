@@ -2,7 +2,6 @@ package com.unimib.unimibike.ProjectFiles;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -20,15 +19,6 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -56,7 +46,6 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mHashMap = new HashMap<>();
     private LatLng mCurrentPosition;
-    private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private Button btn;
     private Button mButtonEndRental;
     private CardView mRentalCardView;
@@ -119,8 +108,6 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
             if (isLocationEnabled()) {
                 Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
                 geo.getLastLocation();
-            } else {
-                displayLocationSettingsRequest(getActivity().getApplicationContext());
             }
         }
     }
@@ -145,49 +132,6 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         if (checkPermissions()) {
             getUserPosition();
         }
-    }
-
-    //Geolocation activate
-
-    private void displayLocationSettingsRequest(Context context) {
-        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
-                .addApi(LocationServices.API).build();
-        googleApiClient.connect();
-
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000 / 2);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-
-        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                switch (((Status) status).getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        Log.d("AAA", "All location settings are satisfied.");
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        Log.d("AAA", "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
-
-                        try {
-                            // Show the dialog by calling startResolutionForResult(), and check the result
-                            // in onActivityResult().
-                            status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException e) {
-                            Log.d("AAA", "PendingIntent unable to execute request.");
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        Log.d("AAA", "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
-                        break;
-                }
-            }
-        });
     }
 
     public void update_view_rental_in_progress(Bike bike_used, final Rental rental){
@@ -282,11 +226,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     @Override
     public void positionCallback(Location mCurrentPosition) {
         this.mCurrentPosition = new LatLng(mCurrentPosition.getLatitude(), mCurrentPosition.getLongitude());
-        //bicocca cordinates 45.5136609,9.211324
-        LatLng targetLocation = new LatLng(45.6282894, 8.8863312);
-
-        double distance = Geolocation.distance(this.mCurrentPosition, targetLocation);
-        Log.d("DISTANCE", distance + " " + mCurrentPosition.getLatitude() + " " + mCurrentPosition.getLongitude() +" " +mCurrentPosition.getAltitude());
+        Log.d("aa", mCurrentPosition+"");
     }
 }
 

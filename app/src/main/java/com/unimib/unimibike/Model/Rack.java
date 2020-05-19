@@ -161,12 +161,13 @@ public class Rack implements Parcelable{
 
     public String getDistanceString() {
         String result;
-        if (mDistance < 1) {
-            int distanceInt = (int) Math.round(mDistance);
-            result = String.valueOf(distanceInt*1000) + " m";
-        } else {
+        if (mDistance < 1000) {
             NumberFormat formatter = new DecimalFormat("#0.00");
-            result = formatter.format(mDistance) + " km";
+            result = formatter.format(mDistance) + " m";
+        } else {//continuare con conversione in km
+            double distance_in_kilometers = mDistance/1000;
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            result = formatter.format(distance_in_kilometers) + " km";
         }
         return result;
     }

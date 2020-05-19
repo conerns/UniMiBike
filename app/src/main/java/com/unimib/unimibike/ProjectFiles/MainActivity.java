@@ -1,10 +1,17 @@
 package com.unimib.unimibike.ProjectFiles;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +26,11 @@ import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 import com.unimib.unimibike.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String MAIL = "Mail";
@@ -26,50 +38,15 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding activity_layout;
     private String email;
     private String password;
-
+    private final int REQUEST_ID_MULTIPLE_PERMISSIONS = 0;
+    private static final String TAG = "MAIN ACTIVITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (SaveSharedPreference.getUserName(getApplicationContext()).length() != 0) {
-            Intent mPagina = new Intent(this, Principal.class);
-            startActivity(mPagina);
-            finish();
-        } else {
-            activity_layout = ActivityMainBinding.inflate(getLayoutInflater());
-            View view = activity_layout.getRoot();
-            setContentView(view);
-            activity_layout.accediUtente.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))) {
-                        email = activity_layout.testoEmail.getText().toString();
-                        password = activity_layout.testoPassword.getText().toString();
-                        if (controlla_email(email) & controlla_pass(password)) {
-                            activity_layout.mainActivityRelativeLayout.setVisibility(View.VISIBLE);
-                            activity_layout.pBar.setVisibility(View.VISIBLE);
-                            activity_layout.testoEmail.setFocusable(false);
-                            activity_layout.testoPassword.setFocusable(false);
-                            activity_layout.accediUtente.setClickable(false);
-                            effettua_login(email, password);
-                        }
-                    } else {
-                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(MainActivity.this, R.style.Theme_MyTheme_Dialog);
-                        mMaterialDialog
-                                .setTitle(R.string.internet_connection_dialog_title)
-                                .setMessage(R.string.check_internet)
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
+        if(checkAndRequestPermissions())
+            afterPermission();
 
-                                    }
-                                })
-                                .show();
-                    }
-                }
-            });
-
-        }
     }
     //questo metodo fa partire una nuova activity
     public void apr_activity(User user){
@@ -161,6 +138,121 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    public void getUserRole(String user_email){
+        UnimibBikeFetcher.getUserId(getApplicationContext(), user_email, new ServerResponseParserCallback<User>() {
+            @Override
+            public void onSuccess(User response) {
+                SaveSharedPreference.clearUserName(getApplicationContext());
+                SaveSharedPreference.setUserName(getApplicationContext(),response.getEmail(),response.getmRole(),response.getmId());
+                Intent mPagina = new Intent(getApplicationContext(), Principal.class);
+                startActivity(mPagina);
+                finish();
+            }
+
+            @Override
+            public void onError(String errorTitle, String errorMessage) {
+
+            }
+        });
+    }
+
+
+    private boolean checkAndRequestPermissions() {
+        int camerapermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        int location = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (camerapermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.CAMERA);
+        }
+        if (location != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case REQUEST_ID_MULTIPLE_PERMISSIONS: {
+
+                Map<String, Integer> perms = new HashMap<>();
+
+                perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+
+                // Fill with actual results from user
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++)
+                        perms.put(permissions[i], grantResults[i]);
+                    // Check for both permissions
+                    if (perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                            && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        Log.d(TAG, "camera & location services permission granted");
+                        // here you can do your logic all Permission Success Call
+                        //moveToNxtScreen();
+
+                    }
+                }
+            }
+            afterPermission();
+        }
+
+    }
+
+    public void afterPermission(){
+        if (SaveSharedPreference.getUserName(getApplicationContext()).length() != 0) {
+            getUserRole(SaveSharedPreference.getUserName(getApplicationContext()));
+        } else {
+            activity_layout = ActivityMainBinding.inflate(getLayoutInflater());
+            View view = activity_layout.getRoot();
+            setContentView(view);
+            activity_layout.accediUtente.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))) {
+                        email = activity_layout.testoEmail.getText().toString();
+                        password = activity_layout.testoPassword.getText().toString();
+                        if (controlla_email(email) & controlla_pass(password)) {
+                            activity_layout.mainActivityRelativeLayout.setVisibility(View.VISIBLE);
+                            activity_layout.pBar.setVisibility(View.VISIBLE);
+                            activity_layout.testoEmail.setFocusable(false);
+                            activity_layout.testoPassword.setFocusable(false);
+                            activity_layout.accediUtente.setClickable(false);
+                            effettua_login(email, password);
+                        }
+                    } else {
+                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(MainActivity.this, R.style.Theme_MyTheme_Dialog);
+                        mMaterialDialog
+                                .setTitle(R.string.internet_connection_dialog_title)
+                                .setMessage(R.string.check_internet)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                })
+                                .show();
+                    }
+                }
+            });
+
+        }
+
     }
 
 }
