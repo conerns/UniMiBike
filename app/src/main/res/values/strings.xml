@@ -17,7 +17,7 @@
     <string name="_logout">Logout</string>
     <string name="u_bicocca_campus_unimib_it">u.bicocca@campus.unimib.it</string>
     <string name="ub">UB</string>
-    <string name="admin_modifica_posizione">"The report has been succesfully sent. "</string>
+    <string name="admin_modifica_posizione">Modify bike\'s position</string>
     <string name="admin_aggiungi_posizione">Add new bike</string>
     <string name="internet_connection_dialog_title">Internet connection</string>
     <string name="check_internet">
