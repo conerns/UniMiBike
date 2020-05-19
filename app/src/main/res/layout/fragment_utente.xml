@@ -1,142 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/nome_utente_pagina"
-        style="@style/Widget.MyTheme.TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:background="@drawable/user_circe"
-        android:gravity="center"
-        android:text="@string/ub"
-        android:elevation="8dp"
-        android:textSize="60sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/mail_utente"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="122dp"
-        app:cardCornerRadius="5dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/nome_utente_pagina"
+            style="@style/Widget.MyTheme.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:background="@drawable/user_circe"
+            android:elevation="8dp"
+            android:gravity="center"
+            android:text="@string/ub"
+            android:textSize="60sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/mail_utente"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="150dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="122dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/credenziali"
-                style="@style/Widget.MyTheme.TextViewButton"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|center_vertical"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_height="match_parent">
 
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="16dp"
-                android:gravity="center"
-                android:text="@string/u_bicocca_campus_unimib_it"
-                android:textSize="18sp"
-                android:typeface="normal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/credenziali"
+                    style="@style/Widget.MyTheme.TextViewButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
+                    android:text="@string/u_bicocca_campus_unimib_it"
+                    android:textSize="18sp"
+                    android:typeface="normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/logout_utente"
-        style="@style/Widget.MyTheme.Button"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="26dp"
-        android:text="@string/_logout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TableLayout
+            android:id="@+id/tableLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mail_utente">
 
-    <TableLayout
-        android:id="@+id/tableLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mail_utente">
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
-        <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/admin_button_bici_mod"
+                    style="@style/Widget.MyTheme.MaterialButtonAdmin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="13dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_edit_location_black_48dp"
+                    android:paddingVertical="26dp"
+                    android:text="@string/admin_modifica_posizione"
+                    android:visibility="gone" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/admin_button_bici_mod"
-                style="@style/Widget.MyTheme.MaterialButtonAdmin"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="13dp"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/ic_edit_location_black_48dp"
-                android:paddingVertical="26dp"
-                android:text="@string/admin_modifica_posizione"
-                android:visibility="gone"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/admin_button_bici_add"
+                    style="@style/Widget.MyTheme.MaterialButtonAdmin"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="13dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_add_circle_outline_black_48dp"
+                    android:paddingVertical="26dp"
+                    android:text="@string/admin_aggiungi_posizione"
+                    android:visibility="gone" />
+            </TableRow>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/admin_button_bici_add"
-                style="@style/Widget.MyTheme.MaterialButtonAdmin"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="13dp"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/ic_add_circle_outline_black_48dp"
-                android:paddingVertical="26dp"
-                android:text="@string/admin_aggiungi_posizione"
-                android:visibility="gone"/>
-        </TableRow>
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
-        <TableRow
-            android:id="@+id/tableRow3"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/admin_button_bici_remove"
+                    style="@style/Widget.MyTheme.MaterialButtonAdmin"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="26dp"
+                    android:layout_span="0"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_remove_circle_outline_black_48dp"
+                    android:paddingVertical="26dp"
+                    android:text="@string/remove_bike"
+                    android:visibility="gone" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/admin_button_bici_remove"
-                style="@style/Widget.MyTheme.MaterialButtonAdmin"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="26dp"
-                android:layout_span="0"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/ic_remove_circle_outline_black_48dp"
-                android:paddingVertical="26dp"
-                android:text="@string/remove_bike"
-                android:visibility="gone"/>
+            </TableRow>
+        </TableLayout>
 
-        </TableRow>
-    </TableLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/logout_utente"
+            style="@style/Widget.MyTheme.Button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:layout_marginBottom="26dp"
+            android:text="@string/_logout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
