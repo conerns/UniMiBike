@@ -58,4 +58,22 @@
     <string name="start_rental_time">"Starting time: "</string>
     <string name="start_rental_rack">"Starting rack: "</string>
     <string name="end_rental">End ride</string>
+    <string name="insert_rack_id">Insert rack ID</string>
+    <string name="confirm_dati">Confirm given data!</string>
+    <string name="confirm_first_half">"Are you sure you add a new bike inside the rack id: "</string>
+    <string name="confirm_second_half">", and unlock code "</string>
+    <string name="correct_bike_add">Bike  added correctly!</string>
+    <string name="correct_bike_add_text">"Congratulations! You correctly added a new bike. "</string>
+    <string name="modifed_position">Position has been modified.</string>
+    <string name="correct_bike_modify">The bike required has been moved into a new Rack. Users will be able to rent the bike from this rack now.</string>
+    <string name="confirm_fh_modify">"Are you sure you want to move bike number "</string>
+    <string name="confirm_sh_modify">", into rack number "</string>
+    <string name="delete_bike">Remove bike</string>
+    <string name="remove_bike_desc">"You are going to remove bike "</string>
+    <string name="remove_bike_desc_finale">\? This bike will no longer be avaible.</string>
+    <string name="confirm_message">Confirm</string>
+    <string name="cancel_message">Cancel</string>
+    <string name="removed_bike">Bike has been removed</string>
+    <string name="correct_bike_remove">The bike has been correctly removed. No one will be able to rent it from now on.</string>
+    <string name="admin_storico">View all the bikes you added.</string>
 </resources>

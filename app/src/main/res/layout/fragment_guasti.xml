@@ -52,6 +52,7 @@
 
         <AutoCompleteTextView
             android:id="@+id/filled_exposed_dropdown"
+            android:textSize="15sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
