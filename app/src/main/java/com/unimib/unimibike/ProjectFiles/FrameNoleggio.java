@@ -62,6 +62,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         rentalCallback = this;
         geolocationCallback = this;
         user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
+
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         btn.setOnClickListener(new View.OnClickListener(){
@@ -135,6 +136,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     }
 
     public void update_view_rental_in_progress(Bike bike_used, final Rental rental){
+        Log.d("update_view_rental", bike_used +" ");
         TextView starting_rack = view.findViewById(R.id.rental_up_starting_rack);
         String[] splitTmp = bike_used.getRack().getLocationDescription().split(" ");
         String rack_description = getString(R.string.start_rental_rack)+splitTmp[1];
@@ -182,17 +184,19 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
 
     public void startRental(final Bike bike_used){
 
+        Log.d("update_view_rental", bike_used +" startRental");
         UnimibBikeFetcher.postRental(getActivity().getApplicationContext(),
                 bike_used.getId(), user_id,
                 new ServerResponseParserCallback<Rental>() {
                     @Override
                     public void onSuccess(Rental response) {
+                        Log.d("update_view_rental", bike_used +" on_success");
                         update_view_rental_in_progress(bike_used, response);
                     }
 
                     @Override
                     public void onError(String errorTitle, String errorMessage) {
-
+                        Log.d("update_view_rental", errorMessage);
                     }
                 });
     }
