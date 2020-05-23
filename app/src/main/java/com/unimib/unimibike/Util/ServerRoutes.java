@@ -22,7 +22,7 @@ public interface ServerRoutes {
     String USERS = BASE_URL + "users";
     String USER_ID = BASE_URL + "userId";
     String ADD_USER = BASE_URL + "addUser";
-
+    String MOD_POSITION = BASE_URL + "modifyBikePosition";
 
     String LOGIN = BASE_URL + "login";
 
