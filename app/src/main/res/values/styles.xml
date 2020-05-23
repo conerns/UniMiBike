@@ -61,12 +61,21 @@
         <item name="android:textColor">?attr/colorSurface</item>
     </style>
 
+    <style name="Widget.MyTheme.TextView2" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+    </style>
+
     <style name="Widget.MyTheme.TextViewButton" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
     <style name="Theme.MyApp.UnimibAccent">
         <item name="colorAccent">?attr/colorPrimary</item>
+    </style>
+
+    <style name="MyThemeIconColor">
+        <item name="android:tint">?attr/colorPrimary</item>
     </style>
 
 </resources>

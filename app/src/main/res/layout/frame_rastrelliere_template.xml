@@ -221,42 +221,42 @@
 
         <ImageView
             android:id="@+id/rack_icon"
+            style="@style/MyThemeIconColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:tint="@color/red_unimib"
             app:layout_constraintStart_toStartOf="@+id/rack_position_icon"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/rastrelliera" />
 
         <ImageView
             android:id="@+id/rack_distance_icon"
+            style="@style/MyThemeIconColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:tint="@color/red_unimib"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_directions_24" />
 
         <ImageView
+            style="@style/MyThemeIconColor"
             android:id="@+id/rack_position_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:tint="@color/red_unimib"
             app:layout_constraintStart_toStartOf="@+id/button_naviga"
             app:layout_constraintTop_toBottomOf="@+id/rack_icon"
             app:srcCompat="@drawable/baseline_room_24" />
 
         <ImageView
             android:id="@+id/rack_bike_icon"
+            style="@style/MyThemeIconColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:tint="@color/red_unimib"
             app:layout_constraintStart_toStartOf="@+id/rack_distance_icon"
             app:layout_constraintTop_toBottomOf="@+id/rack_distance_icon"
             app:srcCompat="@drawable/icona_bici" />

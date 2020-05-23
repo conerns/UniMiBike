@@ -87,6 +87,12 @@ public class FrameUtente extends Fragment {
                     apri_remove_biciletta();
                 }
             });
+            mHistory.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    apri_storico_biciclette_aggiunte();
+                }
+            });
         }
 
     }
@@ -110,5 +116,10 @@ public class FrameUtente extends Fragment {
     public void apri_aggiungi_biciletta(){
         Intent mPagina = new Intent(getActivity(), AggiungiNuovaBici.class);
         startActivity(mPagina);
+    }
+
+    public void apri_storico_biciclette_aggiunte(){
+        //Intent mPagina = new Intent(getActivity(), AggiungiNuovaBici.class);
+        //startActivity(mPagina);
     }
 }
