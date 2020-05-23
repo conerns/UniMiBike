@@ -29,6 +29,7 @@ public class FrameUtente extends Fragment {
     private MaterialButton mAddNewBike;
     private MaterialButton mModBike;
     private MaterialButton mRemBike;
+    private MaterialButton mHistory;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,6 +67,8 @@ public class FrameUtente extends Fragment {
             mModBike.setVisibility(View.VISIBLE);
             mRemBike = view.findViewById(R.id.admin_button_bici_remove);
             mRemBike.setVisibility(View.VISIBLE);
+            mHistory = view.findViewById(R.id.admin_button_storico);
+            mHistory.setVisibility(View.VISIBLE);
             mModBike.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -76,6 +79,12 @@ public class FrameUtente extends Fragment {
                 @Override
                 public void onClick(View view) {
                     apri_aggiungi_biciletta();
+                }
+            });
+            mRemBike.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    apri_remove_biciletta();
                 }
             });
         }
@@ -92,6 +101,10 @@ public class FrameUtente extends Fragment {
 
     public void apri_modifica_posizione(){
         Intent mPagina = new Intent(getActivity(), ModificaPosizione.class);
+        startActivity(mPagina);
+    }
+    public void apri_remove_biciletta(){
+        Intent mPagina = new Intent(getActivity(), RemoveBike.class);
         startActivity(mPagina);
     }
     public void apri_aggiungi_biciletta(){

@@ -124,11 +124,24 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="26dp"
-                    android:layout_span="0"
+                    android:layout_marginRight="13dp"
                     android:layout_weight="1"
                     android:drawableTop="@drawable/ic_remove_circle_outline_black_48dp"
                     android:paddingVertical="26dp"
                     android:text="@string/remove_bike"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/admin_button_storico"
+                    style="@style/Widget.MyTheme.MaterialButtonAdmin"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginLeft="13dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_history_black_48dp"
+                    android:paddingVertical="26dp"
+                    android:text="@string/admin_storico"
                     android:visibility="gone" />
 
             </TableRow>

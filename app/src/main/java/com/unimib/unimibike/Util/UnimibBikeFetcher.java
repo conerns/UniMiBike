@@ -15,6 +15,8 @@ import com.unimib.unimibike.Model.Report;
 import com.unimib.unimibike.Model.User;
 import com.unimib.unimibike.Model.Building;
 import com.unimib.unimibike.Model.Rack;
+import com.unimib.unimibike.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,89 @@ public class UnimibBikeFetcher {
                 return_value.onError(getErrorTitle(statusCode), getErrorMessage(statusCode));;
             }
         });
+    }
+    public static void postAddBike(final Context context, int user_id, int rack_id, int unlock_code, final ServerResponseParserCallback<Bike> return_value){
+        final JSONObject oggetto_add_bike = createJSONAdd(user_id,rack_id,unlock_code);
+
+        ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.ADD_BIKES, oggetto_add_bike, new NetworkCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                    return_value.onSuccess(new Bike());
+
+            }
+
+            @Override
+            public void onError(int statusCode, JSONObject cache) {
+                return_value.onError("Add error", "Qualcosa è andato storto");
+            }
+        });
+    }
+    public static void postModifyBike(final Context context,int bike_id, int rack_id,int user_id, final ServerResponseParserCallback<Bike> return_value){
+        final JSONObject oggettoModifica = createJSONModify(bike_id, rack_id, user_id);
+        ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.MOD_POSITION, oggettoModifica, new NetworkCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                return_value.onSuccess(new Bike());
+            }
+
+            @Override
+            public void onError(int statusCode, JSONObject cache) {
+                return_value.onError("Modify Error", "Dati inseriti non validi");
+            }
+        });
+    }
+
+    public static void postRemoveBike(final Context context,int bike_id, int user_id, final ServerResponseParserCallback<Bike> return_value){
+        final JSONObject oggettoModifica = createJSONRemove(bike_id, user_id);
+        ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.REMOVE_BIKES, oggettoModifica, new NetworkCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                return_value.onSuccess(new Bike());
+            }
+
+            @Override
+            public void onError(int statusCode, JSONObject cache) {
+                return_value.onError("Remove error", "Qualcosa è andato storto");
+            }
+        });
+    }
+
+    private static JSONObject createJSONRemove(int bike_id, int user_id) {JSONObject mJson = new JSONObject();
+        try{
+            mJson.put("user_id", user_id);
+            mJson.put("bike_id", bike_id);
+            return mJson;
+        }catch (JSONException e){
+            e.getCause();
+        }
+        return null;
+
+    }
+
+    private static JSONObject createJSONModify(int bike_id, int rack_id, int user_id) {
+        JSONObject mJson = new JSONObject();
+        try{
+            mJson.put("user_id", user_id);
+            mJson.put("rack_id", rack_id);
+            mJson.put("bike_id", bike_id);
+            return mJson;
+        }catch (JSONException e){
+            e.getCause();
+        }
+        return null;
+    }
+
+    private static JSONObject createJSONAdd(int user_id, int rack_id, int unlock_code){
+        JSONObject mJson = new JSONObject();
+        try{
+            mJson.put("user_id", user_id);
+            mJson.put("rack_id", rack_id);
+            mJson.put("unlock_code", unlock_code);
+            return mJson;
+        }catch (JSONException e){
+            e.getCause();
+        }
+        return null;
     }
 
     public static void postAddUser(final Context context, String email, final ServerResponseParserCallback<User> return_value){
@@ -248,33 +333,6 @@ public class UnimibBikeFetcher {
             }
         });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private static User getUserFromJSONObject(JSONObject response) {
         if (response.length() != 0) {

@@ -87,6 +87,7 @@ public class FrameRastrelliere extends Fragment implements GeolocationCallback {
     public void positionCallback(Location mCurrentPosition) {
             this.mCurrentPosition = new LatLng(mCurrentPosition.getLatitude(), mCurrentPosition.getLongitude());
     }
+
     private void getUserPosition(){
         if (checkPermissions()) {
             if (isLocationEnabled()) {

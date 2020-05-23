@@ -53,4 +53,14 @@
     <string name="start_rental_time">"Orario di partenza: "</string>
     <string name="start_rental_rack">"Rastrelliera di partenza: "</string>
     <string name="end_rental">Concludi</string>
+    <string name="insert_rack_id">Inserisci id rasterlliera</string>
+    <string name="confirm_dati">Conferma dati inseriti!</string>
+    <string name="confirm_first_half">"Sei sicuro di voler aggiungere la nuova bici all'interno della rastrelliera "</string>
+    <string name="confirm_second_half">", avente codice di sblocco "</string>
+    <string name="correct_bike_add">Bicicletta aggiunta correttamente!</string>
+    <string name="correct_bike_add_text">Hai aggiunto una nuova bicicletta e sarà subito pronta all\'uso.</string>
+    <string name="modifed_position">Poszione modificata correttamente.</string>
+    <string name="correct_bike_modify">"La bicicletta in questione è stata spostata in una nuova Rastrelliera. Gli utenti potranno prenderla dalla nuova rastrelliera d'ora in poi. "</string>
+    <string name="confirm_fh_modify">"Sei sicuro di voler spostare la bicicletta con id "</string>
+    <string name="confirm_sh_modify">", nella rasterlliera "</string>
 </resources>
