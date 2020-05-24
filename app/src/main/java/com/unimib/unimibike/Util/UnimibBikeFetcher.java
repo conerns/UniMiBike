@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 //da ricordare di dover fare la import anche dei restanti
 import com.unimib.unimibike.Model.Bike;
+import com.unimib.unimibike.Model.BikeHistory;
 import com.unimib.unimibike.Model.BikeState;
 import com.unimib.unimibike.Model.Rental;
 import com.unimib.unimibike.Model.Report;
@@ -49,6 +50,7 @@ public class UnimibBikeFetcher {
             }
         });
     }
+
     public static void postAddBike(final Context context, int user_id, int rack_id, int unlock_code, final ServerResponseParserCallback<Bike> return_value){
         final JSONObject oggetto_add_bike = createJSONAdd(user_id,rack_id,unlock_code);
 
@@ -65,6 +67,7 @@ public class UnimibBikeFetcher {
             }
         });
     }
+
     public static void postModifyBike(final Context context,int bike_id, int rack_id,int user_id, final ServerResponseParserCallback<Bike> return_value){
         final JSONObject oggettoModifica = createJSONModify(bike_id, rack_id, user_id);
         ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.MOD_POSITION, oggettoModifica, new NetworkCallback<JSONObject>() {
@@ -334,6 +337,48 @@ public class UnimibBikeFetcher {
         });
     }
 
+    public static void postAddedBikes(final Context context, final int user_id,
+                                      final ServerResponseParserCallback<List<BikeHistory>> serverResponseParserCallback){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("user_id", user_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.BIKE_ADDED_HISTORY, jsonObject,
+                new NetworkCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        serverResponseParserCallback.onSuccess(createListBikeHistoryFromObject(response));
+                    }
+
+                    @Override
+                    public void onError(int statusCode, JSONObject cache) {
+                        serverResponseParserCallback.onError(getErrorTitle(statusCode), getErrorMessage(statusCode));
+                    }
+                });
+    }
+
+
+    public static List<BikeHistory> createListBikeHistoryFromObject(JSONObject response){
+        if (response != null) {
+            List<BikeHistory> bikes = new ArrayList<>();
+            try {
+                JSONArray mJson = response.getJSONArray("bikes");
+                for (int i = 0; i < mJson.length(); i++) {
+                    bikes.add(createBikeHistoryFromJSONObject(mJson.getJSONObject(i)));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return bikes;
+        }
+        return null;
+    }
+
+
+
+
     private static User getUserFromJSONObject(JSONObject response) {
         if (response.length() != 0) {
             User user = new User();
@@ -567,7 +612,22 @@ public class UnimibBikeFetcher {
     }
 
 
-
+    public static BikeHistory createBikeHistoryFromJSONObject(JSONObject mJson){
+        if(mJson != null){
+            BikeHistory bike = new BikeHistory();
+            try {
+                bike.setmBikeId(mJson.getInt("id"));
+                bike.setmBikeDescription(mJson.getString("description"));
+                bike.setmCreatedOn(mJson.getString("created_on"));
+                bike.setmUnlockCode(mJson.getInt("unlock_code"));
+                bike.setmRackBuildings(mJson.getString("location_description"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return bike;
+        }
+        return null;
+    }
 
 
 

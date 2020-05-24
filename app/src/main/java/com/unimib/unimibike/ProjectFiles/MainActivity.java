@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         pagina.putExtra("USER-ID", user.getmId());
         pagina.putExtra("USER-MAIL", user.getEmail());
         pagina.putExtra("USER-PERISSION", user.getmRole());
-        SaveSharedPreference.setUserName(getApplicationContext(),user.getEmail(),user.getmRole(),user.getmId());
+        SaveSharedPreference.setUserName(getApplicationContext(),user.getEmail(),user.getmRole(),user.getmId(),user.getUserState());
         startActivity(pagina);
         finish();
     }

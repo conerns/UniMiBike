@@ -34,6 +34,7 @@ import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
+import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 
@@ -62,7 +63,6 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         rentalCallback = this;
         geolocationCallback = this;
         user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
-
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         btn.setOnClickListener(new View.OnClickListener(){
@@ -71,12 +71,20 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
                 BottomSheet bsdf = new BottomSheet(rentalCallback);
                 assert getFragmentManager() != null;
                 bsdf.show(getFragmentManager() ,"bottomsheetlayout");
-
             }
         });
 
         getUserPosition();
 
+        if(SaveSharedPreference.getRentalInProgress(getActivity().getApplicationContext()) != null &&
+            SaveSharedPreference.getBikeRentalInProgress(getActivity().getApplicationContext()) != null &&
+            SaveSharedPreference.getUserID(getActivity().getApplicationContext()) == user_id &&
+            SaveSharedPreference.getUserState(getActivity().getApplicationContext()) == 3) {
+            update_view_rental_in_progress(SaveSharedPreference.getBikeRentalInProgress(getActivity().getApplicationContext()),
+                    SaveSharedPreference.getRentalInProgress(getActivity().getApplicationContext()));
+            Log.d("FRAMENOLEGGIOONCREATE", SaveSharedPreference.getRentalInProgress(getActivity().getApplicationContext()).toString());
+            Log.d("FRAMENOLEGGIOONCREATE", SaveSharedPreference.getBikeRentalInProgress(getActivity().getApplicationContext()).toString());
+        }
         return view;
     }
 
@@ -143,10 +151,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         starting_rack.setText(rack_description);
 
         TextView starting_time = view.findViewById(R.id.rental_up_starting_time);
-        SimpleDateFormat  formatter = new SimpleDateFormat("hh:mm:ss");
-        Date tmp = new Date();
-        String strDate = getString(R.string.start_rental_time)+formatter.format(tmp);
-
+        String strDate = getString(R.string.start_rental_time)+rental.getStartedOn().substring(11);
         starting_time.setText(strDate);
 
         mRentalCardView = view.findViewById(R.id.rental_up_cardview);
@@ -191,6 +196,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
                     @Override
                     public void onSuccess(Rental response) {
                         Log.d("update_view_rental", bike_used +" on_success");
+                        SaveSharedPreference.setPrefRentalInProgress(getActivity().getApplicationContext(),response,bike_used);
                         update_view_rental_in_progress(bike_used, response);
                     }
 
@@ -208,6 +214,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
                     @Override
                     public void onSuccess(Rental response) {
                         mRentalCardView.setVisibility(View.GONE);
+                        SaveSharedPreference.clearRental_in_progress(getActivity().getApplicationContext());
                     }
 
                     @Override

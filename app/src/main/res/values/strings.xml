@@ -70,7 +70,7 @@
     <string name="confirm_sh_modify">", into rack number "</string>
     <string name="delete_bike">Remove bike</string>
     <string name="remove_bike_desc">"You are going to remove bike "</string>
-    <string name="remove_bike_desc_finale">\? This bike will no longer be avaible.</string>
+    <string name="remove_bike_desc_finale">\? This bike will no longer be available</string>
     <string name="confirm_message">Confirm</string>
     <string name="cancel_message">Cancel</string>
     <string name="removed_bike">Bike has been removed</string>
