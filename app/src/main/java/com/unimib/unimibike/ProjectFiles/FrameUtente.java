@@ -119,7 +119,10 @@ public class FrameUtente extends Fragment {
     }
 
     public void apri_storico_biciclette_aggiunte(){
-        //Intent mPagina = new Intent(getActivity(), AggiungiNuovaBici.class);
-        //startActivity(mPagina);
+        Intent mPagina = new Intent(getActivity(), AdminAddedBikes.class);
+        int user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
+        Log.d("FRAMEUTENTE", user_id+"");
+        mPagina.putExtra("user_id", user_id);
+        startActivity(mPagina);
     }
 }

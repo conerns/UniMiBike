@@ -63,4 +63,12 @@
     <string name="correct_bike_modify">"La bicicletta in questione è stata spostata in una nuova Rastrelliera. Gli utenti potranno prenderla dalla nuova rastrelliera d'ora in poi. "</string>
     <string name="confirm_fh_modify">"Sei sicuro di voler spostare la bicicletta con id "</string>
     <string name="confirm_sh_modify">", nella rasterlliera "</string>
+    <string name="delete_bike">Rimuovi bicicletta</string>
+    <string name="remove_bike_desc">Stai per rimuovere la bicicletta</string>
+    <string name="remove_bike_desc_finale">" ? Questa bicicletta non sarà più disponibile"</string>
+    <string name="confirm_message">Conferma</string>
+    <string name="cancel_message">Cancella</string>
+    <string name="removed_bike">La bicicletta è stata rimossa</string>
+    <string name="correct_bike_remove">La bicicletta è stata rimossa correttamente</string>
+    <string name="admin_storico">Visualizza tutte le bici che hai aggiunto</string>
 </resources>
