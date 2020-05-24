@@ -31,7 +31,7 @@
         android:theme="@style/Theme.MyApp"
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="n">
-        <activity android:name=".ProjectFiles.RemoveBike"></activity>
+        <activity android:name=".ProjectFiles.RemoveBike" />
         <activity android:name=".Util.Geolocation" />
         <activity android:name=".Util.QrReaderActivity" />
         <activity android:name=".ProjectFiles.AggiungiNuovaBici" />
