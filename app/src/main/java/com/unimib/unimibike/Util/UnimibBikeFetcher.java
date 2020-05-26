@@ -376,6 +376,39 @@ public class UnimibBikeFetcher {
         return null;
     }
 
+    public static void getRentals(final Context context,int user_id,
+                                  final ServerResponseParserCallback<List<Rental>> serverResponseParserCallback) {
+        String url = ServerRoutes.RENTALS + "/?id=" + user_id;
+        Log.d(TAG, url);
+        ServerRequest.getInstance(context).getBasicRequest(url, new NetworkCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                serverResponseParserCallback.onSuccess(getRentalsFromJSONObject(response));
+            }
+
+            @Override
+            public void onError(int statusCode, JSONObject cache) {
+                serverResponseParserCallback.onError(getErrorTitle(statusCode), getErrorMessage(statusCode));
+            }
+        });
+    }
+
+    private static List<Rental> getRentalsFromJSONObject(JSONObject response) {
+        if (response != null) {
+            List<Rental> rentals = new ArrayList<>();
+            try {
+                JSONArray mJson = response.getJSONArray("rentals");
+                for (int i = 0; i < mJson.length(); i++) {
+                    rentals.add(createRentalFromJSONObject(mJson.getJSONObject(i)));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return rentals;
+        }
+        return null;
+    }
+
 
 
 

@@ -4,7 +4,7 @@ package com.unimib.unimibike.Util;
  */
 
 public interface ServerRoutes {
-    String IP = "192.168.1.10";
+    String IP = "192.168.1.14";
     String PORT = "8000";
     String BASE_URL = "http://"+IP+":"+PORT+"/api/";
     String RACKS = BASE_URL + "racks";
@@ -24,6 +24,7 @@ public interface ServerRoutes {
     String ADD_USER = BASE_URL + "addUser";
 
 
+    String BIKE_ADDED_HISTORY = BASE_URL + "addedBikes";
     String LOGIN = BASE_URL + "login";
 
     double MIN_DISTANCE_FROM_RACKS = 2;

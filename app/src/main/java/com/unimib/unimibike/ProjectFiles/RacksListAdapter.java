@@ -79,6 +79,7 @@ public class RacksListAdapter extends RecyclerView.Adapter<RacksListAdapter.Rack
         else
             holder.getRackDistance().setText(mRacks.get(position).getDistanceString());
         holder.getRackAvailableBikes().setText(String.valueOf(mRacks.get(position).getAvailableBikes()));
+
         holder.getGoToButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
