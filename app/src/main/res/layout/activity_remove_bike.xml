@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.unimib.unimibike.ProjectFiles.RemoveBike">
+    tools:context="com.unimib.unimibike.ProjectFiles.AdminOperations.RemoveBike">
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/id_remove_bike"
         style="@style/Widget.MyTheme.TextInputLayout.OutlinedBox"

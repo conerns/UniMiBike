@@ -9,55 +9,46 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.Model.Rental;
-import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.Geolocation;
+import com.unimib.unimibike.ProjectFiles.Adapters.RentalFrameAdapter;
+import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.Util.SaveSharedPreference;
-import com.unimib.unimibike.Util.ServerResponseParserCallback;
-import com.unimib.unimibike.Util.UnimibBikeFetcher;
+import com.unimib.unimibike.databinding.FragmentStoricoBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FrameStorico extends Fragment {
-    private RecyclerView recyclerView;
     private RentalFrameAdapter adapter;
-    private ArrayList<Rental> rackArrayList;
-    private View view;
+    private RentalsViewModel rentalsViewModel;
+    private MutableLiveData<List<Rental>> rentalsLiveData;
+    private FragmentStoricoBinding binding;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view =  inflater.inflate(R.layout.fragment_storico,container, false);
+        binding = FragmentStoricoBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         addValuesFromDB();
         return view;
     }
 
     private void addValuesFromDB() {
-        rackArrayList = new ArrayList<>();
-        UnimibBikeFetcher.getRentals(getContext(),
-                SaveSharedPreference.getUserID(getActivity().getApplicationContext()),
-                new ServerResponseParserCallback<List<Rental>>() {
+        rentalsViewModel = new RentalsViewModel();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        binding.recyclerStorico.setLayoutManager(layoutManager);
+        final Observer<List<Rental>> observer = new Observer<List<Rental>>() {
             @Override
-            public void onSuccess(List<Rental> response) {
-                Log.d("Fragment", response.toString());
-                rackArrayList.addAll(response);
-                recyclerView = view.findViewById(R.id.recycler_storico);
-                adapter = new RentalFrameAdapter(rackArrayList);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(adapter);
+            public void onChanged(List<Rental> rentals) {
+                adapter = new RentalFrameAdapter(rentals);
+                binding.recyclerStorico.setAdapter(adapter);
             }
+        };
+        rentalsLiveData = rentalsViewModel.getUserRentals(getContext(), SaveSharedPreference.getUserID(getActivity().getApplicationContext()));
 
-            @Override
-            public void onError(String errorTitle, String errorMessage) {
-
-            }
-        });
-
+        rentalsLiveData.observe(requireActivity(), observer);
     }
 }

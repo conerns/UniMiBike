@@ -1,7 +1,6 @@
 package com.unimib.unimibike.ProjectFiles;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,32 +8,28 @@ import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.unimib.unimibike.Model.User;
-import com.unimib.unimibike.R;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.AdminAddedBikes;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.AggiungiNuovaBici;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.ModificaPosizione;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.RemoveBike;
+
 import com.unimib.unimibike.Util.SaveSharedPreference;
+import com.unimib.unimibike.databinding.FragmentUtenteBinding;
 
 public class FrameUtente extends Fragment {
     private String get_email;
     private String get_role;
-    private MaterialButton mAddNewBike;
-    private MaterialButton mModBike;
-    private MaterialButton mRemBike;
-    private MaterialButton mHistory;
+    private FragmentUtenteBinding binding;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View user = inflater.inflate(R.layout.fragment_utente,container, false);
-        Button get_out = (Button) user.findViewById(R.id.logout_utente);
+        binding = FragmentUtenteBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         if(SaveSharedPreference.getUserName(getContext().getApplicationContext()).length() != 0) {
             get_email = SaveSharedPreference.getUserName(getContext().getApplicationContext());
             get_role = SaveSharedPreference.getPrefUserRole(getContext().getApplicationContext());
@@ -43,53 +38,52 @@ public class FrameUtente extends Fragment {
             get_role = getArguments().getString("USER-ROLE");
             get_email = getArguments().getString("USER-MAIL");
         }
-        get_out.setOnClickListener(new OnClickListener() {
+        binding.logoutUtente.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 apr_activity();
             }
         });
-        return user;
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        TextView user_mail = (TextView) getView().findViewById(R.id.credenziali);
-        user_mail.setText(get_email);
-        TextView user_image = (TextView) getView().findViewById(R.id.nome_utente_pagina);
+        binding.credenziali.setText(get_email);
         String[] value = get_email.split("\\.");
         String cambia= value[0].toUpperCase() + (value[1].toUpperCase()).charAt(0);
-        user_image.setText(cambia);
+        binding.nomeUtentePagina.setText(cambia);
+
         if(get_role.equals("admin")){
-            mAddNewBike = view.findViewById(R.id.admin_button_bici_add);
-            mAddNewBike.setVisibility(View.VISIBLE);
-            mModBike = view.findViewById(R.id.admin_button_bici_mod);
-            mModBike.setVisibility(View.VISIBLE);
-            mRemBike = view.findViewById(R.id.admin_button_bici_remove);
-            mRemBike.setVisibility(View.VISIBLE);
-            mHistory = view.findViewById(R.id.admin_button_storico);
-            mHistory.setVisibility(View.VISIBLE);
-            mModBike.setOnClickListener(new OnClickListener() {
+            binding.adminButtonBiciAdd.setVisibility(View.VISIBLE);
+            binding.adminButtonBiciMod.setVisibility(View.VISIBLE);
+            binding.adminButtonBiciRemove.setVisibility(View.VISIBLE);
+            binding.adminButtonStorico.setVisibility(View.VISIBLE);
+
+            binding.adminButtonBiciAdd.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    apri_modifica_posizione();
-                }
-            });
-            mAddNewBike.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     apri_aggiungi_biciletta();
                 }
             });
-            mRemBike.setOnClickListener(new OnClickListener() {
+
+            binding.adminButtonBiciMod.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
+                    apri_modifica_posizione();
+                }
+            });
+
+            binding.adminButtonBiciRemove.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     apri_remove_biciletta();
                 }
             });
-            mHistory.setOnClickListener(new OnClickListener() {
+
+            binding.adminButtonStorico.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     apri_storico_biciclette_aggiunte();
                 }
             });

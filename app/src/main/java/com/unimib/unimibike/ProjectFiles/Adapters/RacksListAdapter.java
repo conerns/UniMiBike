@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.Adapters;
 
 import android.content.Intent;
 import android.net.Uri;

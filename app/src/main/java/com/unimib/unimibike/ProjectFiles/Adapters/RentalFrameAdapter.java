@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.Adapters;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

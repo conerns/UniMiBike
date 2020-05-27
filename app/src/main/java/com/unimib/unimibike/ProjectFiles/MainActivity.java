@@ -3,27 +3,25 @@ package com.unimib.unimibike.ProjectFiles;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.Model.User;
+import com.unimib.unimibike.ProjectFiles.ViewModels.UsersViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.CheckForInternet;
 import com.unimib.unimibike.Util.SaveSharedPreference;
-import com.unimib.unimibike.Util.ServerResponseParserCallback;
-import com.unimib.unimibike.Util.UnimibBikeFetcher;
 import com.unimib.unimibike.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -35,11 +33,14 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     private static final String MAIL = "Mail";
     private static final String PASSWORD = "Password";
-    private ActivityMainBinding activity_layout;
+    private ActivityMainBinding binding;
     private String email;
     private String password;
     private final int REQUEST_ID_MULTIPLE_PERMISSIONS = 0;
     private static final String TAG = "MAIN ACTIVITY";
+    private UsersViewModel usersViewModel;
+    private MutableLiveData<Resource<User>> recourceUserMutableLiveData;
+    private MutableLiveData<User> userMutableLiveData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,105 +62,85 @@ public class MainActivity extends AppCompatActivity {
     }
     public boolean controlla_email(String value){
         if(value.isEmpty()){
-            activity_layout.userEmail.setError("Campo email vuoto!");
+            binding.userEmail.setError("Campo email vuoto!");
             return false;
         }
         if((value.split("@")).length == 2){
             if(value.endsWith("@campus.unimib.it") || value.endsWith("@unimib.it")){
-                activity_layout.userEmail.setError(null);
-                activity_layout.userEmail.setErrorEnabled(false);
+                binding.userEmail.setError(null);
+                binding.userEmail.setErrorEnabled(false);
                 return true;
             }
         }
-        activity_layout.userEmail.setError("Email non valida!");
+        binding.userEmail.setError("Email non valida!");
         return false;
     }
 
     public boolean controlla_pass(String value){
         if(value.isEmpty()){
-            activity_layout.userPassword.setError("Campo password vuoto!");
+            binding.userPassword.setError("Campo password vuoto!");
             return false;
         }
-        activity_layout.userPassword.setError(null);
+        binding.userPassword.setError(null);
         return true;
     }
 
     public void effettua_login(String value_email, String value_password){
-        activity_layout.accediUtente.setEnabled(true);
-        UnimibBikeFetcher.postUserLogin(getApplicationContext(), value_email, value_password, new ServerResponseParserCallback<User>() {
+        binding.accediUtente.setEnabled(true);
+        usersViewModel = new UsersViewModel();
+        final Observer<Resource<User>> observer = new Observer<Resource<User>>() {
             @Override
-            public void onSuccess(User response) {
-                returnUserIdRoute(response.getEmail());
+            public void onChanged(Resource<User> user) {
+                if(user.getStatusCode() == 200)
+                    returnUserIdRoute(user.getData().getEmail(), true);
+                else if(user.getStatusCode() == 404){
+                    binding.mainActivityRelativeLayout.setVisibility(View.GONE);
+                    binding.pBar.setVisibility(View.GONE);
+                    binding.testoEmail.setFocusableInTouchMode(true);
+                    binding.testoPassword.setFocusableInTouchMode(true);
+                    binding.accediUtente.setClickable(true);
+                    binding.userEmail.setError("email potrebbe essere errata");
+                    binding.userPassword.setError("password potrebbe essere errata");
+                    binding.accediUtente.setEnabled(true);
+                }
             }
-
-            @Override
-            public void onError(String errorTitle, String errorMessage) {
-                activity_layout.mainActivityRelativeLayout.setVisibility(View.GONE);
-                activity_layout.pBar.setVisibility(View.GONE);
-                activity_layout.testoEmail.setFocusableInTouchMode(true);
-                activity_layout.testoPassword.setFocusableInTouchMode(true);
-                activity_layout.accediUtente.setClickable(true);
-                activity_layout.userEmail.setError("email potrebbe essere errata");
-                activity_layout.userPassword.setError("password potrebbe essere errata");
-                activity_layout.accediUtente.setEnabled(true);
-            }
-
-        });
+        };
+        recourceUserMutableLiveData = usersViewModel.login(this.getApplicationContext(), value_email, value_password);
+        recourceUserMutableLiveData.observe(this, observer);
     }
 
-    public void returnUserIdRoute(final String email){
-        UnimibBikeFetcher.getUserId(getApplicationContext(), email, new ServerResponseParserCallback<User>() {
+    public void returnUserIdRoute(final String email, final boolean call){
+        usersViewModel = new UsersViewModel();
+        final Observer<User> observer = new Observer<User>() {
             @Override
-            public void onSuccess(User response) {
-                if(response != null) {
-                    Log.d("USERIDROUTE", "onSuccess: " + response.toString());
-                    apr_activity(response);
+            public void onChanged(User user) {
+                if(call)
+                    if (user != null) {
+                        Log.d("USERIDROUTE", "onSuccess: " + user.toString());
+                        apr_activity(user);
+                    } else
+                        addUser(email);
+                else{
+                    SaveSharedPreference.clearUserName(getApplicationContext());
+                    apr_activity(user);
                 }
-                else
-                    addUser(email);
             }
-
-            @Override
-            public void onError(String errorTitle, String errorMessage) {
-                Log.d("ONERRORRETURNUSER", errorMessage);
-            }
-        });
+        };
+        userMutableLiveData = usersViewModel.getUserId(this.getApplicationContext(), email);
+        userMutableLiveData.observe(this, observer);
     }
 
     public void addUser(String email){
-        UnimibBikeFetcher.postAddUser(getApplicationContext(), email, new ServerResponseParserCallback<User>() {
+        usersViewModel = new UsersViewModel();
+        final Observer<User> observer = new Observer<User>() {
             @Override
-            public void onSuccess(User response) {
-                apr_activity(response);
+            public void onChanged(User user) {
+                apr_activity(user);
             }
-
-            @Override
-            public void onError(String errorTitle, String errorMessage) {
-
-            }
-        });
+        };
+        userMutableLiveData = usersViewModel.addUser(this.getApplicationContext(), email);
+        userMutableLiveData.observe(this, observer);
     }
-
-
-    public void getUserRole(String user_email){
-        UnimibBikeFetcher.getUserId(getApplicationContext(), user_email, new ServerResponseParserCallback<User>() {
-            @Override
-            public void onSuccess(User response) {
-                SaveSharedPreference.clearUserName(getApplicationContext());
-                /*SaveSharedPreference.setUserName(getApplicationContext(),response.getEmail(),response.getmRole(),response.getmId());
-                Intent mPagina = new Intent(getApplicationContext(), Principal.class);
-                startActivity(mPagina);
-                finish();*/
-                apr_activity(response);
-            }
-
-            @Override
-            public void onError(String errorTitle, String errorMessage) {
-
-            }
-        });
-    }
-
 
     private boolean checkAndRequestPermissions() {
         int camerapermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -217,23 +198,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void afterPermission(){
         if (SaveSharedPreference.getUserName(getApplicationContext()).length() != 0) {
-            getUserRole(SaveSharedPreference.getUserName(getApplicationContext()));
+            //getUserRole(SaveSharedPreference.getUserName(getApplicationContext()));
+            returnUserIdRoute(SaveSharedPreference.getUserName(getApplicationContext()), false);
         } else {
-            activity_layout = ActivityMainBinding.inflate(getLayoutInflater());
-            View view = activity_layout.getRoot();
+            binding = ActivityMainBinding.inflate(getLayoutInflater());
+            View view = binding.getRoot();
             setContentView(view);
-            activity_layout.accediUtente.setOnClickListener(new View.OnClickListener() {
+            binding.accediUtente.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))) {
-                        email = activity_layout.testoEmail.getText().toString();
-                        password = activity_layout.testoPassword.getText().toString();
+                        email = binding.testoEmail.getText().toString();
+                        password = binding.testoPassword.getText().toString();
                         if (controlla_email(email) & controlla_pass(password)) {
-                            activity_layout.mainActivityRelativeLayout.setVisibility(View.VISIBLE);
-                            activity_layout.pBar.setVisibility(View.VISIBLE);
-                            activity_layout.testoEmail.setFocusable(false);
-                            activity_layout.testoPassword.setFocusable(false);
-                            activity_layout.accediUtente.setClickable(false);
+                            binding.mainActivityRelativeLayout.setVisibility(View.VISIBLE);
+                            binding.pBar.setVisibility(View.VISIBLE);
+                            binding.testoEmail.setFocusable(false);
+                            binding.testoPassword.setFocusable(false);
+                            binding.accediUtente.setClickable(false);
                             effettua_login(email, password);
                         }
                     } else {

@@ -14,74 +14,66 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.google.android.gms.maps.model.LatLng;
 
 import com.unimib.unimibike.Model.Rack;
-import com.unimib.unimibike.R;
+import com.unimib.unimibike.ProjectFiles.Adapters.RacksListAdapter;
+import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
-import com.unimib.unimibike.Util.ServerResponseParserCallback;
-import com.unimib.unimibike.Util.UnimibBikeFetcher;
+import com.unimib.unimibike.databinding.FrameListaRastrelliereBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FrameRastrelliere extends Fragment implements GeolocationCallback {
-    private RecyclerView recyclerView;
     private RacksListAdapter adapter;
-    private ArrayList<Rack> rackArrayList;
-    private View view;
     private LatLng mCurrentPosition;
     private GeolocationCallback geolocationCallback;
-    private Rack elemento_neutro;
+    private RacksViewModel model;
+    private MutableLiveData<List<Rack>> liveData;
     private int counter = 0;
+    private FrameListaRastrelliereBinding binding;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view =  inflater.inflate(R.layout.frame_lista_rastrelliere,container, false);
-        addValuesFromDB();
+        binding = FrameListaRastrelliereBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        getRacks();
         geolocationCallback = this;
-
         getUserPosition();
         return view;
     }
 
-    private void addValuesFromDB() {
-        rackArrayList = new ArrayList<>();
-        UnimibBikeFetcher.getRacks(getContext(), new ServerResponseParserCallback<List<Rack>>() {
+    public void getRacks(){
+        model = new RacksViewModel();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        binding.recyclerView.setLayoutManager(layoutManager);
+        final Observer<List<Rack>> observer = new Observer<List<Rack>>() {
             @Override
-            public void onSuccess(List<Rack> response) {
-                //proviamo a rifare da qui, e funziona
-                for(int i = 0; i < response.size() ; i++){
-                    elemento_neutro = response.get(i);
-                    elemento_neutro.setDistance(-1);
+            public void onChanged(List<Rack> racks) {
+                for(int i = 0; i < racks.size() ; i++){
+                    racks.get(i).setDistance(-1);
                     if (checkPermissions())
                         if (isLocationEnabled() && mCurrentPosition != null) {
                             double distance = Geolocation.distance(mCurrentPosition,
-                                    new LatLng(elemento_neutro.getLatitude(), elemento_neutro.getLongitude())
+                                    new LatLng(racks.get(i).getLatitude(), racks.get(i).getLongitude())
                             );
-                            elemento_neutro.setDistance(distance);
+                            racks.get(i).setDistance(distance);
                         }
-                    rackArrayList.add(elemento_neutro);
                 }
-                recyclerView = view.findViewById(R.id.recycler_view);
-                adapter = new RacksListAdapter(rackArrayList);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(adapter);
-
+                adapter = new RacksListAdapter(racks);
+                binding.recyclerView.setAdapter(adapter);
             }
+        };
+        liveData = model.getListOfRacks(getContext());
+        liveData.observe(requireActivity(), observer);
+    }
 
-            @Override
-            public void onError(String errorTitle, String errorMessage) {
-
-            }
-        });
-        }
 
     @Override
     public void positionCallback(Location mCurrentPosition) {

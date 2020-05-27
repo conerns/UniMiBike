@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.unimib.unimibike.Model.BikeHistory;
 import com.unimib.unimibike.R;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

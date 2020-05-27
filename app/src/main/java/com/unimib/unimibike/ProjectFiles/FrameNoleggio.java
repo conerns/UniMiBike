@@ -18,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.Model.Rental;
+import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.R;
 
 import com.unimib.unimibike.Util.FragmentCallback;
@@ -37,9 +40,8 @@ import com.unimib.unimibike.Util.GeolocationCallback;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
+import com.unimib.unimibike.databinding.FragmentNoleggioBinding;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,18 +56,20 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private GeolocationCallback geolocationCallback;
     private View view;
     private int user_id;
+    private RacksViewModel model;
+    private MutableLiveData<List<Rack>> liveData;
+    private FragmentNoleggioBinding binding;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view =  inflater.inflate(R.layout.fragment_noleggio,container, false);
-        btn = (Button) view.findViewById(R.id.sblocca_bici);
-        mRentalCardView = view.findViewById(R.id.rental_up_cardview);
+        binding = FragmentNoleggioBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         rentalCallback = this;
         geolocationCallback = this;
         user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        btn.setOnClickListener(new View.OnClickListener(){
+        binding.sbloccaBici.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 BottomSheet bsdf = new BottomSheet(rentalCallback);
@@ -144,20 +148,15 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     }
 
     public void update_view_rental_in_progress(Bike bike_used, final Rental rental){
-        Log.d("update_view_rental", bike_used +" ");
-        TextView starting_rack = view.findViewById(R.id.rental_up_starting_rack);
         String[] splitTmp = bike_used.getRack().getLocationDescription().split(" ");
         String rack_description = getString(R.string.start_rental_rack)+splitTmp[1];
-        starting_rack.setText(rack_description);
+        binding.rentalUpStartingRack.setText(rack_description);
 
-        TextView starting_time = view.findViewById(R.id.rental_up_starting_time);
         String strDate = getString(R.string.start_rental_time)+rental.getStartedOn().substring(11);
-        starting_time.setText(strDate);
+        binding.rentalUpStartingTime.setText(strDate);
 
-        mRentalCardView = view.findViewById(R.id.rental_up_cardview);
-        mRentalCardView.setVisibility(View.VISIBLE);
-        mButtonEndRental = view.findViewById(R.id.rental_up_button_end_procedure);
-        mButtonEndRental.setOnClickListener(new View.OnClickListener() {
+        binding.rentalUpCardview.setVisibility(View.VISIBLE);
+        binding.rentalUpButtonEndProcedure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ending_rental(rental);
@@ -169,22 +168,20 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     //Server request
 
     public void getRacks(GoogleMap googleMap){
-        UnimibBikeFetcher.getRacks(getContext(), new ServerResponseParserCallback<List<Rack>>() {
+        model = new RacksViewModel();
+        final Observer<List<Rack>> observer = new Observer<List<Rack>>() {
             @Override
-            public void onSuccess(List<Rack> response) {
-                for(Rack rack: response){
+            public void onChanged(List<Rack> racks) {
+                for(Rack rack: racks){
                     LatLng rackPositition = new LatLng(rack.getLatitude(),rack.getLongitude());
                     Marker m = mMap.addMarker(new MarkerOptions().position(rackPositition).title(rack.getLocationDescription()));
                     mHashMap.put(m, rack.getId());
                 }
-
             }
+        };
+        liveData = model.getListOfRacks(getContext());
 
-            @Override
-            public void onError(String errorTitle, String errorMessage) {
-
-            }
-        });
+        liveData.observe(requireActivity(), observer);
     }
 
     public void startRental(final Bike bike_used){
@@ -213,7 +210,8 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
                 new ServerResponseParserCallback<Rental>() {
                     @Override
                     public void onSuccess(Rental response) {
-                        mRentalCardView.setVisibility(View.GONE);
+                        //mRentalCardView.setVisibility(View.GONE);
+                        binding.rentalUpCardview.setVisibility(View.GONE);
                         SaveSharedPreference.clearRental_in_progress(getActivity().getApplicationContext());
                     }
 
