@@ -18,6 +18,7 @@ import android.view.View;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.unimib.unimibike.Model.Bike;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
@@ -28,7 +29,7 @@ import com.unimib.unimibike.databinding.ActivityRemoveBikeBinding;
 public class RemoveBike extends AppCompatActivity {
     private ActivityRemoveBikeBinding binding;
     private BikesViewModel bikeViewModel;
-    private MutableLiveData<Bike> bikeMutableLiveData;
+    private MutableLiveData<Resource<Bike>> bikeMutableLiveData;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,21 +86,27 @@ public class RemoveBike extends AppCompatActivity {
 
     public void removeBikeIntoServer(){
         bikeViewModel = new BikesViewModel();
-        final Observer<Bike> observer = new Observer<Bike>() {
+        final Observer<Resource<Bike>> observer = new Observer<Resource<Bike>>() {
             @Override
-            public void onChanged(Bike bike) {
-                binding.idRemoveBikeContent.setText(null);
-                MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
-                mMaterialDialog
-                    .setTitle(R.string.removed_bike)
-                    .setMessage(getString(R.string.correct_bike_remove))
-                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+            public void onChanged(Resource<Bike> bike) {
+                if(bike.getStatusCode() == 200) {
+                    binding.idRemoveBikeContent.setText(null);
+                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
+                    mMaterialDialog
+                            .setTitle(R.string.removed_bike)
+                            .setMessage(getString(R.string.correct_bike_remove))
+                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                        }
-                    })
-                    .show();
+                                }
+                            })
+                            .show();
+                }else if(bike.getStatusCode() == 404){
+                    binding.idRemoveBike.setError("Inserisci un id valido");
+                    binding.idRemoveBike.setErrorEnabled(true);
+                }
+
             }
         };
         bikeMutableLiveData = bikeViewModel.removeBike(this.getApplicationContext(),

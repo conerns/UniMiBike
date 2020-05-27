@@ -66,7 +66,7 @@ public class BikesRepository {
     }
 
     public void removeAdminBike(final Context context, final int bike_id,
-                                final int user_id, final MutableLiveData<Bike> bike){
+                                final int user_id, final MutableLiveData<Resource<Bike>> bike){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -129,16 +129,21 @@ public class BikesRepository {
     }
 
     private void removeAdminBikeIntoDatabase(final Context context, final int bike_id,
-                                             final int user_id, final MutableLiveData<Bike> bike){
+                                             final int user_id, final MutableLiveData<Resource<Bike>> bike){
         UnimibBikeFetcher.postRemoveBike(context, bike_id, user_id, new ServerResponseParserCallback<Bike>() {
             @Override
             public void onSuccess(Bike response) {
-                bike.postValue(response);
+                Resource<Bike> resource = new Resource<>();
+                resource.setStatusCode(200);
+                resource.setData(response);
+                bike.postValue(resource);
             }
 
             @Override
             public void onError(String errorTitle, String errorMessage) {
-
+                Resource<Bike> resource = new Resource<>();
+                resource.setStatusCode(404);
+                bike.postValue(resource);
             }
         });
     }

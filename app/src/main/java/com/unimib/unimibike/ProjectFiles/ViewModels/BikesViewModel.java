@@ -42,11 +42,11 @@ public class BikesViewModel extends ViewModel {
         return resourceBike;
     }
 
-    public MutableLiveData<Bike> removeBike(Context context, final int bike_id, final int user_id){
-        if (bike == null)
-            bike = new MutableLiveData<>();
+    public MutableLiveData<Resource<Bike>> removeBike(Context context, final int bike_id, final int user_id){
+        if (resourceBike == null)
+            resourceBike = new MutableLiveData<>();
 
-        BikesRepository.getInstance().removeAdminBike(context, bike_id, user_id, bike);
-        return bike;
+        BikesRepository.getInstance().removeAdminBike(context, bike_id, user_id, resourceBike);
+        return resourceBike;
     }
 }
