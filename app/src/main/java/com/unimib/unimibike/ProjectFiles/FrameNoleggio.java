@@ -10,12 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
@@ -32,14 +29,13 @@ import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.Model.Rental;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
+import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
 
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
 import com.unimib.unimibike.Util.SaveSharedPreference;
-import com.unimib.unimibike.Util.UnimibBikeFetcher;
-import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.databinding.FragmentNoleggioBinding;
 
 import java.util.HashMap;
@@ -49,15 +45,13 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mHashMap = new HashMap<>();
     private LatLng mCurrentPosition;
-    private Button btn;
-    private Button mButtonEndRental;
-    private CardView mRentalCardView;
     private FragmentCallback rentalCallback;
     private GeolocationCallback geolocationCallback;
-    private View view;
     private int user_id;
-    private RacksViewModel model;
-    private MutableLiveData<List<Rack>> liveData;
+    private RacksViewModel racksViewModel;
+    private MutableLiveData<List<Rack>> racksMutableLiveData;
+    private RentalsViewModel rentalsViewModel;
+    private MutableLiveData<Rental> rentalMutableLiveData;
     private FragmentNoleggioBinding binding;
     @Nullable
     @Override
@@ -168,7 +162,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     //Server request
 
     public void getRacks(GoogleMap googleMap){
-        model = new RacksViewModel();
+        racksViewModel = new RacksViewModel();
         final Observer<List<Rack>> observer = new Observer<List<Rack>>() {
             @Override
             public void onChanged(List<Rack> racks) {
@@ -179,47 +173,36 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
                 }
             }
         };
-        liveData = model.getListOfRacks(getContext());
+        racksMutableLiveData = racksViewModel.getListOfRacks(getContext());
 
-        liveData.observe(requireActivity(), observer);
+        racksMutableLiveData.observe(requireActivity(), observer);
     }
 
     public void startRental(final Bike bike_used){
+        rentalsViewModel = new RentalsViewModel();
+        final Observer<Rental> observer = new Observer<Rental>() {
+            @Override
+            public void onChanged(Rental rental) {
+                SaveSharedPreference.setPrefRentalInProgress(getActivity().getApplicationContext(), rental, bike_used);
+                update_view_rental_in_progress(bike_used, rental);
+            }
+        };
+        rentalMutableLiveData = rentalsViewModel.starRental(getContext(), user_id,bike_used.getId());
 
-        Log.d("update_view_rental", bike_used +" startRental");
-        UnimibBikeFetcher.postRental(getActivity().getApplicationContext(),
-                bike_used.getId(), user_id,
-                new ServerResponseParserCallback<Rental>() {
-                    @Override
-                    public void onSuccess(Rental response) {
-                        Log.d("update_view_rental", bike_used +" on_success");
-                        SaveSharedPreference.setPrefRentalInProgress(getActivity().getApplicationContext(),response,bike_used);
-                        update_view_rental_in_progress(bike_used, response);
-                    }
-
-                    @Override
-                    public void onError(String errorTitle, String errorMessage) {
-                        Log.d("update_view_rental", errorMessage);
-                    }
-                });
+        rentalMutableLiveData.observe(requireActivity(), observer);
     }
 
     public void ending_rental(Rental rental){
-        UnimibBikeFetcher.putRental(getActivity().getApplicationContext(),
-                rental.getId(), 4,
-                new ServerResponseParserCallback<Rental>() {
-                    @Override
-                    public void onSuccess(Rental response) {
-                        //mRentalCardView.setVisibility(View.GONE);
-                        binding.rentalUpCardview.setVisibility(View.GONE);
-                        SaveSharedPreference.clearRental_in_progress(getActivity().getApplicationContext());
-                    }
-
-                    @Override
-                    public void onError(String errorTitle, String errorMessage) {
-
-                    }
-                });
+        rentalsViewModel = new RentalsViewModel();
+        final Observer<Rental> observer = new Observer<Rental>() {
+            @Override
+            public void onChanged(Rental rental) {
+                binding.rentalUpCardview.setVisibility(View.GONE);
+                SaveSharedPreference.clearRental_in_progress(getActivity().getApplicationContext());
+            }
+        };
+        rentalMutableLiveData = rentalsViewModel.endRental(getContext(), rental.getId(),5);
+        rentalMutableLiveData.observe(requireActivity(), observer);
     }
 
 

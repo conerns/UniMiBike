@@ -95,22 +95,22 @@ public class AggiungiNuovaBici extends AppCompatActivity {
                             if (controlloCodice()) {
                                 MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);
                                 mMaterialDialog
-                                        .setTitle(R.string.confirm_dati)
-                                        .setMessage(getString(R.string.confirm_first_half) + binding.valoriRastrelliereFine.getText().toString()
-                                                + getString(R.string.confirm_second_half) + binding.contenutoCodeBike.getText().toString())
-                                        .setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                addBike();
-                                            }
-                                        })
-                                        .setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                    .setTitle(R.string.confirm_dati)
+                                    .setMessage(getString(R.string.confirm_first_half) + binding.valoriRastrelliereFine.getText().toString()
+                                            + getString(R.string.confirm_second_half) + binding.contenutoCodeBike.getText().toString())
+                                    .setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            addBike();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                                            }
-                                        })
-                                        .show();
+                                        }
+                                    })
+                                    .show();
                             }
                             return;
                         }

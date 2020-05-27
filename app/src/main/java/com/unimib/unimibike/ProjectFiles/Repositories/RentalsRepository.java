@@ -37,11 +37,72 @@ public class RentalsRepository {
         new Thread(runnable).start();
     }
 
+    public void startRental(final Context context, final int user_id, final int bike_id, final MutableLiveData<Rental> rental){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    postStartRentalIntoDatabase(context, user_id, bike_id, rental);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(runnable).start();
+    }
+
+    public void stopRental(final Context context, final int rental_id, final int rack_id, final MutableLiveData<Rental> rental){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    postCloseRentalIntoDatabase(context, rental_id, rack_id, rental);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(runnable).start();
+    }
+
+
+
+
+
     private void getUserRentalsFromDatabase(final Context context, final int user_id, final MutableLiveData<List<Rental>> rentals){
         UnimibBikeFetcher.getRentals(context, user_id, new ServerResponseParserCallback<List<Rental>>() {
             @Override
             public void onSuccess(List<Rental> response) {
                 rentals.postValue(response);
+            }
+
+            @Override
+            public void onError(String errorTitle, String errorMessage) {
+
+            }
+        });
+    }
+
+    private void postStartRentalIntoDatabase(final Context context, final int user_id,
+                                        final int bike_id, final MutableLiveData<Rental> rental){
+        UnimibBikeFetcher.postRental(context, bike_id, user_id, new ServerResponseParserCallback<Rental>() {
+            @Override
+            public void onSuccess(Rental response) {
+                rental.postValue(response);
+            }
+
+            @Override
+            public void onError(String errorTitle, String errorMessage) {
+            }
+        });
+    }
+
+    private void postCloseRentalIntoDatabase(final Context context, final int rental_id,
+                                             final int rack_id, final MutableLiveData<Rental> rental){
+        UnimibBikeFetcher.putRental(context,rental_id, rack_id, new ServerResponseParserCallback<Rental>() {
+            @Override
+            public void onSuccess(Rental response) {
+                rental.postValue(response);
             }
 
             @Override

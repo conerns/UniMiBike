@@ -3,6 +3,8 @@ package com.unimib.unimibike.ProjectFiles.AdminOperations;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -13,92 +15,40 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.unimib.unimibike.Model.Bike;
+import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
-import com.unimib.unimibike.Util.ServerResponseParserCallback;
-import com.unimib.unimibike.Util.UnimibBikeFetcher;
+import com.unimib.unimibike.databinding.ActivityRemoveBikeBinding;
 
 public class RemoveBike extends AppCompatActivity {
-    private TextInputLayout mIDBike;
-    private TextInputEditText mBikeContent;
-    private Button mApply;
+    private ActivityRemoveBikeBinding binding;
+    private BikesViewModel bikeViewModel;
+    private MutableLiveData<Bike> bikeMutableLiveData;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_remove_bike);
-        mIDBike = findViewById(R.id.id_remove_bike);
-        mBikeContent = findViewById(R.id.id_remove_bike_content);
+        binding = ActivityRemoveBikeBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        mApply = findViewById(R.id.send_fixed_report);
-
-        mApply.setOnClickListener(new View.OnClickListener() {
+        binding.sendFixedReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mIDBike.setError(null);
-                mIDBike.setErrorEnabled(false);
-                if(controlloId()){
-                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
-                    mMaterialDialog
-                            .setTitle(R.string.confirm_dati)
-                            .setMessage(getString(R.string.remove_bike_desc) + mBikeContent.getText().toString()
-                                        + getString(R.string.remove_bike_desc_finale))
-                            .setPositiveButton(getString(R.string.confirm_message), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    UnimibBikeFetcher.postRemoveBike(getApplicationContext(),
-                                            Integer.parseInt(mBikeContent.getText().toString()),
-                                            SaveSharedPreference.getUserID(getApplicationContext()),
-                                            new ServerResponseParserCallback<Bike>() {
-                                                @Override
-                                                public void onSuccess(Bike response) {
-                                                    mBikeContent.setText(null);
-                                                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
-                                                    mMaterialDialog
-                                                            .setTitle(R.string.removed_bike)
-                                                            .setMessage(getString(R.string.correct_bike_remove))
-                                                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                                                }
-                                                            })
-                                                            .show();
-                                                }
-
-                                                @Override
-                                                public void onError(String errorTitle, String errorMessage) {
-
-                                                }
-                                            }
-                                    );
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.cancel_message), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            })
-                            .show();
-
-                }
+               removeBike();
             }
         });
-        mBikeContent.setOnTouchListener(new View.OnTouchListener() {
+        binding.idRemoveBikeContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 final int DRAWABLE_RIGHT = 2;
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    if(motionEvent.getRawX() >= (mBikeContent.getRight() - mBikeContent.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    if(motionEvent.getRawX() >= (binding.idRemoveBikeContent.getRight() - binding.idRemoveBikeContent.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         method_called();
                         return true;
                     }
@@ -107,13 +57,65 @@ public class RemoveBike extends AppCompatActivity {
             }
         });
     }
+
+    public void removeBike(){
+        binding.idRemoveBike.setError(null);
+        binding.idRemoveBike.setErrorEnabled(false);
+        if(controlloId()){
+            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
+            mMaterialDialog
+                .setTitle(R.string.confirm_dati)
+                .setMessage(getString(R.string.remove_bike_desc) + binding.idRemoveBikeContent.getText().toString()
+                        + getString(R.string.remove_bike_desc_finale))
+                .setPositiveButton(getString(R.string.confirm_message), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeBikeIntoServer();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel_message), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+        }
+    }
+
+    public void removeBikeIntoServer(){
+        bikeViewModel = new BikesViewModel();
+        final Observer<Bike> observer = new Observer<Bike>() {
+            @Override
+            public void onChanged(Bike bike) {
+                binding.idRemoveBikeContent.setText(null);
+                MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
+                mMaterialDialog
+                    .setTitle(R.string.removed_bike)
+                    .setMessage(getString(R.string.correct_bike_remove))
+                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .show();
+            }
+        };
+        bikeMutableLiveData = bikeViewModel.removeBike(this.getApplicationContext(),
+                Integer.parseInt(binding.idRemoveBikeContent.getText().toString()),
+                SaveSharedPreference.getUserID(getApplicationContext()));
+        bikeMutableLiveData.observe(this, observer);
+    }
+
     private boolean controlloId() {
-        if(mBikeContent.getText().length() == 0){
-            mIDBike.setError("Campo richiesto!");
+        if(binding.idRemoveBikeContent.getText().length() == 0){
+            binding.idRemoveBike.setError("Campo richiesto!");
             return false;
         }
         return true;
     }
+
     private void method_called() {
         if (ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(this.getApplicationContext(), QrReaderActivity.class);
@@ -132,7 +134,7 @@ public class RemoveBike extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
                     int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
-                    mBikeContent.setText(String.valueOf(returnValue));
+                    binding.idRemoveBikeContent.setText(String.valueOf(returnValue));
                 }
                 break;
             }

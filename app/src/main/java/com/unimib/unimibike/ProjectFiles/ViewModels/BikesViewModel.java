@@ -6,13 +6,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.unimib.unimibike.Model.Bike;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.Repositories.BikesRepository;
 
+import java.net.ResponseCache;
 import java.util.List;
 
 public class BikesViewModel extends ViewModel {
     private MutableLiveData<List<Bike>> listOfBikes;
     private MutableLiveData<Bike> bike;
+    private MutableLiveData<Resource<Bike>> resourceBike;
 
     public MutableLiveData<Bike> adminAddBike(Context context, final int user_id, final int unlock_code, final int rack_id) {
         if (bike == null)
@@ -30,4 +33,20 @@ public class BikesViewModel extends ViewModel {
         return bike;
     }
 
+    public MutableLiveData<Resource<Bike>> modifyBikePosition(Context context, final int bike_id,
+                                                              final int new_rack_id, final int user_id){
+        if (resourceBike == null)
+            resourceBike = new MutableLiveData<>();
+
+        BikesRepository.getInstance().modifyAdminBikePosition(context, bike_id, new_rack_id, user_id, resourceBike);
+        return resourceBike;
+    }
+
+    public MutableLiveData<Bike> removeBike(Context context, final int bike_id, final int user_id){
+        if (bike == null)
+            bike = new MutableLiveData<>();
+
+        BikesRepository.getInstance().removeAdminBike(context, bike_id, user_id, bike);
+        return bike;
+    }
 }
