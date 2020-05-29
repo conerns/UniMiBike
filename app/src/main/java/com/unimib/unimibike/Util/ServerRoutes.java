@@ -4,7 +4,7 @@ package com.unimib.unimibike.Util;
  */
 
 public interface ServerRoutes {
-    String IP = "192.168.1.8";
+    String IP = "192.168.1.12";
     String PORT = "8000";
     String BASE_URL = "http://"+IP+":"+PORT+"/api/";
     String RACKS = BASE_URL + "racks";

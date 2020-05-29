@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -29,6 +30,7 @@ import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
+import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.databinding.BottomSheetEndBinding;
 import com.unimib.unimibike.databinding.BottomSheetLayoutBinding;
@@ -83,12 +85,8 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
             public void onChanged(Rack rack) {
                 DialogFragment newFragment;
                 //se ho una bici e ho posto posso lasciarla nella rastrelliera
-                if(rack.getAvailableStands() > 0) {
-                    newFragment = MyAlertDialogFragment.newInstance(getString(R.string.ended_succs),
-                            getString(R.string.rent_ended_mess));
-                    newFragment.show(getFragmentManager(), "dialog");
-                    ending_rental(mRental,view);
-                }
+                if(rack.getAvailableStands() > 0)
+                    ending_rental(mRental,view,getFragmentManager());
                 else {
                     newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
                             getString(R.string.not_avaible_message));
@@ -103,13 +101,11 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
         bikeLiveData.observe(requireActivity(), observer);
     }
     private void method_called() {
-        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (MyUtils.checkCameraPermission(getActivity())) {
             Intent intent = new Intent(getActivity().getApplicationContext(), QrReaderActivity.class);
             startActivityForResult(intent, 0);
         }else{
-            DialogFragment newFragment;
-            newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),"Non hai dato i permessi per utilizzare la fotocamera");
-            newFragment.show(getFragmentManager(), "dialog");
+            MyUtils.showCameraPermissionDeniedDialog(getActivity(), getActivity().getSupportFragmentManager());
         }
     }
     @Override
@@ -127,7 +123,7 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
         }
     }
 
-    public void ending_rental(Rental rental, final View view){
+    public void ending_rental(Rental rental, final View view, final FragmentManager fragmentManager){
         rentalsViewModel = new RentalsViewModel();
         final Observer<Rental> observer = new Observer<Rental>() {
             @Override
@@ -136,6 +132,9 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
                 //prima idea, inserisce il coso di fine
                // FrameNoleggio.finishRent();
 
+                DialogFragment newFragment= MyAlertDialogFragment.newInstance(view.getContext().getString(R.string.ended_succs),
+                        view.getContext().getString(R.string.rent_ended_mess));
+                newFragment.show(fragmentManager, "dialog");
                 dismiss();
             }
         };

@@ -84,8 +84,18 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
         id = getIntent().getIntExtra("USER-ID", 0);
         Log.d("Qui", utente + ruolo);
 
+        bottomNav.setSelectedItemId(R.id.id_noleggio);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_displayer,
                 new FrameNoleggio()).commit();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(listener);
+        bottomNav.setSelectedItemId(R.id.id_noleggio);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_displayer,
+                new FrameNoleggio()).commit();
+    }
 }

@@ -71,4 +71,7 @@
     <string name="removed_bike">La bicicletta è stata rimossa</string>
     <string name="correct_bike_remove">La bicicletta è stata rimossa correttamente</string>
     <string name="admin_storico">Visualizza tutte le bici che hai aggiunto</string>
+    <string name="dialog_need">Per poter concludere il noleggio dovrai inserire l\'id della rastrelliera</string>
+    <string name="ended_succs">Noleggio concluso</string>
+    <string name="rent_ended_mess">Grazie per aver usato i nostri servizi, speriamo di rivederti presto. Buona giornata!</string>
 </resources>
