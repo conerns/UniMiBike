@@ -40,7 +40,7 @@ public class BottomSheetRack extends BottomSheetDialogFragment implements Geoloc
         View view = binding.getRoot();
         geolocationCallback = this;
 
-        getRackId(getArguments().getInt("Rack_id"));
+        getRackId(getArguments().getInt("Rack_id"), view);
 
         binding.buttonGoToRack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,15 +54,15 @@ public class BottomSheetRack extends BottomSheetDialogFragment implements Geoloc
         return view;
     }
 
-    public void getRackId(int rack_id){
+    public void getRackId(int rack_id, final View view){
         model = new RacksViewModel();
         final Observer<Rack> observer = new Observer<Rack>() {
             @Override
             public void onChanged(Rack rack) {
                 binding.goToRackTextviewTitle.setText(rack.getLocationDescription());
                 binding.rackAddress.setText(rack.getStreetAddress());
-                String avaible_bike = rack.getAvailableBikes()+" "+getString(R.string.avaible_bikes);
-                binding.rackBikeAvaible.setText(avaible_bike);
+                String available_bike = rack.getAvailableBikes()+" "+view.getContext().getString(R.string.avaible_bikes);
+                binding.rackBikeAvaible.setText(available_bike);
                 rack_map_position = new LatLng(rack.getLatitude(),rack.getLongitude());
                 if (MyUtils.checkPermissions(getActivity()) && MyUtils.isLocationEnabled(getActivity())){
                     Geolocation geo = new Geolocation(getActivity(), geolocationCallback);

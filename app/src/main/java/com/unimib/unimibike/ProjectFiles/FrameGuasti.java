@@ -1,8 +1,12 @@
 package com.unimib.unimibike.ProjectFiles;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,6 +23,8 @@ import com.unimib.unimibike.Model.Report;
 import com.unimib.unimibike.ProjectFiles.ViewModels.ReportsViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
+import com.unimib.unimibike.Util.MyUtils;
+import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.FragmentGuastiBinding;
 
@@ -30,6 +36,7 @@ public class FrameGuasti extends Fragment {
     private MutableLiveData<Report> reportMutableLiveDate;
     private FragmentGuastiBinding binding;
     View w;
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,6 +66,33 @@ public class FrameGuasti extends Fragment {
                 view.findViewById(R.id.filled_exposed_dropdown);
         editTextFilledExposedDropdown.setAdapter(adapter);
         editTextFilledExposedDropdown.setInputType(InputType.TYPE_NULL);
+
+        binding.bikeCodeTextFixed.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_RIGHT = 2;
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(motionEvent.getRawX() >= (binding.bikeCodeTextFixed.getRight() - binding.bikeCodeTextFixed.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        checkCameraPermission(1);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        binding.bikeCodeTextFault.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_RIGHT = 2;
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(motionEvent.getRawX() >= (binding.bikeCodeTextFault.getRight() - binding.bikeCodeTextFault.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        checkCameraPermission(0);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
         return view;
 
     }
@@ -140,6 +174,37 @@ public class FrameGuasti extends Fragment {
         reportMutableLiveDate.observe(requireActivity(), observer);
     }
 
+    private void checkCameraPermission(final int caller) {
+        if (MyUtils.checkCameraPermission(getActivity())) {
+            Intent intent = new Intent(getActivity().getApplicationContext(), QrReaderActivity.class);
+            startActivityForResult(intent, caller);
+        }else{
+            MyUtils.showCameraPermissionDeniedDialog(getActivity(), getActivity().getSupportFragmentManager());
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (0) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    // TODO Extract the data returned from the child Activity.
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    binding.bikeCodeTextFault.setText(String.valueOf(returnValue));
+                }
+                break;
+            }
+            case (1) :{
+                if (resultCode == Activity.RESULT_OK) {
+                    // TODO Extract the data returned from the child Activity.
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    binding.bikeCodeTextFixed.setText(String.valueOf(returnValue));
+                }
+                break;
+            }
+        }
+    }
 }
 
 
