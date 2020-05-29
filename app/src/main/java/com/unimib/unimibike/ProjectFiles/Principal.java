@@ -2,13 +2,8 @@ package com.unimib.unimibike.ProjectFiles;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,6 +11,7 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.Geolocation;
+import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.OnGeolocationActive;
 
 public class Principal extends AppCompatActivity implements OnGeolocationActive {
@@ -31,7 +27,7 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
         super.onCreate(savedInstanceState);
         geolocationActive = this;
 
-        if (!isLocationEnabled() && counter == 0 && checkPermissions()) {
+        if (!MyUtils.isLocationEnabled(this) && counter == 0 && MyUtils.checkPermissions(this)) {
             Geolocation geo = new Geolocation(this, geolocationActive);
             geo.displayLocationSettingsRequest(this.getApplicationContext());
             counter++;
@@ -72,21 +68,6 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
                     return true;
                 }
             };
-
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER);
-    }
-
-
-    private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void onGeolocationActiveCallback() {

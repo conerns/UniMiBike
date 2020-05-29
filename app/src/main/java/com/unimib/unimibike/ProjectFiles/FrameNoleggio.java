@@ -1,10 +1,6 @@
 package com.unimib.unimibike.ProjectFiles;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -35,6 +30,7 @@ import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
+import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.FragmentNoleggioBinding;
 
@@ -111,32 +107,18 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     }
 
     private void getUserPosition(){
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
+        if (MyUtils.checkPermissions(getActivity())) {
+            if (MyUtils.isLocationEnabled(getActivity())) {
                 Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
                 geo.getLastLocation();
             }
         }
     }
 
-    private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER);
-    }
-
     @Override
     public void onResume(){
         super.onResume();
-        if (checkPermissions()) {
+        if (MyUtils.checkPermissions(getActivity())) {
             getUserPosition();
         }
     }

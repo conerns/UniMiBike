@@ -1,12 +1,8 @@
 package com.unimib.unimibike.ProjectFiles;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +12,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -27,6 +22,7 @@ import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
+import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.databinding.BottomSheetLayoutRackBinding;
 
 public class BottomSheetRack extends BottomSheetDialogFragment implements GeolocationCallback{
@@ -65,10 +61,10 @@ public class BottomSheetRack extends BottomSheetDialogFragment implements Geoloc
             public void onChanged(Rack rack) {
                 binding.goToRackTextviewTitle.setText(rack.getLocationDescription());
                 binding.rackAddress.setText(rack.getStreetAddress());
-                String avaible_bike = String.valueOf(rack.getAvailableBikes())+" "+getString(R.string.avaible_bikes);
+                String avaible_bike = rack.getAvailableBikes()+" "+getString(R.string.avaible_bikes);
                 binding.rackBikeAvaible.setText(avaible_bike);
                 rack_map_position = new LatLng(rack.getLatitude(),rack.getLongitude());
-                if (checkPermissions() && isLocationEnabled()){
+                if (MyUtils.checkPermissions(getActivity()) && MyUtils.isLocationEnabled(getActivity())){
                     Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
                     geo.getLastLocation();
                 }
@@ -87,20 +83,5 @@ public class BottomSheetRack extends BottomSheetDialogFragment implements Geoloc
         Rack tmp = new Rack();
         tmp.setDistance(distance);
         binding.rackDistance.setText(tmp.getDistanceString());
-    }
-
-
-    private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER);
     }
 }

@@ -1,19 +1,15 @@
 package com.unimib.unimibike.ProjectFiles.AdminOperations;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -22,7 +18,7 @@ import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.MyAlertDialogFragment;
+import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.ModificaPosizioneBiciBinding;
@@ -40,13 +36,6 @@ public class ModificaPosizione extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        /*mIDBike = findViewById(R.id.id_posizione_bici);
-        mBikeContent = findViewById(R.id.bike_code_text_fault);
-
-        mIDRack = findViewById(R.id.posizione_bici_finale);
-        mRackContent = findViewById(R.id.valori_rastrelliere_fine);
-        mApply = findViewById(R.id.send_fixed_report);*/
-
         binding.sendFixedReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,7 +48,7 @@ public class ModificaPosizione extends AppCompatActivity {
                 final int DRAWABLE_RIGHT = 2;
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if(motionEvent.getRawX() >= (binding.bikeCodeTextFault.getRight() - binding.bikeCodeTextFault.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        method_called_onRack();
+                        checkCameraPermission(1);
                         return true;
                     }
                 }
@@ -72,7 +61,7 @@ public class ModificaPosizione extends AppCompatActivity {
                 final int DRAWABLE_RIGHT = 2;
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if(motionEvent.getRawX() >= (binding.bikeCodeTextFault.getRight() - binding.bikeCodeTextFault.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        method_called();
+                        checkCameraPermission(0);
                         return true;
                     }
                 }
@@ -160,24 +149,12 @@ public class ModificaPosizione extends AppCompatActivity {
     }
 
 
-    private void method_called() {
-        if (ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+    private void checkCameraPermission(final int caller) {
+        if (MyUtils.checkCameraPermission(this)) {
             Intent intent = new Intent(this.getApplicationContext(), QrReaderActivity.class);
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, caller);
         }else{
-            DialogFragment newFragment;
-            newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),"Non hai dato i permessi per utilizzare la fotocamera");
-            newFragment.show(getSupportFragmentManager(), "dialog");
-        }
-    }
-    private void method_called_onRack() {
-        if (ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(this.getApplicationContext(), QrReaderActivity.class);
-            startActivityForResult(intent, 1);
-        }else{
-            DialogFragment newFragment;
-            newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),"Non hai dato i permessi per utilizzare la fotocamera");
-            newFragment.show(getSupportFragmentManager(), "dialog");
+            MyUtils.showCameraPermissionDeniedDialog(this, getSupportFragmentManager());
         }
     }
 

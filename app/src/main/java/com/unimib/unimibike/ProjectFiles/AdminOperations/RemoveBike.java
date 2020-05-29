@@ -1,17 +1,13 @@
 package com.unimib.unimibike.ProjectFiles.AdminOperations;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,7 +17,7 @@ import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.MyAlertDialogFragment;
+import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.ActivityRemoveBikeBinding;
@@ -50,7 +46,7 @@ public class RemoveBike extends AppCompatActivity {
                 final int DRAWABLE_RIGHT = 2;
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if(motionEvent.getRawX() >= (binding.idRemoveBikeContent.getRight() - binding.idRemoveBikeContent.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        method_called();
+                        checkCameraPermission();
                         return true;
                     }
                 }
@@ -123,16 +119,15 @@ public class RemoveBike extends AppCompatActivity {
         return true;
     }
 
-    private void method_called() {
-        if (ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+    private void checkCameraPermission() {
+        if (MyUtils.checkCameraPermission(this)) {
             Intent intent = new Intent(this.getApplicationContext(), QrReaderActivity.class);
             startActivityForResult(intent, 0);
         }else{
-            DialogFragment newFragment;
-            newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),"Non hai dato i permessi per utilizzare la fotocamera");
-            newFragment.show(getSupportFragmentManager(), "dialog");
+            MyUtils.showCameraPermissionDeniedDialog(this, getSupportFragmentManager());
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

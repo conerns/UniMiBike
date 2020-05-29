@@ -1,10 +1,6 @@
 package com.unimib.unimibike.ProjectFiles;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -26,6 +21,7 @@ import com.unimib.unimibike.ProjectFiles.Adapters.RacksListAdapter;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
+import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.databinding.FrameListaRastrelliereBinding;
 
 import java.util.List;
@@ -43,9 +39,9 @@ public class FrameRastrelliere extends Fragment implements GeolocationCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FrameListaRastrelliereBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-        getRacks();
         geolocationCallback = this;
         getUserPosition();
+        getRacks();
         return view;
     }
 
@@ -58,13 +54,14 @@ public class FrameRastrelliere extends Fragment implements GeolocationCallback {
             public void onChanged(List<Rack> racks) {
                 for(int i = 0; i < racks.size() ; i++){
                     racks.get(i).setDistance(-1);
-                    if (checkPermissions())
-                        if (isLocationEnabled() && mCurrentPosition != null) {
+                    if (MyUtils.checkPermissions(getActivity())) {
+                        if (MyUtils.isLocationEnabled(getActivity()) && mCurrentPosition != null) {
                             double distance = Geolocation.distance(mCurrentPosition,
                                     new LatLng(racks.get(i).getLatitude(), racks.get(i).getLongitude())
                             );
                             racks.get(i).setDistance(distance);
                         }
+                    }
                 }
                 adapter = new RacksListAdapter(racks);
                 binding.recyclerView.setAdapter(adapter);
@@ -81,32 +78,18 @@ public class FrameRastrelliere extends Fragment implements GeolocationCallback {
     }
 
     private void getUserPosition(){
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
+        if (MyUtils.checkPermissions(getActivity())) {
+            if (MyUtils.isLocationEnabled(getActivity())) {
                 Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
                 geo.getLastLocation();
             }
         }
     }
 
-    private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER);
-    }
-
     @Override
     public void onResume(){
         super.onResume();
-        if (checkPermissions()) {
+        if (MyUtils.checkPermissions(getActivity())) {
             getUserPosition();
         }
     }

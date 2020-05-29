@@ -1,10 +1,8 @@
 package com.unimib.unimibike.ProjectFiles;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -25,6 +22,7 @@ import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
+import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.databinding.BottomSheetLayoutBinding;
 
@@ -54,7 +52,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (binding.bikeCodeText.getRight() - binding.bikeCodeText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        method_called();
+                        checkCameraPermission();
                         return true;
                     }
                 }
@@ -97,14 +95,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
         bikeLiveData.observe(requireActivity(), observer);
     }
 
-    private void method_called() {
-        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+    private void checkCameraPermission() {
+        if (MyUtils.checkCameraPermission(getActivity())) {
             Intent intent = new Intent(getActivity().getApplicationContext(), QrReaderActivity.class);
             startActivityForResult(intent, 0);
         }else{
-            DialogFragment newFragment;
-            newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),"Non hai dato i permessi per utilizzare la fotocamera");
-            newFragment.show(getFragmentManager(), "dialog");
+            MyUtils.showCameraPermissionDeniedDialog(getActivity(), getFragmentManager());
         }
     }
 
