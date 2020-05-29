@@ -5,25 +5,29 @@
     <style name="Theme.MyApp" parent="Base.Theme.MyApp"/>
 
     <style name="Base.Theme.MyApp" parent="Base.Theme.UnimiBike">
-
         <item name="colorPrimary">@color/unimibDark</item>
         <item name="colorPrimaryVariant">@color/unimibDarkVariant</item>
+
         <item name="colorSecondary">@color/purple_link</item>
         <item name="colorSecondaryVariant">@color/purple_link_variant</item>
 
-        <item name="android:colorBackground">@color/cardview_dark_background</item>
-        <item name="colorSurface">@color/cardview_dark_background</item>
-        <item name="colorError">@color/errorOnBlack</item>
+        <!-- colore dello sfondo nei fragment -->
+        <item name="android:colorBackground">@color/darkThemeCard</item>
 
-        <item name="colorOnPrimary">@color/color_white</item>
-        <item name="colorOnSecondary">@color/color_white</item><!-- colore testo card -->
-        <item name="colorOnBackground">@color/color_white</item>
+        <!-- colore dello sfondo delle card -->
+        <item name="colorSurface">@color/darkThemeCard</item>
+        <item name="colorError">@color/errorOnBlack</item>
+        <item name="colorOnPrimary">@color/darkGrey</item>
+        <item name="colorOnSecondary">@color/darkGrey</item><!-- colore testo card -->
+        <item name="colorOnBackground">@color/darkGrey</item>
 
         <item name="colorOnSurface">@color/color_white</item><!-- colore testo nei textfield -->
         <item name="colorOnError">@color/errorOnBlack</item> <!-- colore error nei textfield -->
+
         <!--Component styles-->
-        <item name="bottomNavigationStyle">@style/Widget.MyTheme.BottomNavigationView</item>
+        <item name="bottomNavigationStyle">@style/Widget.MyTheme.BottomNavigationView.Dark</item>
     </style>
+
     <style name="Base.Theme.UnimiBike" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorPrimary</item>
     </style>

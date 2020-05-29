@@ -11,9 +11,10 @@
     </style>
 
     <style name="Widget.MyTheme.BottomNavigationView.Dark" parent="Widget.MaterialComponents.BottomNavigationView">
-
     </style>
-
+    <style name="Widget.MyTheme.MyCard" parent="CardView">
+        <item name="android:tint">?colorPrimary</item>
+    </style>
     <style name="Widget.MyTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="backgroundTint">?attr/colorPrimary</item>
@@ -45,6 +46,7 @@
         <item name="hintTextColor">?attr/colorPrimary</item>
         <item name="passwordToggleTint">?attr/colorOnSurface</item>
     </style>
+
     <style name="Widget.MyTheme.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="boxStrokeColor">?attr/colorOnSurface</item>
         <item name="endIconTint">?attr/colorOnSurface</item>
@@ -60,6 +62,9 @@
     <style name="Widget.MyTheme.TextView" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">?attr/colorSurface</item>
     </style>
+    <style name="Widget.MyTheme.VistaUtente" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
 
     <style name="Widget.MyTheme.TextView2" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">?attr/colorOnSurface</item>
@@ -73,7 +78,6 @@
     <style name="Theme.MyApp.UnimibAccent">
         <item name="colorAccent">?attr/colorPrimary</item>
     </style>
-
     <style name="MyThemeIconColor">
         <item name="android:tint">?attr/colorPrimary</item>
     </style>

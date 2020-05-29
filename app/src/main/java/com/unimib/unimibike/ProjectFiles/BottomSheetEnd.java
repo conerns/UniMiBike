@@ -3,10 +3,12 @@ package com.unimib.unimibike.ProjectFiles;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,32 +20,41 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.unimib.unimibike.Model.Bike;
-import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.unimib.unimibike.Model.Rack;
+import com.unimib.unimibike.Model.Rental;
+import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
+import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.QrReaderActivity;
+import com.unimib.unimibike.databinding.BottomSheetEndBinding;
 import com.unimib.unimibike.databinding.BottomSheetLayoutBinding;
 
-public class BottomSheet extends BottomSheetDialogFragment {
-    private FragmentCallback    rentalCallback;
-    private BottomSheetLayoutBinding binding;
-    private BikesViewModel bikesViewModel;
-    private MutableLiveData<Bike> bikeLiveData;
+public class BottomSheetEnd extends BottomSheetDialogFragment {
+    private BottomSheetEndBinding binding;
+    private RacksViewModel racksViewModel;
+    private MutableLiveData<Rack> bikeLiveData;
+    private RentalsViewModel rentalsViewModel;
+    private MutableLiveData<Rental> rentalMutableLiveData;
+    private Rental mRental;
+    public BottomSheetEnd(Rental element, Context context){
+        mRental = element;
+    }
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = BottomSheetLayoutBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
+        binding = BottomSheetEndBinding.inflate(getLayoutInflater());
+        final View view = binding.getRoot();
         binding.buttonUnlockBike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(binding.bikeCodeText.getText().length()!=0)
-                    functionGetBike(Integer.parseInt(binding.bikeCodeText.getText().toString()));
+                if(binding.bikeCodeText.getText().length()!=0) {
+                    functionGetRack(Integer.parseInt(binding.bikeCodeText.getText().toString()),view);
+                }
             }
         });
 
@@ -65,24 +76,18 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
-    public BottomSheet(FragmentCallback rentalCallback){
-        this.rentalCallback = rentalCallback;
-    }
-
-
-    private void functionGetBike(int bike_id) {
-        bikesViewModel = new BikesViewModel();
-        final Observer<Bike> observer = new Observer<Bike>() {
+    private void functionGetRack(int rack_id, final View view) {
+        racksViewModel = new RacksViewModel();
+        final Observer<Rack> observer = new Observer<Rack>() {
             @Override
-            public void onChanged(Bike bike) {
+            public void onChanged(Rack rack) {
                 DialogFragment newFragment;
-                if(bike.getBikeState().getDescription().equals("Disponibile")) {
-                    newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),
-                            getString(R.string.unlock_first_half_message) + bike.getUnlockCode() +
-                                    getString(R.string.unlock_second_half_message));
+                //se ho una bici e ho posto posso lasciarla nella rastrelliera
+                if(rack.getAvailableStands() > 0) {
+                    newFragment = MyAlertDialogFragment.newInstance(getString(R.string.ended_succs),
+                            getString(R.string.rent_ended_mess));
                     newFragment.show(getFragmentManager(), "dialog");
-
-                    rentalCallback.callbackMethod(true, bike);
+                    ending_rental(mRental,view);
                 }
                 else {
                     newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
@@ -91,12 +96,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 }
                 dismiss();
             }
-        };
-        bikeLiveData = bikesViewModel.getBike(getContext(), bike_id);
 
+        };
+        //controllo distanza dalla rastrelliera
+        bikeLiveData = racksViewModel.getRackById(rack_id, getContext());
         bikeLiveData.observe(requireActivity(), observer);
     }
-
     private void method_called() {
         if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(getActivity().getApplicationContext(), QrReaderActivity.class);
@@ -107,7 +112,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
             newFragment.show(getFragmentManager(), "dialog");
         }
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -121,5 +125,21 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             }
         }
+    }
+
+    public void ending_rental(Rental rental, final View view){
+        rentalsViewModel = new RentalsViewModel();
+        final Observer<Rental> observer = new Observer<Rental>() {
+            @Override
+            public void onChanged(Rental rental) {
+                //qui devo fare tutto
+                //prima idea, inserisce il coso di fine
+               // FrameNoleggio.finishRent();
+
+                dismiss();
+            }
+        };
+        rentalMutableLiveData = rentalsViewModel.endRental(getContext(), rental.getId(), Integer.parseInt(binding.bikeCodeText.getText().toString()));
+        rentalMutableLiveData.observe(requireActivity(), observer);
     }
 }

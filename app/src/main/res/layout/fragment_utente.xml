@@ -12,7 +12,7 @@
 
         <TextView
             android:id="@+id/nome_utente_pagina"
-            style="@style/Widget.MyTheme.TextView"
+            style="@style/Widget.MyTheme.VistaUtente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="52dp"

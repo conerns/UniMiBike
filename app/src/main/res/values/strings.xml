@@ -76,4 +76,7 @@
     <string name="removed_bike">Bike has been removed</string>
     <string name="correct_bike_remove">The bike has been correctly removed. No one will be able to rent it from now on.</string>
     <string name="admin_storico">View all the bikes you added.</string>
+    <string name="dialog_need">In order to procede you\'ll have to insert the end rack id or scan the QR code associated with the rack.</string>
+    <string name="ended_succs">Rent completed</string>
+    <string name="rent_ended_mess">Thanks for using our services, hope we\'ll se you soon. Have a nice day.</string>
 </resources>
