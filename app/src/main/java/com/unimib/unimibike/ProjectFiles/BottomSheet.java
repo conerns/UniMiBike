@@ -64,7 +64,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
     }
 
     public BottomSheet(FragmentCallback rentalCallback){
-        this.rentalCallback=rentalCallback;
+        this.rentalCallback = rentalCallback;
     }
 
 

@@ -1,5 +1,9 @@
 package com.unimib.unimibike.ProjectFiles;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +13,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -20,9 +26,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.Model.Rental;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.RemoveBike;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
@@ -30,6 +38,7 @@ import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
+import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.FragmentNoleggioBinding;
@@ -43,12 +52,13 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private LatLng mCurrentPosition;
     private FragmentCallback rentalCallback;
     private GeolocationCallback geolocationCallback;
-    private int user_id;
+    private int user_id, rack_id;
     private RacksViewModel racksViewModel;
     private MutableLiveData<List<Rack>> racksMutableLiveData;
     private RentalsViewModel rentalsViewModel;
     private MutableLiveData<Rental> rentalMutableLiveData;
     private FragmentNoleggioBinding binding;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -135,7 +145,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         binding.rentalUpButtonEndProcedure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ending_rental(rental);
+                startbottomSheet(rental);
             }
         });
     }
@@ -174,21 +184,16 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         rentalMutableLiveData.observe(requireActivity(), observer);
     }
 
-    public void ending_rental(Rental rental){
-        rentalsViewModel = new RentalsViewModel();
-        final Observer<Rental> observer = new Observer<Rental>() {
-            @Override
-            public void onChanged(Rental rental) {
-                binding.rentalUpCardview.setVisibility(View.GONE);
-                SaveSharedPreference.clearRental_in_progress(getActivity().getApplicationContext());
-            }
-        };
-        rentalMutableLiveData = rentalsViewModel.endRental(getContext(), rental.getId(),5);
-        rentalMutableLiveData.observe(requireActivity(), observer);
+
+
+    private void startbottomSheet(Rental rental) {
+        BottomSheetEnd bsdf = new BottomSheetEnd(rental,getActivity().getApplicationContext());
+        assert getFragmentManager() != null;
+        bsdf.show(getFragmentManager() ,"un altro botto sheet");
+        binding.rentalUpCardview.setVisibility(View.GONE);
+        SaveSharedPreference.clearRental_in_progress(getActivity().getApplicationContext());
+
     }
-
-
-
 
     //Callback interface methods
 

@@ -9,11 +9,11 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:tag="MapRentalTag"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:tag="MapRentalTag"
         tools:context="com.unimib.unimibike.ProjectFiles.FrameNoleggio"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
@@ -37,6 +37,7 @@
         android:id="@+id/rental_up_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/map"
         app:layout_constraintTop_toTopOf="parent"
@@ -52,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:text="@string/rental_in_progress"
@@ -68,20 +69,21 @@
                 android:id="@+id/rental_up_clock_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rental_up_starting_time"
+                app:layout_constraintTop_toBottomOf="@+id/rental_up_title"
                 app:srcCompat="@drawable/baseline_watch_later_24" />
 
             <ImageView
                 android:id="@+id/rental_up_marker_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/rental_up_clock_icon"
                 app:layout_constraintTop_toBottomOf="@+id/rental_up_clock_icon"
                 app:srcCompat="@drawable/baseline_room_24" />
 
@@ -91,11 +93,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="?attr/colorOnSurface"
-                app:layout_constraintStart_toEndOf="@+id/rental_up_clock_icon"
-                app:layout_constraintTop_toBottomOf="@+id/rental_up_title" />
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/rental_up_clock_icon"
+                app:layout_constraintStart_toEndOf="@+id/rental_up_clock_icon" />
 
             <TextView
                 android:id="@+id/rental_up_starting_rack"
@@ -103,21 +105,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginBottom="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="?attr/colorOnSurface"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/rental_up_marker_icon"
                 app:layout_constraintStart_toEndOf="@+id/rental_up_marker_icon"
-                app:layout_constraintTop_toTopOf="@+id/rental_up_marker_icon"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="@+id/rental_up_marker_icon" />
 
             <Button
                 android:id="@+id/rental_up_button_end_procedure"
                 style="@style/Widget.MyTheme.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/end_rental"
                 app:layout_constraintBottom_toBottomOf="parent"
