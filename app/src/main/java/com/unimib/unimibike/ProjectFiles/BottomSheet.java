@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.unimib.unimibike.Model.Bike;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.FragmentCallback;
@@ -30,7 +31,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
     private FragmentCallback    rentalCallback;
     private BottomSheetLayoutBinding binding;
     private BikesViewModel bikesViewModel;
-    private MutableLiveData<Bike> bikeLiveData;
+    private MutableLiveData<Resource<Bike>> bikeLiveData;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
@@ -59,7 +60,14 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 return false;
             }
         });
-
+        binding.bikeCodeText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+            if(hasFocus)
+                binding.bikeCode.setError(null);
+                //binding.bikeCode.setErrorEnabled(false);
+            }
+        });
         return view;
     }
 
@@ -70,24 +78,30 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
     private void functionGetBike(int bike_id) {
         bikesViewModel = new BikesViewModel();
-        final Observer<Bike> observer = new Observer<Bike>() {
+        final Observer<Resource<Bike>> observer = new Observer<Resource<Bike>>() {
             @Override
-            public void onChanged(Bike bike) {
+            public void onChanged(Resource<Bike> bike) {
                 DialogFragment newFragment;
-                if(bike.getBikeState().getDescription().equals("Disponibile")) {
-                    newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),
-                            getString(R.string.unlock_first_half_message) + bike.getUnlockCode() +
-                                    getString(R.string.unlock_second_half_message));
-                    newFragment.show(getFragmentManager(), "dialog");
+                if(bike.getStatusCode() == 200) {
+                    if (bike.getData().getBikeState().getDescription().equals("Disponibile")) {
+                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),
+                                getString(R.string.unlock_first_half_message) + bike.getData().getUnlockCode() +
+                                        getString(R.string.unlock_second_half_message));
+                        newFragment.show(getFragmentManager(), "dialog");
 
-                    rentalCallback.callbackMethod(true, bike);
+                        rentalCallback.callbackMethod(true, bike.getData());
+                    } else {
+                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
+                                getString(R.string.not_avaible_message));
+                        newFragment.show(getFragmentManager(), "dialog");
+                    }
+                    dismiss();
                 }
-                else {
-                    newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
-                            getString(R.string.not_avaible_message));
-                    newFragment.show(getFragmentManager(), "dialog");
+                else if(bike.getStatusCode() == 404){
+                    binding.bikeCode.setErrorEnabled(true);
+                    binding.bikeCode.setError("ID non valido");
+                    binding.bikeCode.clearFocus();
                 }
-                dismiss();
             }
         };
         bikeLiveData = bikesViewModel.getBike(getContext(), bike_id);

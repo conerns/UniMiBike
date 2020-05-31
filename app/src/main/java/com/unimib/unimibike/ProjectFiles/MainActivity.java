@@ -7,12 +7,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -47,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         if(checkAndRequestPermissions())
             afterPermission();
-
     }
     //questo metodo fa partire una nuova activity
     public void apr_activity(User user){
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         }
+        binding.userEmail.clearFocus();
         binding.userEmail.setError("Email non valida!");
         return false;
     }
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean controlla_pass(String value){
         if(value.isEmpty()){
             binding.userPassword.setError("Campo password vuoto!");
+            binding.userPassword.clearFocus();
             return false;
         }
         binding.userPassword.setError(null);
@@ -234,8 +239,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            binding.testoEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus)
+                        binding.userEmail.setError(null);
+                }
+            });
+
+            binding.testoPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus)
+                        binding.userPassword.setError(null);
+                }
+            });
+
         }
 
     }
-
 }

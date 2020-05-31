@@ -36,7 +36,7 @@ public class BikesRepository {
         new Thread(runnable).start();
     }
 
-    public void getBike(final int bike_id, final Context context, final MutableLiveData<Bike> bike){
+    public void getBike(final int bike_id, final Context context, final MutableLiveData<Resource<Bike>> bike){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -94,16 +94,21 @@ public class BikesRepository {
         });
     }
 
-    private void getBikeFromDatabase(final int bike_id, final Context context, final MutableLiveData<Bike> bike){
+    private void getBikeFromDatabase(final int bike_id, final Context context, final MutableLiveData<Resource<Bike>> bike){
         UnimibBikeFetcher.getBike(context, bike_id, new ServerResponseParserCallback<Bike>() {
             @Override
             public void onSuccess(Bike response) {
-                bike.postValue(response);
+                Resource<Bike> bikeResource = new Resource<>();
+                bikeResource.setData(response);
+                bikeResource.setStatusCode(200);
+                bike.postValue(bikeResource);
             }
 
             @Override
             public void onError(String errorTitle, String errorMessage) {
-
+                Resource<Bike> bikeResource = new Resource<>();
+                bikeResource.setStatusCode(404);
+                bike.postValue(bikeResource);
             }
         });
     }

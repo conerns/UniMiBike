@@ -89,13 +89,13 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
                 new FrameNoleggio()).commit();
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         super.onResume();
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(listener);
-        bottomNav.setSelectedItemId(R.id.id_noleggio);
+        //BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+//        bottomNav.setOnNavigationItemSelectedListener(listener);
+        //bottomNav.setSelectedItemId(R.id.id_noleggio);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_displayer,
                 new FrameNoleggio()).commit();
-    }
+    }*/
 }

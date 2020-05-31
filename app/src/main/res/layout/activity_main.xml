@@ -1,48 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".ProjectFiles.MainActivity">
+
+    <Button
+        android:id="@+id/accedi_utente"
+        style="@style/Widget.MyTheme.Button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginLeft="161dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginRight="162dp"
+        android:text="@string/accedi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_password" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/user_email"
+        style="@style/Widget.MyTheme.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ProjectFiles.MainActivity">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="26dp"
+        android:hint="@string/utente_mail"
+        app:layout_constraintBottom_toTopOf="@+id/user_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/accedi_utente"
-            style="@style/Widget.MyTheme.Button"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="161dp"
-            android:layout_marginLeft="161dp"
-            android:layout_marginTop="26dp"
-            android:layout_marginEnd="162dp"
-            android:layout_marginRight="162dp"
-            android:text="@string/accedi"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_password" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/user_email"
-            style="@style/Widget.MyTheme.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/testo_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="26dp"
-            android:hint="@string/utente_mail"
-            app:layout_constraintBottom_toTopOf="@+id/user_password"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:focusable="true"
+            android:inputType="text" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/testo_email"
-                android:inputType="text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/user_password"
@@ -58,14 +61,13 @@
         app:layout_constraintBottom_toTopOf="@+id/accedi_utente"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:passwordToggleEnabled="true"
-        >
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/testo_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,15 +109,15 @@
         android:background="#66000000"
         android:elevation="8dp"
 
-        android:visibility="gone"
-        android:gravity="center|center_horizontal|center_vertical">
+        android:gravity="center|center_horizontal|center_vertical"
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/pBar"
-            android:theme="@style/Theme.MyApp.UnimibAccent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:theme="@style/Theme.MyApp.UnimibAccent"
+            android:visibility="gone" />
     </RelativeLayout>
 
 

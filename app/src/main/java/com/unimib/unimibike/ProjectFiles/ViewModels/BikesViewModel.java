@@ -25,12 +25,12 @@ public class BikesViewModel extends ViewModel {
         return bike;
     }
 
-    public MutableLiveData<Bike> getBike(Context context, final int bike_id){
-        if (bike == null)
-            bike = new MutableLiveData<>();
+    public MutableLiveData<Resource<Bike>> getBike(Context context, final int bike_id){
+        if (resourceBike == null)
+            resourceBike = new MutableLiveData<>();
 
-        BikesRepository.getInstance().getBike(bike_id, context, bike);
-        return bike;
+        BikesRepository.getInstance().getBike(bike_id, context, resourceBike);
+        return resourceBike;
     }
 
     public MutableLiveData<Resource<Bike>> modifyBikePosition(Context context, final int bike_id,
