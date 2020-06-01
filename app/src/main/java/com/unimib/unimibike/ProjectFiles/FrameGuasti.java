@@ -20,6 +20,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.unimib.unimibike.Model.Report;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.ReportsViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
@@ -33,7 +34,7 @@ public class FrameGuasti extends Fragment {
     private String get_role;
     private int get_id;
     private ReportsViewModel reportsViewModel;
-    private MutableLiveData<Report> reportMutableLiveDate;
+    private MutableLiveData <Resource<Report>> reportMutableLiveDate;
     private FragmentGuastiBinding binding;
     View w;
     @SuppressLint("ClickableViewAccessibility")
@@ -107,7 +108,9 @@ public class FrameGuasti extends Fragment {
         binding.sendFaultReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkType(binding.typeFaultReport.getEditText().getText().toString()) & checkIdBike(binding.bikeCodeFault.getEditText().getText().toString())) {
+                if(checkType(binding.typeFaultReport.getEditText().getText().toString())
+                    & checkIdBike(binding.bikeCodeFault.getEditText().getText().toString())
+                    & checkDescriptionLength()) {
                     Report r = createReport();
                     newReport(r);
                 }
@@ -135,6 +138,16 @@ public class FrameGuasti extends Fragment {
         return true;
     }
 
+    private boolean checkDescriptionLength(){
+        if(binding.bikeFalutDesciptionText.getText().length() > 120){
+            binding.bikeFalutDesciption.setError("Non superare i 120 caratteri");
+            return false;
+        }
+        binding.bikeFalutDesciption.setError(null);
+        binding.bikeFalutDesciption.setErrorEnabled(false);
+        return true;
+    }
+
     public Report createReport(){
         String typeTemp = binding.typeFaultReport.getEditText().getText().toString();
         Report report = new Report();
@@ -159,14 +172,19 @@ public class FrameGuasti extends Fragment {
 
     public void newReport(Report report){
         reportsViewModel = new ReportsViewModel();
-        final Observer<Report> observer = new Observer<Report>() {
+        final Observer<Resource<Report>> observer = new Observer<Resource<Report>>() {
             @Override
-            public void onChanged(Report report) {
-                DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.report_sent), getString(R.string.report_sent_body));
-                newFragment.show(getFragmentManager(), "dialog");
-                binding.bikeCodeFault.getEditText().setText("");
-                binding.typeFaultReport.getEditText().setText("");
-                binding.bikeFalutDesciption.getEditText().setText("");
+            public void onChanged(Resource<Report> report) {
+                if(report.getStatusCode() == 200) {
+                    DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.report_sent), getString(R.string.report_sent_body));
+                    newFragment.show(getFragmentManager(), "dialog");
+                    binding.bikeCodeFault.getEditText().setText("");
+                    binding.typeFaultReport.getEditText().setText("");
+                    binding.bikeFalutDesciption.getEditText().setText("");
+                }else if(report.getStatusCode() == 404){
+                    binding.bikeCodeFault.setErrorEnabled(true);
+                    binding.bikeCodeFault.setError("inserire ID valido");
+                }
             }
         };
         reportMutableLiveDate = reportsViewModel.sendReport(getContext(), report);

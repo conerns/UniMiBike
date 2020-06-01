@@ -26,6 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.Model.Rental;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
@@ -38,7 +39,7 @@ import com.unimib.unimibike.databinding.BottomSheetLayoutBinding;
 public class BottomSheetEnd extends BottomSheetDialogFragment {
     private BottomSheetEndBinding binding;
     private RacksViewModel racksViewModel;
-    private MutableLiveData<Rack> bikeLiveData;
+    private MutableLiveData<Resource<Rack>> bikeLiveData;
     private RentalsViewModel rentalsViewModel;
     private MutableLiveData<Rental> rentalMutableLiveData;
     private Rental mRental;
@@ -75,24 +76,40 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
             }
         });
 
+        binding.bikeCodeText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    binding.bikeCode.setError(null);
+                    binding.bikeCode.setErrorEnabled(false);
+                }
+            }
+        });
+
         return view;
     }
 
     private void functionGetRack(int rack_id, final View view) {
         racksViewModel = new RacksViewModel();
-        final Observer<Rack> observer = new Observer<Rack>() {
+        final Observer<Resource<Rack>> observer = new Observer<Resource<Rack>>() {
             @Override
-            public void onChanged(Rack rack) {
-                DialogFragment newFragment;
-                //se ho una bici e ho posto posso lasciarla nella rastrelliera
-                if(rack.getAvailableStands() > 0)
-                    ending_rental(mRental,view,getFragmentManager());
-                else {
-                    newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
-                            getString(R.string.not_avaible_message));
-                    newFragment.show(getFragmentManager(), "dialog");
+            public void onChanged(Resource<Rack> rack) {
+                if(rack.getStatusCode() == 200) {
+                    DialogFragment newFragment;
+                    //se ho una bici e ho posto posso lasciarla nella rastrelliera
+                    if (rack.getData().getAvailableStands() > 0)
+                        ending_rental(mRental, view, getFragmentManager());
+                    else {
+                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
+                                getString(R.string.not_avaible_message));
+                        newFragment.show(getFragmentManager(), "dialog");
+                    }
+                    dismiss();
+                }else if(rack.getStatusCode() == 404){
+                    binding.bikeCode.setErrorEnabled(true);
+                    binding.bikeCode.setError("Inserire ID valido");
+                    binding.bikeCode.clearFocus();
                 }
-                dismiss();
             }
 
         };

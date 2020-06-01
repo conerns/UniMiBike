@@ -21,6 +21,7 @@ import android.view.View;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Rack;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.R;
@@ -36,7 +37,7 @@ public class AggiungiNuovaBici extends AppCompatActivity {
     private ActivityAggiungiNuovaBiciBinding binding;
     private RacksViewModel racksViewModel;
     private BikesViewModel bikeViewModel;
-    private MutableLiveData<Bike> bikeLiveData;
+    private MutableLiveData<Resource<Bike>> bikeLiveData;
     private MutableLiveData<List<Rack>> racksliveData;
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -91,28 +92,28 @@ public class AggiungiNuovaBici extends AppCompatActivity {
             public void onChanged(List<Rack> racks) {
                 if(binding.valoriRastrelliereFine.getText().length() != 0){
                     for(Rack rack: racks) {
-                        if (rack.getId() == Integer.parseInt(binding.valoriRastrelliereFine.getText().toString())) {
+                        if (rack.getId() == Integer.parseInt(binding.valoriRastrelliereFine.getText().toString()) &
+                            controlloCodice()) {
                             Log.d("Controllo", String.valueOf(binding.valoriRastrelliereFine.getId() == Integer.parseInt(binding.valoriRastrelliereFine.getText().toString())));
-                            if (controlloCodice()) {
-                                MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);
-                                mMaterialDialog
-                                    .setTitle(R.string.confirm_dati)
-                                    .setMessage(getString(R.string.confirm_first_half) + binding.valoriRastrelliereFine.getText().toString()
-                                            + getString(R.string.confirm_second_half) + binding.contenutoCodeBike.getText().toString())
-                                    .setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            addBike();
-                                        }
-                                    })
-                                    .setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+                            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);
+                            mMaterialDialog
+                                .setTitle(R.string.confirm_dati)
+                                .setMessage(getString(R.string.confirm_first_half) + binding.valoriRastrelliereFine.getText().toString()
+                                        + getString(R.string.confirm_second_half) + binding.contenutoCodeBike.getText().toString())
+                                .setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        addBike();
+                                    }
+                                })
+                                .setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                                        }
-                                    })
-                                    .show();
-                            }
+                                    }
+                                })
+                                .show();
+
                             return;
                         }
                     }
@@ -129,12 +130,14 @@ public class AggiungiNuovaBici extends AppCompatActivity {
 
     public void addBike(){
         bikeViewModel = new BikesViewModel();
-        final Observer<Bike> observer = new Observer<Bike>() {
+        final Observer<Resource<Bike>> observer = new Observer<Resource<Bike>>() {
             @Override
-            public void onChanged(Bike bike) {
-                binding.contenutoCodeBike.setText(null);
-                binding.valoriRastrelliereFine.setText(null);
-                funzione_dialog();
+            public void onChanged(Resource<Bike> bike) {
+                if(bike.getStatusCode() == 200) {
+                    binding.contenutoCodeBike.setText(null);
+                    binding.valoriRastrelliereFine.setText(null);
+                    funzione_dialog();
+                }
             }
         };
         bikeLiveData = bikeViewModel.adminAddBike(this.getApplicationContext(),

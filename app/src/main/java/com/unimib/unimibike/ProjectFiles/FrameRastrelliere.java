@@ -32,7 +32,6 @@ public class FrameRastrelliere extends Fragment implements GeolocationCallback {
     private GeolocationCallback geolocationCallback;
     private RacksViewModel model;
     private MutableLiveData<List<Rack>> liveData;
-    private int counter = 0;
     private FrameListaRastrelliereBinding binding;
     @Nullable
     @Override

@@ -17,20 +17,20 @@ public class BikesViewModel extends ViewModel {
     private MutableLiveData<Bike> bike;
     private MutableLiveData<Resource<Bike>> resourceBike;
 
-    public MutableLiveData<Bike> adminAddBike(Context context, final int user_id, final int unlock_code, final int rack_id) {
-        if (bike == null)
-            bike = new MutableLiveData<>();
+    public MutableLiveData<Resource<Bike>> adminAddBike(Context context, final int user_id, final int unlock_code, final int rack_id) {
+        if (resourceBike == null)
+            resourceBike = new MutableLiveData<>();
 
-        BikesRepository.getInstance().addBike(user_id, unlock_code, rack_id, context, bike);
-        return bike;
+        BikesRepository.getInstance().addBike(user_id, unlock_code, rack_id, context, resourceBike);
+        return resourceBike;
     }
 
-    public MutableLiveData<Bike> getBike(Context context, final int bike_id){
-        if (bike == null)
-            bike = new MutableLiveData<>();
+    public MutableLiveData<Resource<Bike>> getBike(Context context, final int bike_id){
+        if (resourceBike == null)
+            resourceBike = new MutableLiveData<>();
 
-        BikesRepository.getInstance().getBike(bike_id, context, bike);
-        return bike;
+        BikesRepository.getInstance().getBike(bike_id, context, resourceBike);
+        return resourceBike;
     }
 
     public MutableLiveData<Resource<Bike>> modifyBikePosition(Context context, final int bike_id,
