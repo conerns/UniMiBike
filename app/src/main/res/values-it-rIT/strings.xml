@@ -26,10 +26,10 @@
     <string name="fault_description">Descrizione guasto</string>
     <string name="send_fault_report">Invia segnalazione guasto</string>
     <string name="optional">Opzionale</string>
-    <string name="send_fix_report">Notifica avvenuta riparazione</string>
+    <string name="send_fix_report">Rendi dispobibile</string>
     <string name="select_end_rack">Seleziona rastrelliera finale</string>
     <string name="select_initial_rack">Seleziona rastrelliera iniziale</string>
-    <string name="apply_position_changes">Applica modifica posizione</string>
+    <string name="apply_position_changes">Modifica posizione</string>
     <string name="flat_tire">Pneumatico bucato</string>
     <string name="broken_pedal">Pedale rotto</string>
     <string name="broken_chain">Catena rotta</string>
@@ -39,11 +39,11 @@
     <string name="altro_guasto">Altro</string>
     <string name="report_sent">Segnalazione avvenuta</string>
     <string name="report_sent_body">La segnalazione è andata a buon fine. Un nostro tecnico risolverà il problema, ti invitiamo ad usare un\'altra bicicletta.</string>
-    <string name="apply_bike_added">Applica aggiunta bici</string>
+    <string name="apply_bike_added">Aggiungi bicicletta</string>
     <string name="select_bike_position">Seleziona posizione bici</string>
     <string name="insert_unlock_code">Inserire codice sblocco</string>
     <string name="go_to">Naviga</string>
-    <string name="avaible_bikes">biciclette disponibili</string>
+    <string name="avaible_bikes">Biciclette disponibili</string>
     <string name="unlock_id_header">Codice di sblocco</string>
     <string name="unlock_first_half_message">"Il codice di sblocco per la bicicletta desiderata è: "</string>
     <string name="unlock_second_half_message">, usa questo codice per eseguire la procedura di sblocco e goditi il viaggio.</string>
@@ -54,10 +54,10 @@
     <string name="start_rental_rack">"Rastrelliera di partenza: "</string>
     <string name="end_rental">Concludi</string>
     <string name="insert_rack_id">Inserisci id rasterlliera</string>
-    <string name="confirm_dati">Conferma dati inseriti!</string>
+    <string name="confirm_dati">Conferma dati inseriti</string>
     <string name="confirm_first_half">"Sei sicuro di voler aggiungere la nuova bici all'interno della rastrelliera "</string>
     <string name="confirm_second_half">", avente codice di sblocco "</string>
-    <string name="correct_bike_add">Bicicletta aggiunta correttamente!</string>
+    <string name="correct_bike_add">Bicicletta aggiunta correttamente</string>
     <string name="correct_bike_add_text">Hai aggiunto una nuova bicicletta e sarà subito pronta all\'uso.</string>
     <string name="modifed_position">Poszione modificata correttamente.</string>
     <string name="correct_bike_modify">"La bicicletta in questione è stata spostata in una nuova Rastrelliera. Gli utenti potranno prenderla dalla nuova rastrelliera d'ora in poi. "</string>
@@ -70,8 +70,14 @@
     <string name="cancel_message">Cancella</string>
     <string name="removed_bike">La bicicletta è stata rimossa</string>
     <string name="correct_bike_remove">La bicicletta è stata rimossa correttamente</string>
-    <string name="admin_storico">Visualizza tutte le bici che hai aggiunto</string>
+    <string name="admin_storico">Biciclette aggiunte da me</string>
     <string name="dialog_need">Per poter concludere il noleggio dovrai inserire l\'id della rastrelliera</string>
     <string name="ended_succs">Noleggio concluso</string>
     <string name="rent_ended_mess">Grazie per aver usato i nostri servizi, speriamo di rivederti presto. Buona giornata!</string>
+    <string name="noleggi">Noleggi</string>
+    <string name="should_not_be_empty">Campo obbligatorio</string>
+    <string name="insert_vaild_value">Inserire un valore valido</string>
+    <string name="only_four_digits">Inserire un codice di 4 cifre</string>
+    <string name="invalid_email_value">E-mail inserita potrebbe non essere valida</string>
+    <string name="invlaid_password_value">Password inserita potrebbe non essere valida</string>
 </resources>

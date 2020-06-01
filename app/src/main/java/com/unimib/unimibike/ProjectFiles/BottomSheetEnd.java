@@ -107,7 +107,7 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
                     dismiss();
                 }else if(rack.getStatusCode() == 404){
                     binding.bikeCode.setErrorEnabled(true);
-                    binding.bikeCode.setError("Inserire ID valido");
+                    binding.bikeCode.setError(getString(R.string.insert_vaild_value));
                     binding.bikeCode.clearFocus();
                 }
             }

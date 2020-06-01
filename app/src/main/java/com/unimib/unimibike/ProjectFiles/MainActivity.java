@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public boolean controlla_email(String value){
         if(value.isEmpty()){
-            binding.userEmail.setError("Campo email vuoto!");
+            binding.userEmail.setError(getString(R.string.should_not_be_empty));
             return false;
         }
         if((value.split("@")).length == 2){
@@ -76,13 +76,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         binding.userEmail.clearFocus();
-        binding.userEmail.setError("Email non valida!");
+        binding.userEmail.setError(getString(R.string.insert_vaild_value));
         return false;
     }
 
     public boolean controlla_pass(String value){
         if(value.isEmpty()){
-            binding.userPassword.setError("Campo password vuoto!");
+            binding.userPassword.setError(getString(R.string.should_not_be_empty));
             binding.userPassword.clearFocus();
             return false;
         }
@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
                     binding.testoEmail.setFocusableInTouchMode(true);
                     binding.testoPassword.setFocusableInTouchMode(true);
                     binding.accediUtente.setClickable(true);
-                    binding.userEmail.setError("email potrebbe essere errata");
-                    binding.userPassword.setError("password potrebbe essere errata");
+                    binding.userEmail.setError(getString(R.string.invalid_email_value));
+                    binding.userPassword.setError(getString(R.string.invlaid_password_value));
                     binding.accediUtente.setEnabled(true);
                 }
             }
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                         mMaterialDialog
                                 .setTitle(R.string.internet_connection_dialog_title)
                                 .setMessage(R.string.check_internet)
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 

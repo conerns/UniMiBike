@@ -77,7 +77,7 @@ public class AggiungiNuovaBici extends AppCompatActivity {
         mMaterialDialog
                 .setTitle(R.string.correct_bike_add)
                 .setMessage(getString(R.string.correct_bike_add_text))
-                .setPositiveButton("Avanti", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -100,13 +100,13 @@ public class AggiungiNuovaBici extends AppCompatActivity {
                                 .setTitle(R.string.confirm_dati)
                                 .setMessage(getString(R.string.confirm_first_half) + binding.valoriRastrelliereFine.getText().toString()
                                         + getString(R.string.confirm_second_half) + binding.contenutoCodeBike.getText().toString())
-                                .setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
+                                .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         addBike();
                                     }
                                 })
-                                .setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
+                                .setNegativeButton(R.string.cancel_message, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -117,10 +117,10 @@ public class AggiungiNuovaBici extends AppCompatActivity {
                             return;
                         }
                     }
-                    binding.posizioneBiciNuova.setError("Valore ID non valido");
+                    binding.posizioneBiciNuova.setError(getString(R.string.insert_vaild_value));
                     return;
                 }
-                binding.posizioneBiciNuova.setError("Inserire valore ID");
+                binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
                 return;
             }
         };
@@ -151,11 +151,11 @@ public class AggiungiNuovaBici extends AppCompatActivity {
 
     private boolean controlloCodice(){
         if(binding.contenutoCodeBike.getText().length() == 0){
-            binding.idCodiceSblocco.setError("Codice di sblocco richiesto!");
+            binding.idCodiceSblocco.setError(getString(R.string.should_not_be_empty));
             return false;
         }
         if(binding.contenutoCodeBike.getText().length() != 4){
-            binding.idCodiceSblocco.setError("Il codice deve contenere 4 numeri!");
+            binding.idCodiceSblocco.setError(getString(R.string.only_four_digits));
             return false;
         }
         return true;

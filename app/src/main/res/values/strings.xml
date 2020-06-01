@@ -20,9 +20,7 @@
     <string name="admin_modifica_posizione">Modify bike\'s position</string>
     <string name="admin_aggiungi_posizione">Add new bike</string>
     <string name="internet_connection_dialog_title">Internet connection</string>
-    <string name="check_internet">
-        Make sure you\'re connected to Wi-Fi connection or data connection
-    </string>
+    <string name="check_internet">"Make sure you're connected to Wi-Fi connection or data connection     "</string>
     <string name="unlock_bike">Unlock bike</string>
     <string name="insert_bike_id">Insert bike ID</string>
     <string name="remove_bike">Remove bike</string>
@@ -30,10 +28,10 @@
     <string name="fault_description">Fault description</string>
     <string name="send_fault_report">Send fault report</string>
     <string name="optional">Optional</string>
-    <string name="send_fix_report">Notify fixed bike</string>
+    <string name="send_fix_report">Set available</string>
     <string name="select_end_rack">Select end rack</string>
     <string name="select_initial_rack">Select initial rack</string>
-    <string name="apply_position_changes">Apply position changes</string>
+    <string name="apply_position_changes">Change position</string>
     <string name="flat_tire">Flat tire</string>
     <string name="broken_pedal">Broken pedal</string>
     <string name="broken_chain">Broken chain</string>
@@ -43,12 +41,12 @@
     <string name="altro_guasto">Other</string>
     <string name="report_sent_body">"The report has been succsesfully sent. One of our technician will solve the problem, you can choose another bike to use meanwhile. "</string>
     <string name="report_sent">Report sent</string>
-    <string name="apply_bike_added">Apply bike added</string>
-    <string name="select_bike_position">select bike position</string>
-    <string name="insert_unlock_code">insert unlock code</string>
+    <string name="apply_bike_added">Add bike</string>
+    <string name="select_bike_position">Select bike position</string>
+    <string name="insert_unlock_code">Insert unlock code</string>
 
     <string name="go_to">Go to</string>
-    <string name="avaible_bikes">avaible bikes</string>
+    <string name="avaible_bikes">Avaible bikes</string>
     <string name="unlock_id_header">Unlock code</string>
     <string name="unlock_first_half_message">"The unock code for this bike is: "</string>
     <string name="unlock_second_half_message">, use it to unlock the bike and enjoy your ride.</string>
@@ -59,10 +57,10 @@
     <string name="start_rental_rack">"Starting rack: "</string>
     <string name="end_rental">End ride</string>
     <string name="insert_rack_id">Insert rack ID</string>
-    <string name="confirm_dati">Confirm given data!</string>
+    <string name="confirm_dati">Confirm given data</string>
     <string name="confirm_first_half">"Are you sure you add a new bike inside the rack id: "</string>
     <string name="confirm_second_half">", and unlock code "</string>
-    <string name="correct_bike_add">Bike  added correctly!</string>
+    <string name="correct_bike_add">Bike added correctly</string>
     <string name="correct_bike_add_text">"Congratulations! You correctly added a new bike. "</string>
     <string name="modifed_position">Position has been modified.</string>
     <string name="correct_bike_modify">The bike required has been moved into a new Rack. Users will be able to rent the bike from this rack now.</string>
@@ -75,8 +73,18 @@
     <string name="cancel_message">Cancel</string>
     <string name="removed_bike">Bike has been removed</string>
     <string name="correct_bike_remove">The bike has been correctly removed. No one will be able to rent it from now on.</string>
-    <string name="admin_storico">View all the bikes you added.</string>
+    <string name="admin_storico">Bikes added by me</string>
     <string name="dialog_need">In order to procede you\'ll have to insert the end rack id or scan the QR code associated with the rack.</string>
     <string name="ended_succs">Rent completed</string>
     <string name="rent_ended_mess">Thanks for using our services, hope we\'ll se you soon. Have a nice day.</string>
+    <string name="noleggi">Rents</string>
+    <string name="should_not_be_empty">Required field</string>
+    <string name="insert_vaild_value">Insert a valid value</string>
+    <string name="only_four_digits">Insert a 4 digits value</string>
+    <string name="invalid_email_value">The email entered may not be valid</string>
+    <string name="invlaid_password_value">The password entered may not be valid</string>
+    <string name="fixed_message">Bike fixed</string>
+    <string name="fixed_message_text">thanks for making this bike available again</string>
+    <string name="request_bad_ending">Something went wrong</string>
+    <string name="request_bad_ending_text">Make sure that all the information you inserted are correct and try again,</string>
 </resources>

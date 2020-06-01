@@ -41,8 +41,15 @@ public class BottomSheet extends BottomSheetDialogFragment {
         binding.buttonUnlockBike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(binding.bikeCodeText.getText().length()!=0)
+                binding.bikeCode.setError(null);
+                binding.bikeCode.setErrorEnabled(false);
+                if(binding.bikeCodeText.getText().length()!=0) {
+
                     functionGetBike(Integer.parseInt(binding.bikeCodeText.getText().toString()));
+                }else{
+                    binding.bikeCode.setError(getString(R.string.should_not_be_empty));
+                    binding.bikeCode.setErrorEnabled(true);
+                }
             }
         });
 
@@ -100,7 +107,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 }
                 else if(bike.getStatusCode() == 404){
                     binding.bikeCode.setErrorEnabled(true);
-                    binding.bikeCode.setError("ID non valido");
+                    binding.bikeCode.setError(getString(R.string.insert_vaild_value));
                     binding.bikeCode.clearFocus();
                 }
             }

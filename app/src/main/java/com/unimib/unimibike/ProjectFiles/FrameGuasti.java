@@ -2,9 +2,12 @@ package com.unimib.unimibike.ProjectFiles;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,8 +22,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Report;
 import com.unimib.unimibike.Model.Resource;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.AggiungiNuovaBici;
 import com.unimib.unimibike.ProjectFiles.ViewModels.ReportsViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
@@ -45,6 +51,7 @@ public class FrameGuasti extends Fragment {
                                             getString(R.string.broken_pedal), getString(R.string.saddle_absent),
                                             getString(R.string.absent_tire), getString(R.string.malfunctioning_breaks), getString(R.string.altro_guasto)
                             };
+
         if(SaveSharedPreference.getUserName(getContext().getApplicationContext()).length() != 0) {
             get_email = SaveSharedPreference.getUserName(getContext().getApplicationContext());
             get_role = SaveSharedPreference.getPrefUserRole(getContext().getApplicationContext());
@@ -56,6 +63,7 @@ public class FrameGuasti extends Fragment {
         }
 
         binding = FragmentGuastiBinding.inflate(getLayoutInflater());
+        binding.bikeFalutDesciptionText.setFilters((new InputFilter[]{new InputFilter.LengthFilter(120)}));
         View view = binding.getRoot();
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
@@ -94,9 +102,73 @@ public class FrameGuasti extends Fragment {
                 return false;
             }
         });
+        binding.sendFixedReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.bikeCodeFixed.setErrorEnabled(false);
+                binding.bikeCodeFixed.setError(null);
+                binding.posizioneBiciNuova.setError(null);
+                binding.posizioneBiciNuova.setErrorEnabled(false);
+                if(checkIDBikeReport() & checkRackReport()){
+                    sendFixReport();
+                }
+            }
+        });
         return view;
+    }
+
+    private void sendFixReport() {
+        MutableLiveData<Resource<Report>> bike;
+        reportsViewModel = new ReportsViewModel();
+        Observer<Resource<Report>> observer = new Observer<Resource<Report>>() {
+            @Override
+            public void onChanged(Resource<Report> bikeResource) {
+                if(bikeResource.getStatusCode() == 200) {
+                    binding.valoriRastrelliereFine.setText(null);
+                    binding.bikeCodeTextFixed.setText(null);
+                    Log.d("TAGunico", bikeResource.toString());
+                    if(bikeResource != null)
+                        funzione_dialog();
+                    else
+                        funzione_dialog_errore();
+                }
+            }
+        };
+        bike = reportsViewModel.fixReport(getActivity().getApplicationContext(),SaveSharedPreference.getUserID(getActivity().getApplicationContext()),
+                Integer.parseInt(binding.valoriRastrelliereFine.getText().toString()),
+                Integer.parseInt(binding.bikeCodeTextFixed.getText().toString())
+        );
+        bike.observe(this, observer);
+    }
+
+    private void funzione_dialog() {
+        DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.fixed_message), getString(R.string.fixed_message_text));
+        newFragment.show(getFragmentManager(), "dialog");
+    }
+    private void funzione_dialog_errore() {
+        DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.request_bad_ending), getString(R.string.request_bad_ending_text));
+        newFragment.show(getFragmentManager(), "dialog");
 
     }
+
+    private boolean checkRackReport() {
+        if(binding.valoriRastrelliereFine.getText().length() == 0){
+            binding.posizioneBiciNuova.setErrorEnabled(true);
+            binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkIDBikeReport() {
+        if(binding.bikeCodeTextFixed.getText().length() == 0){
+            binding.bikeCodeFixed.setErrorEnabled(true);
+            binding.bikeCodeFixed.setError(getString(R.string.should_not_be_empty));
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(get_role.equals("admin")){
@@ -109,8 +181,7 @@ public class FrameGuasti extends Fragment {
             @Override
             public void onClick(View v) {
                 if(checkType(binding.typeFaultReport.getEditText().getText().toString())
-                    & checkIdBike(binding.bikeCodeFault.getEditText().getText().toString())
-                    & checkDescriptionLength()) {
+                    & checkIdBike(binding.bikeCodeFault.getEditText().getText().toString())) {
                     Report r = createReport();
                     newReport(r);
                 }
@@ -120,7 +191,7 @@ public class FrameGuasti extends Fragment {
 
     public boolean checkType(String value){
         if(value.isEmpty()){
-            binding.typeFaultReport.setError("Campo obbligatorio");
+            binding.typeFaultReport.setError(getString(R.string.should_not_be_empty));
             return false;
         }
         binding.typeFaultReport.setError(null);
@@ -130,7 +201,7 @@ public class FrameGuasti extends Fragment {
 
     public boolean checkIdBike(String value){
         if(value.isEmpty()){
-            binding.bikeCodeFault.setError("Campo obbligatorio");
+            binding.bikeCodeFault.setError(getString(R.string.should_not_be_empty));
             return false;
         }
         binding.bikeCodeFault.setError(null);
@@ -138,15 +209,6 @@ public class FrameGuasti extends Fragment {
         return true;
     }
 
-    private boolean checkDescriptionLength(){
-        if(binding.bikeFalutDesciptionText.getText().length() > 120){
-            binding.bikeFalutDesciption.setError("Non superare i 120 caratteri");
-            return false;
-        }
-        binding.bikeFalutDesciption.setError(null);
-        binding.bikeFalutDesciption.setErrorEnabled(false);
-        return true;
-    }
 
     public Report createReport(){
         String typeTemp = binding.typeFaultReport.getEditText().getText().toString();
@@ -177,13 +239,14 @@ public class FrameGuasti extends Fragment {
             public void onChanged(Resource<Report> report) {
                 if(report.getStatusCode() == 200) {
                     DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.report_sent), getString(R.string.report_sent_body));
+
                     newFragment.show(getFragmentManager(), "dialog");
                     binding.bikeCodeFault.getEditText().setText("");
                     binding.typeFaultReport.getEditText().setText("");
                     binding.bikeFalutDesciption.getEditText().setText("");
                 }else if(report.getStatusCode() == 404){
                     binding.bikeCodeFault.setErrorEnabled(true);
-                    binding.bikeCodeFault.setError("inserire ID valido");
+                    binding.bikeCodeFault.setError(getString(R.string.insert_vaild_value));
                 }
             }
         };

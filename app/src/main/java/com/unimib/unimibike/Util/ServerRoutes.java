@@ -14,7 +14,7 @@ public interface ServerRoutes {
     String ADD_BIKES = BASE_URL + "addBikes";
     String REMOVE_BIKES = BASE_URL + "removeBikes";
     String BUILDINGS = BASE_URL + "buildings";
-
+    String FIX_REPORT = BASE_URL + "fixedReports";
     String RESERVATIONS = BASE_URL + "reservations";
 
     String REPORTS = BASE_URL + "reports";

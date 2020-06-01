@@ -13,7 +13,7 @@
     <item
         android:id="@+id/id_storico"
         android:icon="@drawable/noleggio_storico"
-        android:title="@string/noleggio"
+        android:title="@string/noleggi"
     />
     <item
         android:id="@+id/id_guasti"
