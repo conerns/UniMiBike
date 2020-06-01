@@ -376,14 +376,21 @@ public class UnimibBikeFetcher {
         return null;
     }
 
-    public static void getRentals(final Context context,int user_id,
+    public static void getRentals(final Context context, int user_id, final boolean active,
                                   final ServerResponseParserCallback<List<Rental>> serverResponseParserCallback) {
         String url = ServerRoutes.RENTALS + "/?id=" + user_id;
+        if(active)
+            url += "&active=yes";
         Log.d(TAG, url);
         ServerRequest.getInstance(context).getBasicRequest(url, new NetworkCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
-                serverResponseParserCallback.onSuccess(getRentalsFromJSONObject(response));
+                if(active){
+                    List<Rental> rentalInProgress = new ArrayList<>();
+                    rentalInProgress.add(getRentalFromJSONObject(response));
+                    serverResponseParserCallback.onSuccess(rentalInProgress);
+                }
+                else serverResponseParserCallback.onSuccess(getRentalsFromJSONObject(response));
             }
 
             @Override

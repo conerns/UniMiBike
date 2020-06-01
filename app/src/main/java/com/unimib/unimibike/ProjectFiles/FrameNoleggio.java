@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.Model.Rental;
+import com.unimib.unimibike.Model.Resource;
+import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
@@ -48,6 +50,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private MutableLiveData<List<Rack>> racksMutableLiveData;
     private RentalsViewModel rentalsViewModel;
     private MutableLiveData<Rental> rentalMutableLiveData;
+    private MutableLiveData<List<Rental>> activeRentalMutableLiveData;
     private FragmentNoleggioBinding binding;
 
     @Nullable
@@ -70,16 +73,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         });
 
         getUserPosition();
-
-        if(SaveSharedPreference.getRentalInProgress(getActivity().getApplicationContext()) != null &&
-            SaveSharedPreference.getBikeRentalInProgress(getActivity().getApplicationContext()) != null &&
-            SaveSharedPreference.getUserID(getActivity().getApplicationContext()) == user_id &&
-            SaveSharedPreference.getUserState(getActivity().getApplicationContext()) == 3) {
-            update_view_rental_in_progress(SaveSharedPreference.getBikeRentalInProgress(getActivity().getApplicationContext()),
-                    SaveSharedPreference.getRentalInProgress(getActivity().getApplicationContext()));
-            Log.d("FRAMENOLEGGIOONCREATE", SaveSharedPreference.getRentalInProgress(getActivity().getApplicationContext()).toString());
-            Log.d("FRAMENOLEGGIOONCREATE", SaveSharedPreference.getBikeRentalInProgress(getActivity().getApplicationContext()).toString());
-        }
+        getRentalInProgress();
         return view;
     }
 
@@ -166,7 +160,6 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         final Observer<Rental> observer = new Observer<Rental>() {
             @Override
             public void onChanged(Rental rental) {
-                SaveSharedPreference.setPrefRentalInProgress(getActivity().getApplicationContext(), rental, bike_used);
                 update_view_rental_in_progress(bike_used, rental);
             }
         };
@@ -182,12 +175,37 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         assert getFragmentManager() != null;
         bsdf.show(getFragmentManager() ,"un altro botto sheet");
         binding.rentalUpCardview.setVisibility(View.GONE);
-        SaveSharedPreference.clearRental_in_progress(getActivity().getApplicationContext());
-
     }
 
+    private void getRentalInProgress(){
+        rentalsViewModel = new RentalsViewModel();
+        final Observer<List<Rental>> observer = new Observer<List<Rental>>() {
+            @Override
+            public void onChanged(final List<Rental> rental) {
+                Log.d("FrameNoelggio", rental.get(0).toString());
+                if(rental.get(0).getId() != 0)
+                    getBike(rental.get(0));
+            }
+        };
+        activeRentalMutableLiveData = rentalsViewModel.getUserRentals(getContext(), user_id, true);
+
+        activeRentalMutableLiveData.observe(requireActivity(), observer);
+    }
     //Callback interface methods
 
+    private void getBike(final Rental rental){
+        MutableLiveData<Resource<Bike>> bike;
+        BikesViewModel bikesViewModel = new BikesViewModel();
+        final Observer<Resource<Bike>> newObserver = new Observer<Resource<Bike>>() {
+            @Override
+            public void onChanged(Resource<Bike> bikeResource) {
+                if(bikeResource.getStatusCode() == 200)
+                    update_view_rental_in_progress(bikeResource.getData(), rental);
+            }
+        };
+        bike = bikesViewModel.getBike(getContext(), rental.getBike().getId());
+        bike.observe(this, newObserver);
+    }
     @Override
     public void callbackMethod(boolean rental_start, Bike bike_used) {
         startRental(bike_used);

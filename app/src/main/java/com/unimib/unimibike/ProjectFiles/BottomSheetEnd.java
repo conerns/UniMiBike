@@ -1,13 +1,9 @@
 package com.unimib.unimibike.ProjectFiles;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,14 +12,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.Model.Rental;
 import com.unimib.unimibike.Model.Resource;
@@ -34,7 +27,6 @@ import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.databinding.BottomSheetEndBinding;
-import com.unimib.unimibike.databinding.BottomSheetLayoutBinding;
 
 public class BottomSheetEnd extends BottomSheetDialogFragment {
     private BottomSheetEndBinding binding;
@@ -111,7 +103,6 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
                     binding.bikeCode.clearFocus();
                 }
             }
-
         };
         //controllo distanza dalla rastrelliera
         bikeLiveData = racksViewModel.getRackById(rack_id, getContext());

@@ -23,12 +23,12 @@ public class RentalsRepository {
         return instance;
     }
 
-    public void getUserRentals(final Context context, final int user_id, final MutableLiveData<List<Rental>> rentals){
+    public void getUserRentals(final Context context, final int user_id, final boolean active, final MutableLiveData<List<Rental>> rentals){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 try {
-                    getUserRentalsFromDatabase(context, user_id, rentals);
+                    getUserRentalsFromDatabase(context, user_id, active, rentals);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -69,10 +69,11 @@ public class RentalsRepository {
 
 
 
-    private void getUserRentalsFromDatabase(final Context context, final int user_id, final MutableLiveData<List<Rental>> rentals){
-        UnimibBikeFetcher.getRentals(context, user_id, new ServerResponseParserCallback<List<Rental>>() {
+    private void getUserRentalsFromDatabase(final Context context, final int user_id, final boolean active, final MutableLiveData<List<Rental>> rentals){
+        UnimibBikeFetcher.getRentals(context, user_id, active, new ServerResponseParserCallback<List<Rental>>() {
             @Override
             public void onSuccess(List<Rental> response) {
+                Log.d("GETRENTALFROMDATABASE",response.toString());
                 rentals.postValue(response);
             }
 

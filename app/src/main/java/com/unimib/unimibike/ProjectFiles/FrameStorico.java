@@ -47,7 +47,7 @@ public class FrameStorico extends Fragment {
                 binding.recyclerStorico.setAdapter(adapter);
             }
         };
-        rentalsLiveData = rentalsViewModel.getUserRentals(getContext(), SaveSharedPreference.getUserID(getActivity().getApplicationContext()));
+        rentalsLiveData = rentalsViewModel.getUserRentals(getContext(), SaveSharedPreference.getUserID(getActivity().getApplicationContext()), false);
 
         rentalsLiveData.observe(requireActivity(), observer);
     }
