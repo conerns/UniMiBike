@@ -4,7 +4,7 @@ package com.unimib.unimibike.Util;
  */
 
 public interface ServerRoutes {
-    String IP = "192.168.1.3";
+    String IP = "192.168.1.8";
     String PORT = "8000";
     String BASE_URL = "http://"+IP+":"+PORT+"/api/";
     String RACKS = BASE_URL + "racks";
@@ -14,7 +14,7 @@ public interface ServerRoutes {
     String ADD_BIKES = BASE_URL + "addBikes";
     String REMOVE_BIKES = BASE_URL + "removeBikes";
     String BUILDINGS = BASE_URL + "buildings";
-
+    String FIX_REPORT = BASE_URL + "fixedReports";
     String RESERVATIONS = BASE_URL + "reservations";
 
     String REPORTS = BASE_URL + "reports";

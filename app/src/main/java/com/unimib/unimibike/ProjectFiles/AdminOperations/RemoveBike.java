@@ -91,7 +91,7 @@ public class RemoveBike extends AppCompatActivity {
                     mMaterialDialog
                             .setTitle(R.string.removed_bike)
                             .setMessage(getString(R.string.correct_bike_remove))
-                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                            .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -99,7 +99,7 @@ public class RemoveBike extends AppCompatActivity {
                             })
                             .show();
                 }else if(bike.getStatusCode() == 404){
-                    binding.idRemoveBike.setError("Inserisci un id valido");
+                    binding.idRemoveBike.setError(getString(R.string.insert_vaild_value));
                     binding.idRemoveBike.setErrorEnabled(true);
                 }
 
@@ -113,7 +113,7 @@ public class RemoveBike extends AppCompatActivity {
 
     private boolean controlloId() {
         if(binding.idRemoveBikeContent.getText().length() == 0){
-            binding.idRemoveBike.setError("Campo richiesto!");
+            binding.idRemoveBike.setError(getString(R.string.should_not_be_empty));
             return false;
         }
         return true;

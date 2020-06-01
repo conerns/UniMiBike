@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.unimib.unimibike.R;
+
 public class MyAlertDialogFragment extends DialogFragment {
     public MyAlertDialogFragment() {
         // Empty constructor required for DialogFragment
@@ -28,13 +30,12 @@ public class MyAlertDialogFragment extends DialogFragment {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle(title);
         alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setPositiveButton("OK",  new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton(getString(R.string.confirm_message),  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // on success
             }
         });
-
         return alertDialogBuilder.create();
     }
 }

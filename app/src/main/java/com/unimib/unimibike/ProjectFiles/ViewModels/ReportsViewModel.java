@@ -11,12 +11,19 @@ import com.unimib.unimibike.ProjectFiles.Repositories.ReportsRepository;
 
 public class ReportsViewModel extends ViewModel {
     private MutableLiveData<Resource<Report>> report;
-
-    public MutableLiveData<Resource<Report>> sendReport(Context context, Report reportToSend) {
+    public MutableLiveData<Resource<Report>> sendReport(final Context context, final Report reportToSend) {
         if (report == null)
             report = new MutableLiveData<>();
 
         ReportsRepository.getInstance().postReport(context, reportToSend, report);
+
+        return report;
+    }
+
+    public MutableLiveData<Resource<Report>> fixReport(final Context context, final int user_id, final int rack_id, final int bike_id){
+        if(report == null)
+            report = new MutableLiveData<>();
+        ReportsRepository.getInstance().postFix(context, user_id, rack_id, bike_id, report);
         return report;
     }
 }

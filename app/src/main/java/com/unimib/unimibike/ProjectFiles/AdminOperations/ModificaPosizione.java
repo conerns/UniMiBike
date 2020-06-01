@@ -102,7 +102,7 @@ public class ModificaPosizione extends AppCompatActivity {
     private boolean controlloRack() {
         binding.valoriRastrelliereFine.setError(null);
         if(binding.valoriRastrelliereFine.getText().length() == 0){
-            binding.posizioneBiciFinale.setError("Campo richiesto!");
+            binding.posizioneBiciFinale.setError(getString(R.string.should_not_be_empty));
             return false;
         }
         return true;
@@ -110,7 +110,7 @@ public class ModificaPosizione extends AppCompatActivity {
 
     private boolean controlloId() {
         if(binding.bikeCodeTextFault.getText().length() == 0){
-            binding.idPosizioneBici.setError("Campo richiesto!");
+            binding.idPosizioneBici.setError(getString(R.string.should_not_be_empty));
             return false;
         }
         return true;
@@ -129,15 +129,15 @@ public class ModificaPosizione extends AppCompatActivity {
                     mMaterialDialog
                             .setTitle(R.string.modifed_position)
                             .setMessage(getString(R.string.correct_bike_modify))
-                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                            .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
                             })
                             .show();
                 }else if(bike.getStatusCode() == 404){
-                    binding.idPosizioneBici.setError("Dati inseriti non validi");
-                    binding.posizioneBiciFinale.setError("Dati inseriti non validi");
+                    binding.idPosizioneBici.setError(getString(R.string.insert_vaild_value));
+                    binding.posizioneBiciFinale.setError(getString(R.string.insert_vaild_value));
                 }
             }
         };

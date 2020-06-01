@@ -53,12 +53,28 @@ public class UnimibBikeFetcher {
 
     public static void postAddBike(final Context context, int user_id, int rack_id, int unlock_code, final ServerResponseParserCallback<Bike> return_value){
         final JSONObject oggetto_add_bike = createJSONAdd(user_id,rack_id,unlock_code);
-
         ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.ADD_BIKES, oggetto_add_bike, new NetworkCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
                     return_value.onSuccess(new Bike());
 
+            }
+
+            @Override
+            public void onError(int statusCode, JSONObject cache) {
+                return_value.onError("Add error", "Qualcosa è andato storto");
+            }
+        });
+    }
+    public static void postFixReport(final Context context, int user_id, int rack_id, int bike_id, final ServerResponseParserCallback<Report> return_value){
+        final JSONObject oggetto_add_bike = createJSONReport(user_id,rack_id,bike_id);
+        ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.FIX_REPORT, oggetto_add_bike, new NetworkCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                if(response!=null)
+                    return_value.onSuccess(getReportFromJSONObject(response));
+                else
+                    return_value.onSuccess(null);
             }
 
             @Override
@@ -102,6 +118,19 @@ public class UnimibBikeFetcher {
         try{
             mJson.put("user_id", user_id);
             mJson.put("bike_id", bike_id);
+            return mJson;
+        }catch (JSONException e){
+            e.getCause();
+        }
+        return null;
+
+    }
+    private static JSONObject createJSONReport(int user_id, int rack_id, int bike_id) {
+        JSONObject mJson = new JSONObject();
+        try{
+            mJson.put("user_id", user_id);
+            mJson.put("bike_id", bike_id);
+            mJson.put("rack_id", rack_id);
             return mJson;
         }catch (JSONException e){
             e.getCause();
