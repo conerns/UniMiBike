@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.unimib.unimibike.Model.Rack;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.Geolocation;
@@ -30,7 +31,7 @@ public class BottomSheetRack extends BottomSheetDialogFragment implements Geoloc
     private LatLng mCurrentPosition;
     private GeolocationCallback geolocationCallback;
     private RacksViewModel model;
-    private MutableLiveData<Rack> liveData;
+    private MutableLiveData<Resource<Rack>> liveData;
     private BottomSheetLayoutRackBinding binding;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -56,19 +57,20 @@ public class BottomSheetRack extends BottomSheetDialogFragment implements Geoloc
 
     public void getRackId(int rack_id, final View view){
         model = new RacksViewModel();
-        final Observer<Rack> observer = new Observer<Rack>() {
+        final Observer<Resource<Rack>> observer = new Observer<Resource<Rack>>() {
             @Override
-            public void onChanged(Rack rack) {
-                binding.goToRackTextviewTitle.setText(rack.getLocationDescription());
-                binding.rackAddress.setText(rack.getStreetAddress());
-                String available_bike = rack.getAvailableBikes()+" "+view.getContext().getString(R.string.avaible_bikes);
-                binding.rackBikeAvaible.setText(available_bike);
-                rack_map_position = new LatLng(rack.getLatitude(),rack.getLongitude());
-                if (MyUtils.checkPermissions(getActivity()) && MyUtils.isLocationEnabled(getActivity())){
-                    Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
-                    geo.getLastLocation();
+            public void onChanged(Resource<Rack> rack) {
+                if (rack.getStatusCode() == 200) {
+                    binding.goToRackTextviewTitle.setText(rack.getData().getLocationDescription());
+                    binding.rackAddress.setText(rack.getData().getStreetAddress());
+                    String available_bike = rack.getData().getAvailableBikes() + " " + view.getContext().getString(R.string.avaible_bikes);
+                    binding.rackBikeAvaible.setText(available_bike);
+                    rack_map_position = new LatLng(rack.getData().getLatitude(), rack.getData().getLongitude());
+                    if (MyUtils.checkPermissions(getActivity()) && MyUtils.isLocationEnabled(getActivity())) {
+                        Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
+                        geo.getLastLocation();
+                    } else binding.rackDistance.setText("-");
                 }
-                else binding.rackDistance.setText("-");
             }
         };
         liveData = model.getRackById(rack_id, getContext());

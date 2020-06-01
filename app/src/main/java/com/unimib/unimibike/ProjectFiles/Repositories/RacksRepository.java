@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 
 import com.unimib.unimibike.Model.Rack;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 
@@ -37,7 +38,7 @@ public class RacksRepository {
         new Thread(runnable).start();
     }
 
-    public void getRack(final Context context, final MutableLiveData<Rack> rack, final int rack_id) {
+    public void getRack(final Context context, final MutableLiveData<Resource<Rack>> rack, final int rack_id) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -66,16 +67,21 @@ public class RacksRepository {
         });
     }
 
-    private void getRackByIdFromDatabase(int rack_id, Context context,final MutableLiveData<Rack> rack) {
+    private void getRackByIdFromDatabase(int rack_id, Context context,final MutableLiveData<Resource<Rack>> rack) {
         UnimibBikeFetcher.getRack(context, rack_id, new ServerResponseParserCallback<Rack>() {
             @Override
             public void onSuccess(Rack response) {
-                rack.postValue(response);
+                Resource<Rack> rackResource = new Resource<>();
+                rackResource.setData(response);
+                rackResource.setStatusCode(200);
+                rack.postValue(rackResource);
             }
 
             @Override
             public void onError(String errorTitle, String errorMessage) {
-
+                Resource<Rack> rackResource = new Resource<>();
+                rackResource.setStatusCode(404);
+                rack.postValue(rackResource);
             }
         });
     }

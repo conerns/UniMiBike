@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 
 import com.unimib.unimibike.Model.Report;
+import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 
@@ -20,7 +21,7 @@ public class ReportsRepository {
         return instance;
     }
 
-    public void postReport(final Context context, final Report reportToSend, final MutableLiveData<Report> report){
+    public void postReport(final Context context, final Report reportToSend, final MutableLiveData<Resource<Report>> report){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -34,16 +35,21 @@ public class ReportsRepository {
         new Thread(runnable).start();
     }
 
-    private void sendReportToDatabase(final Report reportToSend, final Context context, final MutableLiveData<Report> report){
+    private void sendReportToDatabase(final Report reportToSend, final Context context, final MutableLiveData<Resource<Report>> report){
         UnimibBikeFetcher.postReport(context, reportToSend, new ServerResponseParserCallback<Report>() {
             @Override
             public void onSuccess(Report response) {
-                report.postValue(response);
+                Resource<Report> reportResource = new Resource<>();
+                reportResource.setStatusCode(200);
+                reportResource.setData(response);
+                report.postValue(reportResource);
             }
 
             @Override
             public void onError(String errorTitle, String errorMessage) {
-
+                Resource<Report> reportResource = new Resource<>();
+                reportResource.setStatusCode(404);
+                report.postValue(reportResource);
             }
         });
     }

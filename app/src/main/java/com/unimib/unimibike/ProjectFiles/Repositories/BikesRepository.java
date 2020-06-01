@@ -22,7 +22,7 @@ public class BikesRepository {
     }
 
     public void addBike(final int user_id, final int unlock_code,
-                        final int rack_id, final Context context, final MutableLiveData<Bike> bike){
+                        final int rack_id, final Context context, final MutableLiveData<Resource<Bike>> bike){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -81,15 +81,20 @@ public class BikesRepository {
     }
 
     private void addBikeAdminIntoDatabase(final int user_id, final int unlock_code,
-                                          final int rack_id, final Context context, final MutableLiveData<Bike> bike){
+                                          final int rack_id, final Context context, final MutableLiveData<Resource<Bike>> bike){
         UnimibBikeFetcher.postAddBike(context, user_id, rack_id, unlock_code, new ServerResponseParserCallback<Bike>() {
             @Override
             public void onSuccess(Bike response) {
-                bike.postValue(response);
+                Resource<Bike> bikeResource = new Resource<>();
+                bikeResource.setData(response);
+                bikeResource.setStatusCode(200);
+                bike.postValue(bikeResource);
             }
             @Override
             public void onError(String errorTitle, String errorMessage) {
-
+                Resource<Bike> bikeResource = new Resource<>();
+                bikeResource.setStatusCode(404);
+                bike.postValue(bikeResource);
             }
         });
     }
