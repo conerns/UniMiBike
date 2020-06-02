@@ -39,6 +39,7 @@ public class ModificaPosizione extends AppCompatActivity {
         binding.sendFixedReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                binding.paginaModifica.requestFocus();
                 applyModify();
             }
         });
@@ -68,7 +69,24 @@ public class ModificaPosizione extends AppCompatActivity {
                 return false;
             }
         });
-
+        binding.bikeCodeTextFault.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    binding.idPosizioneBici.setErrorEnabled(false);
+                    binding.idPosizioneBici.setError(null);
+                }
+            }
+        });
+        binding.valoriRastrelliereFine.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    binding.posizioneBiciFinale.setError(null);
+                    binding.posizioneBiciFinale.setErrorEnabled(false);
+                }
+            }
+        });
     }
 
 

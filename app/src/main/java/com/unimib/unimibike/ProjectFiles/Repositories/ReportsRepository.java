@@ -36,7 +36,7 @@ public class ReportsRepository {
         new Thread(runnable).start();
     }
 
-    public void postFix(final Context context,final int user_id, final int rack_id, final int bike_id, final MutableLiveData<Resource<Report>> report){
+    public void postFix(final Context context,final int user_id, final int rack_id, final int bike_id, final MutableLiveData<Resource<Bike>> report){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -69,11 +69,11 @@ public class ReportsRepository {
             }
         });
     }
-    private void fixReportToDatabase(final Context context, final int user_id, final int rack_id, final int bike_id, final MutableLiveData<Resource<Report>> report){
-        UnimibBikeFetcher.postFixReport(context, user_id, rack_id, bike_id, new ServerResponseParserCallback<Report>() {
+    private void fixReportToDatabase(final Context context, final int user_id, final int rack_id, final int bike_id, final MutableLiveData<Resource<Bike>> report){
+        UnimibBikeFetcher.postFixReport(context, user_id, rack_id, bike_id, new ServerResponseParserCallback<Bike>() {
             @Override
-            public void onSuccess(Report response) {
-                Resource<Report> bikeResource = new Resource<>();
+            public void onSuccess(Bike response) {
+                Resource<Bike> bikeResource = new Resource<>();
                 bikeResource.setStatusCode(200);
                 bikeResource.setData(response);
                 report.postValue(bikeResource);
@@ -81,7 +81,7 @@ public class ReportsRepository {
 
             @Override
             public void onError(String errorTitle, String errorMessage) {
-                Resource<Report> bikeResource = new Resource<>();
+                Resource<Bike> bikeResource = new Resource<>();
                 bikeResource.setStatusCode(404);
                 report.postValue(bikeResource);
             }

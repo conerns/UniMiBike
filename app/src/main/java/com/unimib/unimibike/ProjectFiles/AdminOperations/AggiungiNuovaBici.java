@@ -71,6 +71,24 @@ public class AggiungiNuovaBici extends AppCompatActivity {
             }
         });
 
+        binding.valoriRastrelliereFine.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    binding.posizioneBiciNuova.setErrorEnabled(false);
+                    binding.posizioneBiciNuova.setError(null);
+                }
+            }
+        });
+        binding.contenutoCodeBike.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    binding.idCodiceSblocco.setErrorEnabled(false);
+                    binding.idCodiceSblocco.setError(null);
+                }
+            }
+        });
     }
     private void funzione_dialog() {
         MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);

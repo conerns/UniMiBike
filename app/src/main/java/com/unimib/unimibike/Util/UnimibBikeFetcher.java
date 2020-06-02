@@ -66,17 +66,17 @@ public class UnimibBikeFetcher {
             }
         });
     }
-    public static void postFixReport(final Context context, int user_id, int rack_id, int bike_id, final ServerResponseParserCallback<Report> return_value){
+    public static void postFixReport(final Context context, int user_id, int rack_id, int bike_id, final ServerResponseParserCallback<Bike> return_value){
         final JSONObject oggetto_add_bike = createJSONReport(user_id,rack_id,bike_id);
         ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.FIX_REPORT, oggetto_add_bike, new NetworkCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
-                if(response!=null)
-                    return_value.onSuccess(getReportFromJSONObject(response));
+                if (!response.isNull("bike")) {
+                    return_value.onSuccess(getBikeFromJSONObject(response));
+                }
                 else
                     return_value.onSuccess(null);
             }
-
             @Override
             public void onError(int statusCode, JSONObject cache) {
                 return_value.onError("Add error", "Qualcosa è andato storto");
@@ -507,7 +507,6 @@ public class UnimibBikeFetcher {
         }
         return null;
     }
-
 
     private static Report getReportFromJSONObject(JSONObject response) {
         if (response != null) {

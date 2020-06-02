@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +48,7 @@ public class FrameGuasti extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         String[] TYPEOFREPORT = new String[] {getString(R.string.flat_tire), getString(R.string.broken_chain),
                                             getString(R.string.broken_pedal), getString(R.string.saddle_absent),
                                             getString(R.string.absent_tire), getString(R.string.malfunctioning_breaks), getString(R.string.altro_guasto)
@@ -61,7 +63,6 @@ public class FrameGuasti extends Fragment {
             get_email = getArguments().getString("USER-MAIL");
             get_id = getArguments().getInt("USER-ID");
         }
-
         binding = FragmentGuastiBinding.inflate(getLayoutInflater());
         binding.bikeFalutDesciptionText.setFilters((new InputFilter[]{new InputFilter.LengthFilter(120)}));
         View view = binding.getRoot();
@@ -70,7 +71,6 @@ public class FrameGuasti extends Fragment {
                         getContext(),
                         R.layout.dropdown_menu_popup_item,
                         TYPEOFREPORT);
-
         AutoCompleteTextView editTextFilledExposedDropdown =
                 view.findViewById(R.id.filled_exposed_dropdown);
         editTextFilledExposedDropdown.setAdapter(adapter);
@@ -102,39 +102,47 @@ public class FrameGuasti extends Fragment {
                 return false;
             }
         });
-        binding.sendFixedReport.setOnClickListener(new View.OnClickListener() {
+        binding.valoriRastrelliereFine.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                binding.bikeCodeFixed.setErrorEnabled(false);
-                binding.bikeCodeFixed.setError(null);
-                binding.posizioneBiciNuova.setError(null);
-                binding.posizioneBiciNuova.setErrorEnabled(false);
-                if(checkIDBikeReport() & checkRackReport()){
-                    sendFixReport();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_RIGHT = 2;
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(motionEvent.getRawX() >= (binding.valoriRastrelliereFine.getRight() - binding.valoriRastrelliereFine.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        checkCameraPermission(2);
+                        return true;
+                    }
                 }
+                return false;
             }
         });
         return view;
+
     }
 
     private void sendFixReport() {
-        MutableLiveData<Resource<Report>> bike;
+        MutableLiveData<Resource<Bike>> bike;
         reportsViewModel = new ReportsViewModel();
-        Observer<Resource<Report>> observer = new Observer<Resource<Report>>() {
+        Observer<Resource<Bike>> observer = new Observer<Resource<Bike>>() {
             @Override
-            public void onChanged(Resource<Report> bikeResource) {
+            public void onChanged(Resource<Bike> bikeResource) {
                 if(bikeResource.getStatusCode() == 200) {
-                    binding.valoriRastrelliereFine.setText(null);
-                    binding.bikeCodeTextFixed.setText(null);
                     Log.d("TAGunico", bikeResource.toString());
-                    if(bikeResource != null)
+                    if(bikeResource.getData() != null) {
+                        binding.valoriRastrelliereFine.setText(null);
+                        binding.bikeCodeTextFixed.setText(null);
                         funzione_dialog();
-                    else
-                        funzione_dialog_errore();
+                    }
+                    else {
+                        binding.bikeCodeFixed.setErrorEnabled(true);
+                        binding.bikeCodeFixed.setError(getString(R.string.insert_vaild_value));
+                        binding.posizioneBiciNuova.setErrorEnabled(true);
+                        binding.posizioneBiciNuova.setError(getString(R.string.insert_vaild_value));
+                    }
                 }
             }
         };
-        bike = reportsViewModel.fixReport(getActivity().getApplicationContext(),SaveSharedPreference.getUserID(getActivity().getApplicationContext()),
+        bike = reportsViewModel.fixReport(getActivity().getApplicationContext(),
+                SaveSharedPreference.getUserID(getActivity().getApplicationContext()),
                 Integer.parseInt(binding.valoriRastrelliereFine.getText().toString()),
                 Integer.parseInt(binding.bikeCodeTextFixed.getText().toString())
         );
@@ -145,29 +153,8 @@ public class FrameGuasti extends Fragment {
         DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.fixed_message), getString(R.string.fixed_message_text));
         newFragment.show(getFragmentManager(), "dialog");
     }
-    private void funzione_dialog_errore() {
-        DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.request_bad_ending), getString(R.string.request_bad_ending_text));
-        newFragment.show(getFragmentManager(), "dialog");
 
-    }
 
-    private boolean checkRackReport() {
-        if(binding.valoriRastrelliereFine.getText().length() == 0){
-            binding.posizioneBiciNuova.setErrorEnabled(true);
-            binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkIDBikeReport() {
-        if(binding.bikeCodeTextFixed.getText().length() == 0){
-            binding.bikeCodeFixed.setErrorEnabled(true);
-            binding.bikeCodeFixed.setError(getString(R.string.should_not_be_empty));
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -175,6 +162,7 @@ public class FrameGuasti extends Fragment {
             binding.divider2.setVisibility(View.VISIBLE);
             binding.bikeCodeFixed.setVisibility(View.VISIBLE);
             binding.sendFixedReport.setVisibility(View.VISIBLE);
+            binding.posizioneBiciNuova.setVisibility(View.VISIBLE);
         }
 
         binding.sendFaultReport.setOnClickListener(new View.OnClickListener() {
@@ -184,6 +172,52 @@ public class FrameGuasti extends Fragment {
                     & checkIdBike(binding.bikeCodeFault.getEditText().getText().toString())) {
                     Report r = createReport();
                     newReport(r);
+                }
+            }
+        });
+        binding.sendFixedReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkIDBikeReport() & checkRackReport()){
+                    sendFixReport();
+                }
+            }
+        });
+
+
+        binding.bikeCodeTextFault.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    binding.bikeCodeFault.setError(null);
+                    binding.bikeCodeFault.setErrorEnabled(false);
+                }
+            }
+        });
+        binding.filledExposedDropdown.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    binding.typeFaultReport.setError(null);
+                    binding.typeFaultReport.setErrorEnabled(false);
+                }
+            }
+        });
+        binding.bikeCodeTextFixed.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    binding.bikeCodeFixed.setError(null);
+                    binding.bikeCodeFixed.setErrorEnabled(false);
+                }
+            }
+        });
+        binding.valoriRastrelliereFine.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    binding.posizioneBiciNuova.setError(null);
+                    binding.posizioneBiciNuova.setErrorEnabled(false);
                 }
             }
         });
@@ -208,7 +242,27 @@ public class FrameGuasti extends Fragment {
         binding.bikeCodeFault.setErrorEnabled(false);
         return true;
     }
+    private boolean checkRackReport() {
+        if(binding.valoriRastrelliereFine.getText().length() == 0){
+            binding.posizioneBiciNuova.setErrorEnabled(true);
+            binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
+            return false;
+        }
+        binding.posizioneBiciNuova.setErrorEnabled(false);
+        binding.posizioneBiciNuova.setError(null);
+        return true;
+    }
 
+    private boolean checkIDBikeReport() {
+        if(binding.bikeCodeTextFixed.getText().length() == 0){
+            binding.bikeCodeFixed.setErrorEnabled(true);
+            binding.bikeCodeFixed.setError(getString(R.string.should_not_be_empty));
+            return false;
+        }
+        binding.bikeCodeFixed.setError(null);
+        binding.bikeCodeFixed.setErrorEnabled(false);
+        return true;
+    }
 
     public Report createReport(){
         String typeTemp = binding.typeFaultReport.getEditText().getText().toString();
@@ -281,6 +335,14 @@ public class FrameGuasti extends Fragment {
                     // TODO Extract the data returned from the child Activity.
                     int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
                     binding.bikeCodeTextFixed.setText(String.valueOf(returnValue));
+                }
+                break;
+            }
+            case (2) :{
+                if (resultCode == Activity.RESULT_OK) {
+                    // TODO Extract the data returned from the child Activity.
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    binding.valoriRastrelliereFine.setText(String.valueOf(returnValue));
                 }
                 break;
             }
