@@ -80,4 +80,10 @@
     <string name="only_four_digits">Inserire un codice di 4 cifre</string>
     <string name="invalid_email_value">E-mail inserita potrebbe non essere valida</string>
     <string name="invlaid_password_value">Password inserita potrebbe non essere valida</string>
+    <string name="fixed_message">Bicicletta riparata</string>
+    <string name="fixed_message_text">Grazie di aver reso questa bicicletta disponibile</string>
+    <string name="request_bad_ending">Qualcosa è andato storto</string>
+    <string name="request_bad_ending_text">Assicurati che tutte le informazioni inserite siano corrette e riprova</string>
+    <string name="no_available_stands">Non ci sono posti disponibili</string>
+    <string name="no_avaliable_stands_message">Non puoi concludere il noleggio in questa rastrelliera, trovane un\'altra</string>
 </resources>

@@ -23,6 +23,7 @@ import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.CloseRentalCallback;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
@@ -35,8 +36,10 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
     private RentalsViewModel rentalsViewModel;
     private MutableLiveData<Rental> rentalMutableLiveData;
     private Rental mRental;
-    public BottomSheetEnd(Rental element, Context context){
+    private CloseRentalCallback closeRentalCallback;
+    public BottomSheetEnd(Rental element, Context context, CloseRentalCallback closeRentalCallback){
         mRental = element;
+        this.closeRentalCallback = closeRentalCallback;
     }
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -60,7 +63,7 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (binding.bikeCodeText.getRight() - binding.bikeCodeText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        method_called();
+                        checkCameraPermission();
                         return true;
                     }
                 }
@@ -92,8 +95,8 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
                     if (rack.getData().getAvailableStands() > 0)
                         ending_rental(mRental, view, getFragmentManager());
                     else {
-                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
-                                getString(R.string.not_avaible_message));
+                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.no_available_stands),
+                                getString(R.string.no_avaliable_stands_message));
                         newFragment.show(getFragmentManager(), "dialog");
                     }
                     dismiss();
@@ -108,7 +111,8 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
         bikeLiveData = racksViewModel.getRackById(rack_id, getContext());
         bikeLiveData.observe(requireActivity(), observer);
     }
-    private void method_called() {
+
+    private void checkCameraPermission() {
         if (MyUtils.checkCameraPermission(getActivity())) {
             Intent intent = new Intent(getActivity().getApplicationContext(), QrReaderActivity.class);
             startActivityForResult(intent, 0);
@@ -144,6 +148,7 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
                         view.getContext().getString(R.string.rent_ended_mess));
                 newFragment.show(fragmentManager, "dialog");
                 dismiss();
+                closeRentalCallback.afterRentalIsClosedCallback();
             }
         };
         rentalMutableLiveData = rentalsViewModel.endRental(getContext(), rental.getId(), Integer.parseInt(binding.bikeCodeText.getText().toString()));
