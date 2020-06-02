@@ -29,6 +29,7 @@ import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
 
+import com.unimib.unimibike.Util.CloseRentalCallback;
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
@@ -39,12 +40,13 @@ import com.unimib.unimibike.databinding.FragmentNoleggioBinding;
 import java.util.HashMap;
 import java.util.List;
 
-public class FrameNoleggio extends Fragment implements OnMapReadyCallback, FragmentCallback, GeolocationCallback {
+public class FrameNoleggio extends Fragment implements OnMapReadyCallback, FragmentCallback, GeolocationCallback, CloseRentalCallback {
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mHashMap = new HashMap<>();
     private LatLng mCurrentPosition;
     private FragmentCallback rentalCallback;
     private GeolocationCallback geolocationCallback;
+    private CloseRentalCallback closeRentalCallback;
     private int user_id, rack_id;
     private RacksViewModel racksViewModel;
     private MutableLiveData<List<Rack>> racksMutableLiveData;
@@ -60,6 +62,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         View view = binding.getRoot();
         rentalCallback = this;
         geolocationCallback = this;
+        closeRentalCallback = this;
         user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -160,6 +163,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         final Observer<Rental> observer = new Observer<Rental>() {
             @Override
             public void onChanged(Rental rental) {
+                binding.sbloccaBici.setVisibility(View.GONE);
                 update_view_rental_in_progress(bike_used, rental);
             }
         };
@@ -171,10 +175,9 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
 
 
     private void startbottomSheet(Rental rental) {
-        BottomSheetEnd bsdf = new BottomSheetEnd(rental,getActivity().getApplicationContext());
+        BottomSheetEnd bsdf = new BottomSheetEnd(rental,getActivity().getApplicationContext(), closeRentalCallback);
         assert getFragmentManager() != null;
         bsdf.show(getFragmentManager() ,"un altro botto sheet");
-        binding.rentalUpCardview.setVisibility(View.GONE);
     }
 
     private void getRentalInProgress(){
@@ -199,8 +202,10 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         final Observer<Resource<Bike>> newObserver = new Observer<Resource<Bike>>() {
             @Override
             public void onChanged(Resource<Bike> bikeResource) {
-                if(bikeResource.getStatusCode() == 200)
+                if(bikeResource.getStatusCode() == 200) {
                     update_view_rental_in_progress(bikeResource.getData(), rental);
+                    binding.sbloccaBici.setVisibility(View.GONE);
+                }
             }
         };
         bike = bikesViewModel.getBike(getContext(), rental.getBike().getId());
@@ -215,6 +220,12 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     public void positionCallback(Location mCurrentPosition) {
         this.mCurrentPosition = new LatLng(mCurrentPosition.getLatitude(), mCurrentPosition.getLongitude());
         Log.d("aa", mCurrentPosition+"");
+    }
+
+    @Override
+    public void afterRentalIsClosedCallback() {
+        binding.rentalUpCardview.setVisibility(View.GONE);
+        binding.sbloccaBici.setVisibility(View.VISIBLE);
     }
 }
 
