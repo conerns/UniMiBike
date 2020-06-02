@@ -95,12 +95,11 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
                     if (rack.getData().getAvailableStands() > 0)
                         ending_rental(mRental, view, getFragmentManager());
                     else {
-                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
-                                getString(R.string.not_avaible_message));
+                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.no_available_stands),
+                                getString(R.string.no_avaliable_stands_message));
                         newFragment.show(getFragmentManager(), "dialog");
                     }
                     dismiss();
-                    closeRentalCallback.afterRentalIsClosedCallback();
                 }else if(rack.getStatusCode() == 404){
                     binding.bikeCode.setErrorEnabled(true);
                     binding.bikeCode.setError(getString(R.string.insert_vaild_value));
@@ -149,6 +148,7 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
                         view.getContext().getString(R.string.rent_ended_mess));
                 newFragment.show(fragmentManager, "dialog");
                 dismiss();
+                closeRentalCallback.afterRentalIsClosedCallback();
             }
         };
         rentalMutableLiveData = rentalsViewModel.endRental(getContext(), rental.getId(), Integer.parseInt(binding.bikeCodeText.getText().toString()));

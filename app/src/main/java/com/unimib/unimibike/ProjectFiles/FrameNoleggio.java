@@ -63,7 +63,8 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         rentalCallback = this;
         geolocationCallback = this;
         closeRentalCallback = this;
-        user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
+        //user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
+        user_id = SaveSharedPreference.getUserID(getContext());
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         binding.sbloccaBici.setOnClickListener(new View.OnClickListener(){
@@ -84,7 +85,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setMapToolbarEnabled(false);
-        getRacks(mMap);
+        getRacks();
         LatLng bicocca = new LatLng(45.5136609,9.211324);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bicocca));
         mMap.setMinZoomPreference(12);
@@ -141,7 +142,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
 
     //Server request
 
-    public void getRacks(GoogleMap googleMap){
+    public void getRacks(){
         racksViewModel = new RacksViewModel();
         final Observer<List<Rack>> observer = new Observer<List<Rack>>() {
             @Override
@@ -224,8 +225,8 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
 
     @Override
     public void afterRentalIsClosedCallback() {
-        binding.rentalUpCardview.setVisibility(View.GONE);
         binding.sbloccaBici.setVisibility(View.VISIBLE);
+        binding.rentalUpCardview.setVisibility(View.GONE);
     }
 }
 
