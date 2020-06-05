@@ -4,7 +4,7 @@
     <string name="LogoScritta">UniMiBike</string>
     <string name="utente_mail">Inserire email</string>
     <string name="utente_password">Inserire password</string>
-    <string name="sblocco_bici">Sblocca</string>
+    <string name="sblocco_bici">Avvia</string>
     <string name="noleggio">Noleggio</string>
     <string name="rastrelliere">Rastrelliere</string>
     <string name="segnala_guasto">Guasti</string>
@@ -24,7 +24,7 @@
     <string name="remove_bike">Rimuovi bicicletta</string>
     <string name="fault_type">Tipo guasto</string>
     <string name="fault_description">Descrizione guasto</string>
-    <string name="send_fault_report">Invia segnalazione guasto</string>
+    <string name="send_fault_report">Invia segnalazione</string>
     <string name="optional">Opzionale</string>
     <string name="send_fix_report">Rendi disponibile</string>
     <string name="select_end_rack">Seleziona rastrelliera finale</string>
@@ -86,4 +86,7 @@
     <string name="request_bad_ending_text">Assicurati che tutte le informazioni inserite siano corrette e riprova</string>
     <string name="no_available_stands">Non ci sono posti disponibili</string>
     <string name="no_avaliable_stands_message">Non puoi concludere il noleggio in questa rastrelliera, trovane un\'altra</string>
+    <string name="switch_text">Ricordami</string>
+    <string name="too_far_from_rack">Sei lontano dalla rastrelliera</string>
+    <string name="too_far_from_rack_text">Sei troppo lontano dalla rastrelliera, per poterla prenotare ti preghiamo di avvicinarti</string>
 </resources>

@@ -54,7 +54,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private MutableLiveData<Rental> rentalMutableLiveData;
     private MutableLiveData<List<Rental>> activeRentalMutableLiveData;
     private FragmentNoleggioBinding binding;
-
+    private Geolocation geo;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,7 +75,6 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
                 bsdf.show(getFragmentManager() ,"bottomsheetlayout");
             }
         });
-
         getUserPosition();
         getRentalInProgress();
         return view;
@@ -108,7 +107,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private void getUserPosition(){
         if (MyUtils.checkPermissions(getActivity())) {
             if (MyUtils.isLocationEnabled(getActivity())) {
-                Geolocation geo = new Geolocation(getActivity(), geolocationCallback);
+                geo = new Geolocation(getActivity(), geolocationCallback);
                 geo.getLastLocation();
             }
         }
@@ -155,7 +154,6 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
             }
         };
         racksMutableLiveData = racksViewModel.getListOfRacks(getContext());
-
         racksMutableLiveData.observe(requireActivity(), observer);
     }
 

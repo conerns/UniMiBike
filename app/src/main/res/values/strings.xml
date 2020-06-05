@@ -4,7 +4,7 @@
     <string name="accedi">Login</string>
     <string name="utente_mail">Insert email</string>
     <string name="utente_password">Insert password</string>
-    <string name="sblocco_bici">Unlock</string>
+    <string name="sblocco_bici">Start</string>
     <!--
         Nomi delle stringhe utilizzate per creare il bottom app navigator
     -->
@@ -26,7 +26,7 @@
     <string name="remove_bike">Remove bike</string>
     <string name="fault_type">Fault type</string>
     <string name="fault_description">Fault description</string>
-    <string name="send_fault_report">Send fault report</string>
+    <string name="send_fault_report">Send report</string>
     <string name="optional">Optional</string>
     <string name="send_fix_report">Set available</string>
     <string name="select_end_rack">Select end rack</string>
@@ -90,4 +90,6 @@
     <string name="no_available_stands">There isn\'t available stands</string>
     <string name="no_avaliable_stands_message">You can\'t close rental in this rack, find another</string>
     <string name="switch_text">Remember me</string>
+    <string name="too_far_from_rack">Far from rack</string>
+    <string name="too_far_from_rack_text">You are too far from the rack, please go closer to rent this bike.</string>
 </resources>

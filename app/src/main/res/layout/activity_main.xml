@@ -8,22 +8,6 @@
     android:focusableInTouchMode="true"
     tools:context=".ProjectFiles.MainActivity">
 
-    <Button
-        android:id="@+id/accedi_utente"
-        style="@style/Widget.MyTheme.Button"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginLeft="161dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginRight="162dp"
-        android:text="@string/accedi"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.425"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ricorda_utente" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/user_email"
         style="@style/Widget.MyTheme.TextInputLayout.OutlinedBox"
@@ -108,8 +92,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#66000000"
-        android:elevation="8dp"
-
         android:gravity="center|center_horizontal|center_vertical"
         android:visibility="gone">
 
@@ -117,8 +99,10 @@
             android:id="@+id/pBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/main_activity_relative_layout"
             android:theme="@style/Theme.MyApp.UnimibAccent"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="NotSibling" />
     </RelativeLayout>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -140,5 +124,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_password"
         app:useMaterialThemeColors="false" />
+
+    <Button
+        android:id="@+id/accedi_utente"
+        style="@style/Widget.MyTheme.Button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginLeft="161dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginRight="162dp"
+        android:text="@string/accedi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.425"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ricorda_utente" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

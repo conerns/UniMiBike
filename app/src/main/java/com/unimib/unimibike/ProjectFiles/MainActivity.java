@@ -119,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
                     binding.userEmail.setError(getString(R.string.invalid_email_value));
                     binding.userPassword.setError(getString(R.string.invlaid_password_value));
                     binding.accediUtente.setEnabled(true);
+                    binding.ricordaUtente.setVisibility(View.VISIBLE);
+                    binding.accediUtente.setVisibility(View.VISIBLE);
                 }
             }
         };
@@ -230,14 +232,19 @@ public class MainActivity extends AppCompatActivity {
                         email = binding.testoEmail.getText().toString();
                         password = binding.testoPassword.getText().toString();
                         if (controlla_email(email) & controlla_pass(password)) {
+                            binding.mainActivityRelativeLayout.bringToFront();
+                            binding.pBar.bringToFront();
                             binding.mainActivityRelativeLayout.setVisibility(View.VISIBLE);
                             binding.pBar.setVisibility(View.VISIBLE);
                             binding.testoEmail.setFocusable(false);
                             binding.testoPassword.setFocusable(false);
                             binding.accediUtente.setClickable(false);
+                            binding.ricordaUtente.setVisibility(View.GONE);
+                            binding.accediUtente.setVisibility(View.GONE);
                             effettua_login(email, password);
                         }
                     } else {
+                        binding.accediUtente.setVisibility(View.VISIBLE);
                         MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(MainActivity.this, R.style.Theme_MyTheme_Dialog);
                         mMaterialDialog
                                 .setTitle(R.string.internet_connection_dialog_title)
