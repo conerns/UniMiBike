@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
             binding.accediUtente.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     if(binding.ricordaUtente.isChecked()) SaveSharedPreference.setLogged(getApplicationContext(), true);
                     if (CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))) {
                         email = binding.testoEmail.getText().toString();

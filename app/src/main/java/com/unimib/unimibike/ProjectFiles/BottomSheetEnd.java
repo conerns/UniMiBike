@@ -92,8 +92,9 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
                 if(rack.getStatusCode() == 200) {
                     DialogFragment newFragment;
                     //se ho una bici e ho posto posso lasciarla nella rastrelliera
-                    if (rack.getData().getAvailableStands() > 0)
+                    if (rack.getData().getAvailableStands() > 0) {
                         ending_rental(mRental, view, getFragmentManager());
+                    }
                     else {
                         newFragment = MyAlertDialogFragment.newInstance(getString(R.string.no_available_stands),
                                 getString(R.string.no_avaliable_stands_message));

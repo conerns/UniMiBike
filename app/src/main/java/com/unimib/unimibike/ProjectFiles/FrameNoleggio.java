@@ -187,8 +187,12 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
             @Override
             public void onChanged(final List<Rental> rental) {
                 Log.d("FrameNoelggio", rental.get(0).toString());
-                if(rental.get(0).getId() != 0)
+                if(rental.get(0).getId() != 0) {
                     getBike(rental.get(0));
+                }
+                else{
+                    binding.sbloccaBici.setVisibility(View.VISIBLE);
+                }
             }
         };
         activeRentalMutableLiveData = rentalsViewModel.getUserRentals(getContext(), user_id, true);
