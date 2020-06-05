@@ -89,4 +89,5 @@
     <string name="request_bad_ending_text">Make sure that all the information you inserted are correct and try again,</string>
     <string name="no_available_stands">There isn\'t available stands</string>
     <string name="no_avaliable_stands_message">You can\'t close rental in this rack, find another</string>
+    <string name="switch_text">Remember me</string>
 </resources>

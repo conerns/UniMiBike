@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.OnGeolocationActive;
+import com.unimib.unimibike.Util.SaveSharedPreference;
 
 public class Principal extends AppCompatActivity implements OnGeolocationActive {
     private String ruolo;

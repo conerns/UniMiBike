@@ -49,9 +49,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(checkAndRequestPermissions())
-            afterPermission();
+        if(checkAndRequestPermissions()) {
+            userRequireLog();
+        }
     }
+
+    private void userRequireLog() {
+        if(SaveSharedPreference.getPrefUserRemember(getApplicationContext())){
+            afterPermission();
+        }
+        else{
+            SaveSharedPreference.clearUserName(getApplicationContext());
+            afterPermission();
+        }
+    }
+
     //questo metodo fa partire una nuova activity
     public void apr_activity(User user){
         Log.d("APRACTIVITY",user.toString());
@@ -212,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
             binding.accediUtente.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(binding.ricordaUtente.isChecked()) SaveSharedPreference.setLogged(getApplicationContext(), true);
                     if (CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))) {
                         email = binding.testoEmail.getText().toString();
                         password = binding.testoPassword.getText().toString();

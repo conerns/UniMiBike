@@ -10,7 +10,7 @@ public class SaveSharedPreference
     private static final String PREF_USER_ROLE= "userrole";
     private static final String PREF_USER_ID = "userid";
     private static final String PREF_USER_STATE = "user_state";
-
+    private static final String PREF_USER_REMEMBER = "remember_me";
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
@@ -22,7 +22,6 @@ public class SaveSharedPreference
         editor.putInt(PREF_USER_STATE, user_state);
         editor.apply();
     }
-
     public static String getUserName(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_USER_NAME, "");
     }
@@ -39,6 +38,10 @@ public class SaveSharedPreference
             return getSharedPreferences(ctx).getInt(PREF_USER_STATE, 0);
     }
 
+    public static boolean getPrefUserRemember(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_USER_REMEMBER, false);
+    }
+
     public static void clearUserName(Context ctx)
     {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
@@ -46,6 +49,13 @@ public class SaveSharedPreference
         editor.remove(PREF_USER_ROLE);
         editor.remove(PREF_USER_ID);
         editor.remove(PREF_USER_STATE);
+        editor.remove(PREF_USER_REMEMBER);
+        editor.apply();
+    }
+
+    public static void setLogged(Context ctx, boolean remember_me){
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putBoolean(PREF_USER_REMEMBER, remember_me);
         editor.apply();
     }
 }
