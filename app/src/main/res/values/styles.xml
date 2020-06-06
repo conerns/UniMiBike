@@ -43,14 +43,14 @@
     <style name="Widget.MyTheme.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">?attr/colorOnSurface</item>
         <item name="endIconTint">?attr/colorOnSurface</item>
-        <item name="hintTextColor">?attr/colorPrimary</item>
+        <item name="hintTextColor">?attr/colorSecondary</item>
         <item name="passwordToggleTint">?attr/colorOnSurface</item>
     </style>
 
     <style name="Widget.MyTheme.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="boxStrokeColor">?attr/colorOnSurface</item>
         <item name="endIconTint">?attr/colorOnSurface</item>
-        <item name="hintTextColor">?attr/colorPrimary</item>
+        <item name="hintTextColor">?attr/colorSecondary</item>
     </style>
 
     <!-- Date Picker -->
@@ -63,7 +63,7 @@
         <item name="android:textColor">?attr/colorSurface</item>
     </style>
     <style name="Widget.MyTheme.VistaUtente" parent="Widget.AppCompat.TextView">
-        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
     <style name="Widget.MyTheme.TextView2" parent="Widget.AppCompat.TextView">
@@ -81,5 +81,4 @@
     <style name="MyThemeIconColor">
         <item name="android:tint">?attr/colorPrimary</item>
     </style>
-
 </resources>

@@ -123,7 +123,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements Geolocatio
 
                         }
                     }
-                    if(distance == -999 || distance > 300){ //possiamo prenotare nel raggio di 300 metri, sono elastico
+                    if(distance == -999 || distance > 30000){ //possiamo prenotare nel raggio di 300 metri, sono elastico
                         Log.d("DISTANCE-RACK", distance + "");
                         newFragment = MyAlertDialogFragment.newInstance(getString(R.string.too_far_from_rack),
                                 getString(R.string.too_far_from_rack_text));

@@ -105,8 +105,9 @@
             tools:ignore="NotSibling" />
     </RelativeLayout>
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
+   <Switch
         android:id="@+id/ricorda_utente"
+        android:theme="@style/SwitchTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -116,14 +117,11 @@
         android:layout_marginRight="16dp"
         android:textSize="16sp"
         android:checked="true"
-        android:drawableTint="?colorPrimary"
         android:textColor="@color/color_grey"
         android:text="@string/switch_text"
-        android:textColorLink="?colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_password"
-        app:useMaterialThemeColors="false" />
+        app:layout_constraintTop_toBottomOf="@+id/user_password" />
 
     <Button
         android:id="@+id/accedi_utente"
