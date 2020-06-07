@@ -125,19 +125,23 @@ public class FrameGuasti extends Fragment {
         Observer<Resource<Bike>> observer = new Observer<Resource<Bike>>() {
             @Override
             public void onChanged(Resource<Bike> bikeResource) {
+
+
+                Log.d("TAGunico", bikeResource.getStatusCode()+"");
                 if(bikeResource.getStatusCode() == 200) {
-                    Log.d("TAGunico", bikeResource.toString());
                     if(bikeResource.getData() != null) {
                         binding.valoriRastrelliereFine.setText(null);
                         binding.bikeCodeTextFixed.setText(null);
                         funzione_dialog();
                     }
-                    else {
-                        binding.bikeCodeFixed.setErrorEnabled(true);
-                        binding.bikeCodeFixed.setError(getString(R.string.insert_vaild_value));
-                        binding.posizioneBiciNuova.setErrorEnabled(true);
-                        binding.posizioneBiciNuova.setError(getString(R.string.insert_vaild_value));
+                    else{
+                        bikeNotFixableDialog();
                     }
+                }else if(bikeResource.getStatusCode() == 404){
+                    binding.bikeCodeFixed.setErrorEnabled(true);
+                    binding.bikeCodeFixed.setError(getString(R.string.insert_vaild_value));
+                    binding.posizioneBiciNuova.setErrorEnabled(true);
+                    binding.posizioneBiciNuova.setError(getString(R.string.insert_vaild_value));
                 }
             }
         };
@@ -154,6 +158,10 @@ public class FrameGuasti extends Fragment {
         newFragment.show(getFragmentManager(), "dialog");
     }
 
+    private void bikeNotFixableDialog(){
+        DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.bike_not_fixable_title), getString(R.string.bike_not_fixable_message));
+        newFragment.show(getFragmentManager(), "dialog");
+    }
 
 
     @Override

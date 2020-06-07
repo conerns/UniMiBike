@@ -31,13 +31,12 @@
         android:theme="@style/Theme.MyApp"
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="n">
+        <activity android:name=".ProjectFiles.PrincipalActivity"></activity>
         <activity android:name=".ProjectFiles.AdminOperations.AdminAddedBikes" />
         <activity android:name=".ProjectFiles.AdminOperations.RemoveBike" />
         <activity android:name=".Util.Geolocation" />
         <activity android:name=".Util.QrReaderActivity" />
         <activity android:name=".ProjectFiles.AdminOperations.AggiungiNuovaBici" />
-
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -52,8 +51,7 @@
 
         <activity
             android:name=".ProjectFiles.Principal"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".ProjectFiles.AdminOperations.ModificaPosizione" />
         <activity
             android:name=".ProjectFiles.MainActivity"
@@ -66,4 +64,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

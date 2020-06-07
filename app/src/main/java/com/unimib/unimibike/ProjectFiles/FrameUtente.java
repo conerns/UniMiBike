@@ -92,10 +92,11 @@ public class FrameUtente extends Fragment {
     }
 
     public void apr_activity(){
-        SaveSharedPreference.clearUserName(getContext().getApplicationContext());
+        SaveSharedPreference.clearUserName(getContext());
         Intent mPagina = new Intent(getActivity(), MainActivity.class);
         startActivity(mPagina);
         Activity activity = getActivity();
+        assert activity != null;
         activity.finish();
     }
 

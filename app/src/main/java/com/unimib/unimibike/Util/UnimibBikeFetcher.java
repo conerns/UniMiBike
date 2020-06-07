@@ -416,7 +416,10 @@ public class UnimibBikeFetcher {
             public void onSuccess(JSONObject response) {
                 if(active){
                     List<Rental> rentalInProgress = new ArrayList<>();
-                    rentalInProgress.add(getRentalFromJSONObject(response));
+                    if(!response.isNull("rental"))
+                        rentalInProgress.add(getRentalFromJSONObject(response));
+                    else
+                        rentalInProgress.add(new Rental());
                     serverResponseParserCallback.onSuccess(rentalInProgress);
                 }
                 else serverResponseParserCallback.onSuccess(getRentalsFromJSONObject(response));
@@ -571,12 +574,14 @@ public class UnimibBikeFetcher {
                 rack.setAddressLocality(mJson.getString("address_locality"));
                 rack.setStreetAddress(mJson.getString("street_address"));
                 rack.setLocationDescription(mJson.getString("location_description"));
-                List<Building> buildings = new ArrayList<>();
-                JSONArray buildingsArray = mJson.getJSONArray("buildings");
-                for (int i = 0; i < buildingsArray.length(); i++) {
-                    buildings.add(createBuildingFromJSONObject(buildingsArray.getJSONObject(i)));
+                if(!mJson.isNull("buildings")) {
+                    List<Building> buildings = new ArrayList<>();
+                    JSONArray buildingsArray = mJson.getJSONArray("buildings");
+                    for (int i = 0; i < buildingsArray.length(); i++) {
+                        buildings.add(createBuildingFromJSONObject(buildingsArray.getJSONObject(i)));
+                    }
+                    rack.setBuildings(buildings);
                 }
-                rack.setBuildings(buildings);
                 if (mJson.has("distance")) {
                     rack.setDistance(mJson.getDouble("distance"));
                 }

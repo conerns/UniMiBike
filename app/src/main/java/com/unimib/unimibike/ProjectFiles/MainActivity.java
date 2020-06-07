@@ -7,16 +7,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -59,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             afterPermission();
         }
         else{
-            SaveSharedPreference.clearUserName(getApplicationContext());
             afterPermission();
         }
     }
@@ -67,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     //questo metodo fa partire una nuova activity
     public void apr_activity(User user){
         Log.d("APRACTIVITY",user.toString());
-        Intent pagina = new Intent(this, Principal.class);
+        Intent pagina = new Intent(this, PrincipalActivity.class);
         pagina.putExtra("USER-ID", user.getmId());
         pagina.putExtra("USER-MAIL", user.getEmail());
         pagina.putExtra("USER-PERISSION", user.getmRole());
@@ -130,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void returnUserIdRoute(final String email, final boolean call){
         usersViewModel = new UsersViewModel();
+        final boolean rememberMe = SaveSharedPreference.getPrefUserRemember(this);
         final Observer<User> observer = new Observer<User>() {
             @Override
             public void onChanged(User user) {
@@ -141,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                         addUser(email);
                 else{
                     SaveSharedPreference.clearUserName(getApplicationContext());
+                    SaveSharedPreference.setLogged(getApplicationContext(),rememberMe);
                     apr_activity(user);
                 }
             }
@@ -216,8 +213,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void afterPermission(){
-        if (SaveSharedPreference.getUserName(getApplicationContext()).length() != 0) {
-            //getUserRole(SaveSharedPreference.getUserName(getApplicationContext()));
+        if (SaveSharedPreference.getPrefUserRemember(this)) {
             returnUserIdRoute(SaveSharedPreference.getUserName(getApplicationContext()), false);
         } else {
             binding = ActivityMainBinding.inflate(getLayoutInflater());
