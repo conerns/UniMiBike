@@ -1,6 +1,8 @@
 package com.unimib.unimibike.ProjectFiles;
 
+import android.content.Intent;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
@@ -31,6 +35,7 @@ import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
 
 import com.unimib.unimibike.Util.CloseRentalCallback;
+import com.unimib.unimibike.Util.ForegroundService;
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
@@ -165,6 +170,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
             public void onChanged(Rental rental) {
                 binding.sbloccaBici.setVisibility(View.GONE);
                 update_view_rental_in_progress(bike_used, rental);
+                startService();
             }
         };
         rentalMutableLiveData = rentalsViewModel.starRental(getContext(), user_id,bike_used.getId());
@@ -204,9 +210,11 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         MutableLiveData<Resource<Bike>> bike;
         BikesViewModel bikesViewModel = new BikesViewModel();
         final Observer<Resource<Bike>> newObserver = new Observer<Resource<Bike>>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onChanged(Resource<Bike> bikeResource) {
                 if(bikeResource.getStatusCode() == 200) {
+                    startService();
                     update_view_rental_in_progress(bikeResource.getData(), rental);
                     binding.sbloccaBici.setVisibility(View.GONE);
                 }
@@ -230,6 +238,17 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     public void afterRentalIsClosedCallback() {
         binding.sbloccaBici.setVisibility(View.VISIBLE);
         binding.rentalUpCardview.setVisibility(View.GONE);
+        stopService();
+    }
+
+    public void startService() {
+        Intent serviceIntent = new Intent(getActivity(), ForegroundService.class);
+        serviceIntent.putExtra("inputExtra", "Noleggio in corso");
+        ContextCompat.startForegroundService(getActivity(), serviceIntent);
+    }
+    public void stopService() {
+        Intent serviceIntent = new Intent(getActivity(), ForegroundService.class);
+        getActivity().stopService(serviceIntent);
     }
 }
 
