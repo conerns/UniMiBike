@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.LoginFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -142,6 +143,8 @@ public class FrameGuasti extends Fragment {
                     binding.bikeCodeFixed.setError(getString(R.string.insert_vaild_value));
                     binding.posizioneBiciNuova.setErrorEnabled(true);
                     binding.posizioneBiciNuova.setError(getString(R.string.insert_vaild_value));
+                    binding.bikeCodeFixed.clearFocus();
+                    binding.posizioneBiciNuova.clearFocus();
                 }
             }
         };
@@ -176,6 +179,10 @@ public class FrameGuasti extends Fragment {
         binding.sendFaultReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("sendFaultReport", binding.typeFaultReport.getEditText().getText().toString());
+                Log.d("sendFaultReport", binding.bikeCodeFault.getEditText().getText().toString());
+                //binding.typeFaultReport.clearFocus();
+                //binding.bikeCodeFault.clearFocus();
                 if(checkType(binding.typeFaultReport.getEditText().getText().toString())
                     & checkIdBike(binding.bikeCodeFault.getEditText().getText().toString())) {
                     Report r = createReport();
@@ -234,6 +241,8 @@ public class FrameGuasti extends Fragment {
     public boolean checkType(String value){
         if(value.isEmpty()){
             binding.typeFaultReport.setError(getString(R.string.should_not_be_empty));
+            binding.typeFaultReport.setErrorEnabled(true);
+            binding.typeFaultReport.clearFocus();
             return false;
         }
         binding.typeFaultReport.setError(null);
@@ -244,6 +253,8 @@ public class FrameGuasti extends Fragment {
     public boolean checkIdBike(String value){
         if(value.isEmpty()){
             binding.bikeCodeFault.setError(getString(R.string.should_not_be_empty));
+            binding.bikeCodeFault.setErrorEnabled(true);
+            binding.bikeCodeFault.clearFocus();
             return false;
         }
         binding.bikeCodeFault.setError(null);
@@ -254,6 +265,7 @@ public class FrameGuasti extends Fragment {
         if(binding.valoriRastrelliereFine.getText().length() == 0){
             binding.posizioneBiciNuova.setErrorEnabled(true);
             binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
+            binding.posizioneBiciNuova.clearFocus();
             return false;
         }
         binding.posizioneBiciNuova.setErrorEnabled(false);
@@ -265,6 +277,7 @@ public class FrameGuasti extends Fragment {
         if(binding.bikeCodeTextFixed.getText().length() == 0){
             binding.bikeCodeFixed.setErrorEnabled(true);
             binding.bikeCodeFixed.setError(getString(R.string.should_not_be_empty));
+            binding.bikeCodeFixed.clearFocus();
             return false;
         }
         binding.bikeCodeFixed.setError(null);
@@ -309,6 +322,7 @@ public class FrameGuasti extends Fragment {
                 }else if(report.getStatusCode() == 404){
                     binding.bikeCodeFault.setErrorEnabled(true);
                     binding.bikeCodeFault.setError(getString(R.string.insert_vaild_value));
+                    binding.bikeCodeFault.clearFocus();
                 }
             }
         };

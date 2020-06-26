@@ -52,6 +52,10 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 if(binding.bikeCodeText.getText().length()!=0) {
                     functionGetRack(Integer.parseInt(binding.bikeCodeText.getText().toString()),view);
+                }else{
+                    binding.bikeCode.setError(getString(R.string.should_not_be_empty));
+                    binding.bikeCode.setErrorEnabled(true);
+                    binding.bikeCode.clearFocus();
                 }
             }
         });

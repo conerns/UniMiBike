@@ -15,7 +15,7 @@ import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.OnGeolocationActive;
 import com.unimib.unimibike.Util.SaveSharedPreference;
-
+@Deprecated
 public class Principal extends AppCompatActivity implements OnGeolocationActive {
     private String ruolo;
     private String utente;

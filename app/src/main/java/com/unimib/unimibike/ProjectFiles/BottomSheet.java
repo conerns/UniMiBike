@@ -58,6 +58,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements Geolocatio
                 }else{
                     binding.bikeCode.setError(getString(R.string.should_not_be_empty));
                     binding.bikeCode.setErrorEnabled(true);
+                    binding.bikeCode.clearFocus();
                 }
             }
         });

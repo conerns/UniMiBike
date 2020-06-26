@@ -34,7 +34,7 @@ public class RemoveBike extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        binding.sendFixedReport.setOnClickListener(new View.OnClickListener() {
+        binding.sendRemoveBike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                removeBike();
@@ -54,12 +54,20 @@ public class RemoveBike extends AppCompatActivity {
             }
         });
 
-
+        binding.idRemoveBikeContent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    binding.idRemoveBike.setError(null);
+                    binding.idRemoveBike.setErrorEnabled(false);
+                }
+            }
+        });
     }
 
     public void removeBike(){
-        binding.idRemoveBike.setError(null);
-        binding.idRemoveBike.setErrorEnabled(false);
+        /*binding.idRemoveBike.setError(null);
+        binding.idRemoveBike.setErrorEnabled(false);*/
         if(controlloId()){
             MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
             mMaterialDialog
@@ -103,6 +111,7 @@ public class RemoveBike extends AppCompatActivity {
                 }else if(bike.getStatusCode() == 404){
                     binding.idRemoveBike.setError(getString(R.string.insert_vaild_value));
                     binding.idRemoveBike.setErrorEnabled(true);
+                    binding.idRemoveBike.clearFocus();
                 }
 
             }
@@ -116,8 +125,12 @@ public class RemoveBike extends AppCompatActivity {
     private boolean controlloId() {
         if(binding.idRemoveBikeContent.getText().length() == 0){
             binding.idRemoveBike.setError(getString(R.string.should_not_be_empty));
+            binding.idRemoveBike.setErrorEnabled(true);
+            binding.idRemoveBike.clearFocus();
             return false;
         }
+        binding.idRemoveBike.setErrorEnabled(false);
+        binding.idRemoveBike.setError(null);
         return true;
     }
 

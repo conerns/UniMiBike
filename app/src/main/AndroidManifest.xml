@@ -32,7 +32,8 @@
         android:theme="@style/Theme.MyApp"
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="n">
-        <activity android:name=".ProjectFiles.PrincipalActivity"></activity>
+        <activity android:name=".ProjectFiles.PrincipalActivity"
+                  android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ProjectFiles.AdminOperations.AdminAddedBikes" />
         <activity android:name=".ProjectFiles.AdminOperations.RemoveBike" />
         <activity android:name=".Util.Geolocation" />
@@ -52,8 +53,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ProjectFiles.Principal"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:name=".ProjectFiles.Principal"/>
         <activity android:name=".ProjectFiles.AdminOperations.ModificaPosizione" />
         <activity
             android:name=".ProjectFiles.MainActivity"
