@@ -32,7 +32,7 @@ public class ForegroundService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Noleggio in corso")
+                .setContentTitle(getString(R.string.rental_in_progress))
                 .setContentText(input)
                 .setSmallIcon(R.drawable.icona_bici)
                 .setContentIntent(pendingIntent)

@@ -170,7 +170,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
             public void onChanged(Rental rental) {
                 binding.sbloccaBici.setVisibility(View.GONE);
                 update_view_rental_in_progress(bike_used, rental);
-                startService();
+                startService(rental);
             }
         };
         rentalMutableLiveData = rentalsViewModel.starRental(getContext(), user_id,bike_used.getId());
@@ -214,7 +214,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
             @Override
             public void onChanged(Resource<Bike> bikeResource) {
                 if(bikeResource.getStatusCode() == 200) {
-                    startService();
+                    startService(rental);
                     update_view_rental_in_progress(bikeResource.getData(), rental);
                     binding.sbloccaBici.setVisibility(View.GONE);
                 }
@@ -241,9 +241,10 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         stopService();
     }
 
-    public void startService() {
+    public void startService(final Rental rental) {
+        String strDate = getString(R.string.start_rental_time)+rental.getStartedOn().substring(11);
         Intent serviceIntent = new Intent(getActivity(), ForegroundService.class);
-        serviceIntent.putExtra("inputExtra", "Noleggio in corso");
+        serviceIntent.putExtra("inputExtra", strDate);
         ContextCompat.startForegroundService(getActivity(), serviceIntent);
     }
     public void stopService() {
