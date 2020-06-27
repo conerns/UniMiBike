@@ -103,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
         final Observer<Resource<User>> observer = new Observer<Resource<User>>() {
             @Override
             public void onChanged(Resource<User> user) {
-                if(user.getStatusCode() == 200)
+                if(user.getStatusCode() == 200) {
+                    if(binding.ricordaUtente.isChecked()) SaveSharedPreference.setLogged(getApplicationContext(), true);
                     returnUserIdRoute(user.getData().getEmail(), true);
+                }
                 else if(user.getStatusCode() == 404){
                     binding.mainActivityRelativeLayout.setVisibility(View.GONE);
                     binding.pBar.setVisibility(View.GONE);
@@ -222,8 +224,6 @@ public class MainActivity extends AppCompatActivity {
             binding.accediUtente.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    if(binding.ricordaUtente.isChecked()) SaveSharedPreference.setLogged(getApplicationContext(), true);
                     if (CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))) {
                         email = binding.testoEmail.getText().toString();
                         password = binding.testoPassword.getText().toString();
@@ -259,16 +259,20 @@ public class MainActivity extends AppCompatActivity {
             binding.testoEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus)
+                    if(hasFocus) {
                         binding.userEmail.setError(null);
+                        binding.userEmail.setErrorEnabled(false);
+                    }
                 }
             });
 
             binding.testoPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus)
+                    if(hasFocus) {
                         binding.userPassword.setError(null);
+                        binding.userPassword.setErrorEnabled(false);
+                    }
                 }
             });
 

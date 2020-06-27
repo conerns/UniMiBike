@@ -108,13 +108,10 @@ public class AggiungiNuovaBici extends AppCompatActivity {
         final Observer<List<Rack>> observer = new Observer<List<Rack>>() {
             @Override
             public void onChanged(List<Rack> racks) {
-                if(binding.valoriRastrelliereFine.getText().length() != 0){
-                    for(Rack rack: racks) {
-                        if (rack.getId() == Integer.parseInt(binding.valoriRastrelliereFine.getText().toString()) &
-                            controlloCodice()) {
-                            Log.d("Controllo", String.valueOf(binding.valoriRastrelliereFine.getId() == Integer.parseInt(binding.valoriRastrelliereFine.getText().toString())));
-                            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);
-                            mMaterialDialog
+                if(checkRackValue()){
+                    if(checkRackExistence(racks) && controlloCodice()) {
+                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);
+                        mMaterialDialog
                                 .setTitle(R.string.confirm_dati)
                                 .setMessage(getString(R.string.confirm_first_half) + binding.valoriRastrelliereFine.getText().toString()
                                         + getString(R.string.confirm_second_half) + binding.contenutoCodeBike.getText().toString())
@@ -131,15 +128,9 @@ public class AggiungiNuovaBici extends AppCompatActivity {
                                     }
                                 })
                                 .show();
-
-                            return;
-                        }
+                        return;
                     }
-                    binding.posizioneBiciNuova.setError(getString(R.string.insert_vaild_value));
-                    return;
                 }
-                binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
-                return;
             }
         };
         racksliveData = racksViewModel.getListOfRacks(this.getApplicationContext());
@@ -165,17 +156,51 @@ public class AggiungiNuovaBici extends AppCompatActivity {
         bikeLiveData.observe(this, observer);
     }
 
+    public boolean checkRackValue(){
+        if(binding.valoriRastrelliereFine.getText().length() == 0){
+            binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
+            binding.posizioneBiciNuova.setErrorEnabled(true);
+            binding.posizioneBiciNuova.clearFocus();
+            binding.idCodiceSblocco.clearFocus();
+            return false;
+        }
+        binding.posizioneBiciNuova.setError(null);
+        binding.posizioneBiciNuova.setErrorEnabled(false);
+        return true;
+    }
 
+    public boolean checkRackExistence(final List<Rack> racks){
+        for(Rack rack: racks) {
+            if (rack.getId() == Integer.parseInt(binding.valoriRastrelliereFine.getText().toString())) {
+                binding.posizioneBiciNuova.setError(null);
+                binding.posizioneBiciNuova.setErrorEnabled(false);
+                return true;
+            }
+        }
+        binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
+        binding.posizioneBiciNuova.setErrorEnabled(true);
+        binding.posizioneBiciNuova.clearFocus();
+        binding.idCodiceSblocco.clearFocus();
+        return false;
+    }
 
     private boolean controlloCodice(){
         if(binding.contenutoCodeBike.getText().length() == 0){
             binding.idCodiceSblocco.setError(getString(R.string.should_not_be_empty));
+            binding.idCodiceSblocco.setErrorEnabled(true);
+            binding.idCodiceSblocco.clearFocus();
+            binding.posizioneBiciNuova.clearFocus();
             return false;
         }
         if(binding.contenutoCodeBike.getText().length() != 4){
             binding.idCodiceSblocco.setError(getString(R.string.only_four_digits));
+            binding.idCodiceSblocco.setErrorEnabled(true);
+            binding.idCodiceSblocco.clearFocus();
+            binding.posizioneBiciNuova.clearFocus();
             return false;
         }
+        binding.idCodiceSblocco.setError(null);
+        binding.idCodiceSblocco.setErrorEnabled(false);
         return true;
     }
 

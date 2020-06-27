@@ -55,7 +55,10 @@ public class SaveSharedPreference
 
     public static void setLogged(Context ctx, boolean remember_me){
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-        editor.putBoolean(PREF_USER_REMEMBER, remember_me);
+        if(remember_me)
+            editor.putBoolean(PREF_USER_REMEMBER, remember_me);
+        else
+            editor.putBoolean(PREF_USER_REMEMBER, false);
         editor.apply();
     }
 }

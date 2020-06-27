@@ -66,8 +66,6 @@ public class RemoveBike extends AppCompatActivity {
     }
 
     public void removeBike(){
-        /*binding.idRemoveBike.setError(null);
-        binding.idRemoveBike.setErrorEnabled(false);*/
         if(controlloId()){
             MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
             mMaterialDialog

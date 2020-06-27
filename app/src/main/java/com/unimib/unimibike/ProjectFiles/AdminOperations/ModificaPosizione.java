@@ -91,10 +91,6 @@ public class ModificaPosizione extends AppCompatActivity {
 
 
     public void applyModify(){
-        binding.posizioneBiciFinale.setError(null);
-        binding.idPosizioneBici.setError(null);
-        binding.posizioneBiciFinale.setErrorEnabled(false);
-        binding.idPosizioneBici.setErrorEnabled(false);
         if(controlloId() & controlloRack()){
             MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(ModificaPosizione.this, R.style.Theme_MyTheme_Dialog);
             mMaterialDialog
@@ -118,19 +114,24 @@ public class ModificaPosizione extends AppCompatActivity {
     }
 
     private boolean controlloRack() {
-        binding.valoriRastrelliereFine.setError(null);
         if(binding.valoriRastrelliereFine.getText().length() == 0){
             binding.posizioneBiciFinale.setError(getString(R.string.should_not_be_empty));
+            binding.posizioneBiciFinale.setErrorEnabled(true);
             return false;
         }
+        binding.valoriRastrelliereFine.setError(null);
+        binding.posizioneBiciFinale.setErrorEnabled(false);
         return true;
     }
 
     private boolean controlloId() {
         if(binding.bikeCodeTextFault.getText().length() == 0){
             binding.idPosizioneBici.setError(getString(R.string.should_not_be_empty));
+            binding.idPosizioneBici.setErrorEnabled(true);
             return false;
         }
+        binding.idPosizioneBici.setError(null);
+        binding.idPosizioneBici.setErrorEnabled(false);
         return true;
     }
 

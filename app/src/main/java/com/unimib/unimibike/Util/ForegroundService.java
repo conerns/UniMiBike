@@ -5,17 +5,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.unimib.unimibike.ProjectFiles.PrincipalActivity;
@@ -38,6 +33,7 @@ public class ForegroundService extends Service {
                 .setContentText(input)
                 .setSmallIcon(R.drawable.icona_bici)
                 .setContentIntent(pendingIntent)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .build();
         startForeground(1, notification);
         //do heavy work on a background thread
