@@ -69,7 +69,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         rentalCallback = this;
         geolocationCallback = this;
         closeRentalCallback = this;
-        //user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
+        //user_id = getActivity().getIntent().getIntExtra(Costants.USER_ID, 0);
         user_id = SaveSharedPreference.getUserID(getContext());
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

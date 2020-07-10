@@ -1,20 +1,16 @@
 package com.unimib.unimibike.Util;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -23,6 +19,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.unimib.unimibike.R;
 
 import java.io.IOException;
+
+//TODO change with viewBinding
 
 public class QrReaderActivity extends AppCompatActivity {
     private SurfaceView surfaceView;
@@ -86,8 +84,8 @@ public class QrReaderActivity extends AppCompatActivity {
                         public void run() {
                             Intent resultIntent = new Intent();
                             Bundle returnData = new Bundle();
-                            returnData.putInt("qr_code_detection", Integer.parseInt(qrCode.valueAt(0).displayValue));
-                            resultIntent.putExtra("data_detect", returnData);
+                            returnData.putInt(Costants.QR_CODE_DETECTION, Integer.parseInt(qrCode.valueAt(0).displayValue));
+                            resultIntent.putExtra(Costants.DATA_DETECT, returnData);
                             setResult(Activity.RESULT_OK, resultIntent);
                             finish();
                         }

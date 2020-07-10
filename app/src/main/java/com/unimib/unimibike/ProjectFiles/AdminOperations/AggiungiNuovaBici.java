@@ -1,17 +1,12 @@
 package com.unimib.unimibike.ProjectFiles.AdminOperations;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
@@ -25,7 +20,7 @@ import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.MyAlertDialogFragment;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
@@ -220,7 +215,7 @@ public class AggiungiNuovaBici extends AppCompatActivity {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
                     binding.valoriRastrelliereFine.setText(String.valueOf(returnValue));
                 }
                 break;

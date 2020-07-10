@@ -21,6 +21,7 @@ import com.unimib.unimibike.Model.User;
 import com.unimib.unimibike.ProjectFiles.ViewModels.UsersViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.CheckForInternet;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.ActivityMainBinding;
 
@@ -63,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
     public void apr_activity(User user){
         Log.d("APRACTIVITY",user.toString());
         Intent pagina = new Intent(this, PrincipalActivity.class);
-        pagina.putExtra("USER-ID", user.getmId());
-        pagina.putExtra("USER-MAIL", user.getEmail());
-        pagina.putExtra("USER-PERISSION", user.getmRole());
+        pagina.putExtra(Costants.USER_ID, user.getmId());
+        pagina.putExtra(Costants.USER_MAIL, user.getEmail());
+        pagina.putExtra(Costants.USER_PERMISSION, user.getmRole());
         SaveSharedPreference.setUserName(getApplicationContext(),user.getEmail(),user.getmRole(),user.getmId(),user.getUserState());
         startActivity(pagina);
         finish();

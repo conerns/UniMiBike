@@ -4,17 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.OnGeolocationActive;
-import com.unimib.unimibike.Util.SaveSharedPreference;
 @Deprecated
 public class Principal extends AppCompatActivity implements OnGeolocationActive {
     private String ruolo;
@@ -42,9 +41,9 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     Bundle creato = new Bundle();
-                    creato.putString("USER-ROLE", ruolo);
-                    creato.putString("USER-MAIL", utente);
-                    creato.putInt("USER-ID", id);
+                    creato.putString(Costants.USER_ROLE, ruolo);
+                    creato.putString(Costants.USER_MAIL, utente);
+                    creato.putInt(Costants.USER_ID, id);
                     Fragment selected = null;
                     switch (menuItem.getItemId()) {
                         case R.id.id_guasti:
@@ -81,9 +80,9 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(listener);
-        utente = getIntent().getStringExtra("USER-MAIL");
-        ruolo = getIntent().getStringExtra("USER-PERISSION");
-        id = getIntent().getIntExtra("USER-ID", 0);
+        utente = getIntent().getStringExtra(Costants.USER_MAIL);
+        ruolo = getIntent().getStringExtra(Costants.USER_PERMISSION);
+        id = getIntent().getIntExtra(Costants.USER_ID, 0);
         Log.d("Qui", utente + ruolo);
 
         bottomNav.setSelectedItemId(R.id.id_noleggio);
@@ -91,13 +90,4 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
                 new FrameNoleggio()).commit();
     }
 
-    /*@Override
-    protected void onResume() {
-        super.onResume();
-        //BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-//        bottomNav.setOnNavigationItemSelectedListener(listener);
-        //bottomNav.setSelectedItemId(R.id.id_noleggio);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_displayer,
-                new FrameNoleggio()).commit();
-    }*/
 }

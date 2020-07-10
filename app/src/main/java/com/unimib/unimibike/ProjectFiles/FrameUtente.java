@@ -18,6 +18,7 @@ import com.unimib.unimibike.ProjectFiles.AdminOperations.AggiungiNuovaBici;
 import com.unimib.unimibike.ProjectFiles.AdminOperations.ModificaPosizione;
 import com.unimib.unimibike.ProjectFiles.AdminOperations.RemoveBike;
 
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.FragmentUtenteBinding;
 
@@ -35,8 +36,8 @@ public class FrameUtente extends Fragment {
             get_role = SaveSharedPreference.getPrefUserRole(getContext().getApplicationContext());
         }
         else {
-            get_role = getArguments().getString("USER-ROLE");
-            get_email = getArguments().getString("USER-MAIL");
+            get_role = getArguments().getString(Costants.USER_ROLE);
+            get_email = getArguments().getString(Costants.USER_MAIL);
         }
         binding.logoutUtente.setOnClickListener(new OnClickListener() {
             @Override
@@ -115,9 +116,9 @@ public class FrameUtente extends Fragment {
 
     public void apri_storico_biciclette_aggiunte(){
         Intent mPagina = new Intent(getActivity(), AdminAddedBikes.class);
-        int user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
+        int user_id = getActivity().getIntent().getIntExtra(Costants.USER_ID, 0);
         Log.d("FRAMEUTENTE", user_id+"");
-        mPagina.putExtra("user_id", user_id);
+        mPagina.putExtra(Costants.USER_ID, user_id);
         startActivity(mPagina);
     }
 }

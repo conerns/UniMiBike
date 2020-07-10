@@ -23,6 +23,7 @@ import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
@@ -174,7 +175,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements Geolocatio
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
                     binding.bikeCodeText.setText(String.valueOf(returnValue));
                 }
                 break;

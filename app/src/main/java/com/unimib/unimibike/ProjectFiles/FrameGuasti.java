@@ -31,6 +31,7 @@ import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.AdminOperations.AggiungiNuovaBici;
 import com.unimib.unimibike.ProjectFiles.ViewModels.ReportsViewModel;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
@@ -60,9 +61,9 @@ public class FrameGuasti extends Fragment {
             get_role = SaveSharedPreference.getPrefUserRole(getContext().getApplicationContext());
             get_id = SaveSharedPreference.getUserID(getContext().getApplicationContext());
         }else {
-            get_role = getArguments().getString("USER-ROLE");
-            get_email = getArguments().getString("USER-MAIL");
-            get_id = getArguments().getInt("USER-ID");
+            get_role = getArguments().getString(Costants.USER_ROLE);
+            get_email = getArguments().getString(Costants.USER_MAIL);
+            get_id = getArguments().getInt(Costants.USER_ID);
         }
         binding = FragmentGuastiBinding.inflate(getLayoutInflater());
         binding.bikeFalutDesciptionText.setFilters((new InputFilter[]{new InputFilter.LengthFilter(120)}));
@@ -347,7 +348,7 @@ public class FrameGuasti extends Fragment {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
                     binding.bikeCodeTextFault.setText(String.valueOf(returnValue));
                 }
                 break;
@@ -355,7 +356,7 @@ public class FrameGuasti extends Fragment {
             case (1) :{
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
                     binding.bikeCodeTextFixed.setText(String.valueOf(returnValue));
                 }
                 break;
@@ -363,7 +364,7 @@ public class FrameGuasti extends Fragment {
             case (2) :{
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
                     binding.valoriRastrelliereFine.setText(String.valueOf(returnValue));
                 }
                 break;

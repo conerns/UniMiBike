@@ -1,29 +1,16 @@
 package com.unimib.unimibike.ProjectFiles;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.internal.NavigationMenu;
-import com.google.android.material.internal.NavigationMenuItemView;
-import com.unimib.unimibike.R;
-
-import android.app.Application;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.OnGeolocationActive;
@@ -55,9 +42,9 @@ public class PrincipalActivity extends AppCompatActivity implements OnGeolocatio
 
     public void createView(){
         setContentView(R.layout.activity_principal);
-        utente = getIntent().getStringExtra("USER-MAIL");
-        ruolo = getIntent().getStringExtra("USER-PERISSION");
-        id = getIntent().getIntExtra("USER-ID", 0);
+        utente = getIntent().getStringExtra(Costants.USER_MAIL);
+        ruolo = getIntent().getStringExtra(Costants.USER_PERMISSION);
+        id = getIntent().getIntExtra(Costants.USER_ID, 0);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);

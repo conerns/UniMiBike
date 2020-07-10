@@ -9,8 +9,6 @@ import com.unimib.unimibike.Model.User;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;
 import com.unimib.unimibike.Util.UnimibBikeFetcher;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
 public class UsersRepository {
     private static UsersRepository instance;
 

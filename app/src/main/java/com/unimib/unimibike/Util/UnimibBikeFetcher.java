@@ -24,10 +24,6 @@ import java.util.List;
 public class UnimibBikeFetcher {
 
     private static final String TAG = "UnimibBikeFetcher";
-    private static final String LAT = "?lat=";
-    private static final String LONG = "&long=";
-    private static final String MAX_DISTANCE = "&max_distance=";
-    private static final String ACTIVE = "?active=yes";
 
     public static void postUserLogin(final Context context, String email, String password, final ServerResponseParserCallback<User> return_value){
         final JSONObject dati_json_form = createJSONLogin(email, password);

@@ -24,6 +24,7 @@ import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.CloseRentalCallback;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
@@ -132,7 +133,7 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
                     binding.bikeCodeText.setText(String.valueOf(returnValue));
                 }
                 break;
