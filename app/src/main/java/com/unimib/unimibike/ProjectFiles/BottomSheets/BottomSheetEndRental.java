@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.BottomSheets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -30,7 +30,7 @@ import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.databinding.BottomSheetEndBinding;
 
-public class BottomSheetEnd extends BottomSheetDialogFragment {
+public class BottomSheetEndRental extends BottomSheetDialogFragment {
     private BottomSheetEndBinding binding;
     private RacksViewModel racksViewModel;
     private MutableLiveData<Resource<Rack>> bikeLiveData;
@@ -38,7 +38,7 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
     private MutableLiveData<Rental> rentalMutableLiveData;
     private Rental mRental;
     private CloseRentalCallback closeRentalCallback;
-    public BottomSheetEnd(Rental element, Context context, CloseRentalCallback closeRentalCallback){
+    public BottomSheetEndRental(Rental element, Context context, CloseRentalCallback closeRentalCallback){
         mRental = element;
         this.closeRentalCallback = closeRentalCallback;
     }
@@ -148,7 +148,7 @@ public class BottomSheetEnd extends BottomSheetDialogFragment {
             public void onChanged(Rental rental) {
                 //qui devo fare tutto
                 //prima idea, inserisce il coso di fine
-               // FrameNoleggio.finishRent();
+               // FragmentRental.finishRent();
 
                 DialogFragment newFragment= MyAlertDialogFragment.newInstance(view.getContext().getString(R.string.ended_succs),
                         view.getContext().getString(R.string.rent_ended_mess));

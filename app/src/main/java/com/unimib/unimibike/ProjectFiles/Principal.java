@@ -9,6 +9,11 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.unimib.unimibike.ProjectFiles.Fragments.FragmentReport;
+import com.unimib.unimibike.ProjectFiles.Fragments.FragmentRental;
+import com.unimib.unimibike.ProjectFiles.Fragments.FragmentRacks;
+import com.unimib.unimibike.ProjectFiles.Fragments.FragmentHistoricalRental;
+import com.unimib.unimibike.ProjectFiles.Fragments.FragmentUser;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.Geolocation;
@@ -47,19 +52,19 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
                     Fragment selected = null;
                     switch (menuItem.getItemId()) {
                         case R.id.id_guasti:
-                            selected = new FrameGuasti();
+                            selected = new FragmentReport();
                             break;
                         case R.id.id_rastrelliere:
-                            selected = new FrameRastrelliere();
+                            selected = new FragmentRacks();
                             break;
                         case R.id.id_storico:
-                            selected = new FrameStorico();
+                            selected = new FragmentHistoricalRental();
                             break;
                         case R.id.id_utente:
-                            selected = new FrameUtente();
+                            selected = new FragmentUser();
                             break;
                         case R.id.id_noleggio:
-                            selected = new FrameNoleggio();
+                            selected = new FragmentRental();
                             break;
 
                     }
@@ -87,7 +92,7 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
 
         bottomNav.setSelectedItemId(R.id.id_noleggio);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_displayer,
-                new FrameNoleggio()).commit();
+                new FragmentRental()).commit();
     }
 
 }

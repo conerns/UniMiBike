@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.Fragments;
 
 import android.content.Intent;
 import android.location.Location;
@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -28,7 +27,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.Model.Rental;
+import com.unimib.unimibike.Model.Report;
 import com.unimib.unimibike.Model.Resource;
+import com.unimib.unimibike.ProjectFiles.BottomSheets.BottomSheetStartRental;
+import com.unimib.unimibike.ProjectFiles.BottomSheets.BottomSheetEndRental;
+import com.unimib.unimibike.ProjectFiles.BottomSheets.BottomSheetRack;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
@@ -46,7 +49,7 @@ import com.unimib.unimibike.databinding.FragmentNoleggioBinding;
 import java.util.HashMap;
 import java.util.List;
 
-public class FrameNoleggio extends Fragment implements OnMapReadyCallback, FragmentCallback, GeolocationCallback, CloseRentalCallback {
+public class FragmentRental extends Fragment implements OnMapReadyCallback, FragmentCallback, GeolocationCallback, CloseRentalCallback {
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mHashMap = new HashMap<>();
     private LatLng mCurrentPosition;
@@ -61,6 +64,9 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private MutableLiveData<List<Rental>> activeRentalMutableLiveData;
     private FragmentNoleggioBinding binding;
     private Geolocation geo;
+
+    public static Report reportAfterRentalClosed;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,7 +82,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         binding.sbloccaBici.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                BottomSheet bsdf = new BottomSheet(rentalCallback);
+                BottomSheetStartRental bsdf = new BottomSheetStartRental(rentalCallback);
                 assert getFragmentManager() != null;
                 bsdf.show(getFragmentManager() ,"bottomsheetlayout");
             }
@@ -181,7 +187,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
 
 
     private void startbottomSheet(Rental rental) {
-        BottomSheetEnd bsdf = new BottomSheetEnd(rental,getActivity().getApplicationContext(), closeRentalCallback);
+        BottomSheetEndRental bsdf = new BottomSheetEndRental(rental,getActivity().getApplicationContext(), closeRentalCallback);
         assert getFragmentManager() != null;
         bsdf.show(getFragmentManager() ,"un altro botto sheet");
     }
@@ -239,6 +245,10 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         binding.sbloccaBici.setVisibility(View.VISIBLE);
         binding.rentalUpCardview.setVisibility(View.GONE);
         stopService();
+        if (reportAfterRentalClosed != null) {
+            FragmentReport fragmentReport = new FragmentReport();
+            fragmentReport.newReport(reportAfterRentalClosed, requireActivity(), false);
+        }
     }
 
     public void startService(final Rental rental) {

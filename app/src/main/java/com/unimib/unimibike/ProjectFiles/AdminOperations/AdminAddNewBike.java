@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -28,7 +27,7 @@ import com.unimib.unimibike.databinding.ActivityAggiungiNuovaBiciBinding;
 
 import java.util.List;
 
-public class AggiungiNuovaBici extends AppCompatActivity {
+public class AdminAddNewBike extends AppCompatActivity {
     private ActivityAggiungiNuovaBiciBinding binding;
     private RacksViewModel racksViewModel;
     private BikesViewModel bikeViewModel;
@@ -86,7 +85,7 @@ public class AggiungiNuovaBici extends AppCompatActivity {
         });
     }
     private void funzione_dialog() {
-        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);
+        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminAddNewBike.this, R.style.Theme_MyTheme_Dialog);
         mMaterialDialog
                 .setTitle(R.string.correct_bike_add)
                 .setMessage(getString(R.string.correct_bike_add_text))
@@ -105,7 +104,7 @@ public class AggiungiNuovaBici extends AppCompatActivity {
             public void onChanged(List<Rack> racks) {
                 if(checkRackValue()){
                     if(checkRackExistence(racks) && controlloCodice()) {
-                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);
+                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminAddNewBike.this, R.style.Theme_MyTheme_Dialog);
                         mMaterialDialog
                                 .setTitle(R.string.confirm_dati)
                                 .setMessage(getString(R.string.confirm_first_half) + binding.valoriRastrelliereFine.getText().toString()

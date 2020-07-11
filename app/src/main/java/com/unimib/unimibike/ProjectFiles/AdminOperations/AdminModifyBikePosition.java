@@ -24,7 +24,7 @@ import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.ModificaPosizioneBiciBinding;
 
-public class ModificaPosizione extends AppCompatActivity {
+public class AdminModifyBikePosition extends AppCompatActivity {
     private BikesViewModel bikesViewModel;
     private MutableLiveData<Resource<Bike>> mutableLiveData;
     private ModificaPosizioneBiciBinding binding;
@@ -93,7 +93,7 @@ public class ModificaPosizione extends AppCompatActivity {
 
     public void applyModify(){
         if(controlloId() & controlloRack()){
-            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(ModificaPosizione.this, R.style.Theme_MyTheme_Dialog);
+            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminModifyBikePosition.this, R.style.Theme_MyTheme_Dialog);
             mMaterialDialog
                 .setTitle(R.string.confirm_dati)
                 .setMessage(getString(R.string.confirm_fh_modify) + binding.bikeCodeTextFault.getText().toString()
@@ -145,7 +145,7 @@ public class ModificaPosizione extends AppCompatActivity {
                 if(bike.getStatusCode() == 200){
                     binding.bikeCodeTextFault.setText(null);
                     binding.valoriRastrelliereFine.setText(null);
-                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(ModificaPosizione.this, R.style.Theme_MyTheme_Dialog);
+                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminModifyBikePosition.this, R.style.Theme_MyTheme_Dialog);
                     mMaterialDialog
                             .setTitle(R.string.modifed_position)
                             .setMessage(getString(R.string.correct_bike_modify))

@@ -7,24 +7,24 @@
 
     <fragment
         android:id="@+id/navigation_maps"
-        android:name="com.unimib.unimibike.ProjectFiles.FrameNoleggio"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentRental"
         tools:layout="@layout/fragment_noleggio" />
 
     <fragment
         android:id="@+id/navigation_rack_list"
-        android:name="com.unimib.unimibike.ProjectFiles.FrameRastrelliere"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentRacks"
         tools:layout="@layout/frame_lista_rastrelliere" />
 
     <fragment
         android:id="@+id/navigation_historical_rental"
-        android:name="com.unimib.unimibike.ProjectFiles.FrameStorico"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentHistoricalRental"
         tools:layout="@layout/fragment_storico" />
     <fragment
         android:id="@+id/navigation_trouble"
-        android:name="com.unimib.unimibike.ProjectFiles.FrameGuasti"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentReport"
         tools:layout="@layout/fragment_guasti" />
     <fragment
         android:id="@+id/navigation_user"
-        android:name="com.unimib.unimibike.ProjectFiles.FrameUtente"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentUser"
         tools:layout="@layout/fragment_utente" />
 </navigation>

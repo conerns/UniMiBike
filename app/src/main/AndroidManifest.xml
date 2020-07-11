@@ -35,10 +35,10 @@
         <activity android:name=".ProjectFiles.PrincipalActivity"
                   android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ProjectFiles.AdminOperations.AdminAddedBikes" />
-        <activity android:name=".ProjectFiles.AdminOperations.RemoveBike" />
+        <activity android:name=".ProjectFiles.AdminOperations.AdminRemoveBike" />
         <activity android:name=".Util.Geolocation" />
         <activity android:name=".Util.QrReaderActivity" />
-        <activity android:name=".ProjectFiles.AdminOperations.AggiungiNuovaBici" />
+        <activity android:name=".ProjectFiles.AdminOperations.AdminAddNewBike" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -54,9 +54,9 @@
 
         <activity
             android:name=".ProjectFiles.Principal"/>
-        <activity android:name=".ProjectFiles.AdminOperations.ModificaPosizione" />
+        <activity android:name=".ProjectFiles.AdminOperations.AdminModifyBikePosition" />
         <activity
-            android:name=".ProjectFiles.MainActivity"
+            android:name=".ProjectFiles.ActivityLogin"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
             <intent-filter>

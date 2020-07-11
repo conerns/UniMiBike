@@ -41,6 +41,8 @@
     <string name="altro_guasto">Other</string>
     <string name="report_sent_body">"The report has been succsesfully sent. One of our technician will solve the problem, you can choose another bike to use meanwhile. "</string>
     <string name="report_sent">Report sent</string>
+    <string name="report_after_rental_title">Report saved</string>
+    <string name="report_after_rental_message">The report has been saved and it will be send as soon as the rental in progress is concluded</string>
     <string name="apply_bike_added">Add bike</string>
     <string name="select_bike_position">Select bike position</string>
     <string name="insert_unlock_code">Insert unlock code</string>

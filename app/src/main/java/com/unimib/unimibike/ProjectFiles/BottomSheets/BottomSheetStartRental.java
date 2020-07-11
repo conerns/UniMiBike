@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.BottomSheets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -32,7 +32,7 @@ import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.databinding.BottomSheetLayoutBinding;
 
-public class BottomSheet extends BottomSheetDialogFragment implements GeolocationCallback{
+public class BottomSheetStartRental extends BottomSheetDialogFragment implements GeolocationCallback{
     private FragmentCallback    rentalCallback;
     private BottomSheetLayoutBinding binding;
     private BikesViewModel bikesViewModel;
@@ -90,7 +90,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements Geolocatio
         return view;
     }
 
-    public BottomSheet(FragmentCallback rentalCallback){
+    public BottomSheetStartRental(FragmentCallback rentalCallback){
         this.rentalCallback = rentalCallback;
     }
     private void getUserPosition(){

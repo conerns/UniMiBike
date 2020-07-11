@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="MapRentalTag"
-        tools:context="com.unimib.unimibike.ProjectFiles.FrameNoleggio"
+        tools:context="com.unimib.unimibike.ProjectFiles.Fragments.FragmentRental"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 

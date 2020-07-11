@@ -18,8 +18,6 @@ import com.unimib.unimibike.databinding.ActivityQrReaderBinding;
 
 import java.io.IOException;
 
-//TODO change with viewBinding
-
 public class QrReaderActivity extends AppCompatActivity {
     private ActivityQrReaderBinding binding;
     private CameraSource cameraSource;
@@ -46,7 +44,6 @@ public class QrReaderActivity extends AppCompatActivity {
                 }
             }
 
-
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {            }
 
@@ -65,6 +62,7 @@ public class QrReaderActivity extends AppCompatActivity {
                 .setRequestedPreviewSize(1920, 1080)
                 .setAutoFocusEnabled(true) //you should add this feature
                 .build();
+
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {

@@ -23,7 +23,7 @@ import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.ActivityRemoveBikeBinding;
 
-public class RemoveBike extends AppCompatActivity {
+public class AdminRemoveBike extends AppCompatActivity {
     private ActivityRemoveBikeBinding binding;
     private BikesViewModel bikeViewModel;
     private MutableLiveData<Resource<Bike>> bikeMutableLiveData;
@@ -68,7 +68,7 @@ public class RemoveBike extends AppCompatActivity {
 
     public void removeBike(){
         if(controlloId()){
-            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
+            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminRemoveBike.this, R.style.Theme_MyTheme_Dialog);
             mMaterialDialog
                 .setTitle(R.string.confirm_dati)
                 .setMessage(getString(R.string.remove_bike_desc) + binding.idRemoveBikeContent.getText().toString()
@@ -96,7 +96,7 @@ public class RemoveBike extends AppCompatActivity {
             public void onChanged(Resource<Bike> bike) {
                 if(bike.getStatusCode() == 200) {
                     binding.idRemoveBikeContent.setText(null);
-                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
+                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminRemoveBike.this, R.style.Theme_MyTheme_Dialog);
                     mMaterialDialog
                             .setTitle(R.string.removed_bike)
                             .setMessage(getString(R.string.correct_bike_remove))

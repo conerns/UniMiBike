@@ -9,7 +9,7 @@ public class SaveSharedPreference
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
-    public static void setUserName(Context ctx, String userName,String userRole, int userID, int user_state){
+    public static void setUserPreferences(Context ctx, String userName,String userRole, int userID, int user_state){
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
         editor.putString(Costants.PREF_USER_NAME, userName);
         editor.putString(Costants.PREF_USER_ROLE, userRole);

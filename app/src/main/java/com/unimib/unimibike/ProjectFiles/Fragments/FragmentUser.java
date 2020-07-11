@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,15 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.unimib.unimibike.ProjectFiles.AdminOperations.AdminAddedBikes;
-import com.unimib.unimibike.ProjectFiles.AdminOperations.AggiungiNuovaBici;
-import com.unimib.unimibike.ProjectFiles.AdminOperations.ModificaPosizione;
-import com.unimib.unimibike.ProjectFiles.AdminOperations.RemoveBike;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.AdminAddNewBike;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.AdminModifyBikePosition;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.AdminRemoveBike;
 
+import com.unimib.unimibike.ProjectFiles.ActivityLogin;
 import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.FragmentUtenteBinding;
 
-public class FrameUtente extends Fragment {
+public class FragmentUser extends Fragment {
     private String get_email;
     private String get_role;
     private FragmentUtenteBinding binding;
@@ -42,7 +43,7 @@ public class FrameUtente extends Fragment {
         binding.logoutUtente.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                apr_activity();
+                logoutUser();
             }
         });
         return view;
@@ -92,9 +93,9 @@ public class FrameUtente extends Fragment {
 
     }
 
-    public void apr_activity(){
+    public void logoutUser(){
         SaveSharedPreference.clearUserName(getContext());
-        Intent mPagina = new Intent(getActivity(), MainActivity.class);
+        Intent mPagina = new Intent(getActivity(), ActivityLogin.class);
         startActivity(mPagina);
         Activity activity = getActivity();
         assert activity != null;
@@ -102,15 +103,15 @@ public class FrameUtente extends Fragment {
     }
 
     public void apri_modifica_posizione(){
-        Intent mPagina = new Intent(getActivity(), ModificaPosizione.class);
+        Intent mPagina = new Intent(getActivity(), AdminModifyBikePosition.class);
         startActivity(mPagina);
     }
     public void apri_remove_biciletta(){
-        Intent mPagina = new Intent(getActivity(), RemoveBike.class);
+        Intent mPagina = new Intent(getActivity(), AdminRemoveBike.class);
         startActivity(mPagina);
     }
     public void apri_aggiungi_biciletta(){
-        Intent mPagina = new Intent(getActivity(), AggiungiNuovaBici.class);
+        Intent mPagina = new Intent(getActivity(), AdminAddNewBike.class);
         startActivity(mPagina);
     }
 
