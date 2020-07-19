@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +22,7 @@ import com.unimib.unimibike.databinding.FragmentStoricoBinding;
 
 import java.util.List;
 
-public class FrameStorico extends Fragment {
+public class FragmentHistoricalRental extends Fragment {
     private RentalFrameAdapter adapter;
     private RentalsViewModel rentalsViewModel;
     private MutableLiveData<List<Rental>> rentalsLiveData;

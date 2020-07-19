@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_maps">
+
+    <fragment
+        android:id="@+id/navigation_maps"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentRental"
+        tools:layout="@layout/fragment_noleggio" />
+
+    <fragment
+        android:id="@+id/navigation_rack_list"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentRacks"
+        tools:layout="@layout/frame_lista_rastrelliere" />
+
+    <fragment
+        android:id="@+id/navigation_historical_rental"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentHistoricalRental"
+        tools:layout="@layout/fragment_storico" />
+    <fragment
+        android:id="@+id/navigation_trouble"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentReport"
+        tools:layout="@layout/fragment_guasti" />
+    <fragment
+        android:id="@+id/navigation_user"
+        android:name="com.unimib.unimibike.ProjectFiles.Fragments.FragmentUser"
+        tools:layout="@layout/fragment_utente" />
+</navigation>

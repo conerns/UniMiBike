@@ -17,12 +17,13 @@ import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.ActivityRemoveBikeBinding;
 
-public class RemoveBike extends AppCompatActivity {
+public class AdminRemoveBike extends AppCompatActivity {
     private ActivityRemoveBikeBinding binding;
     private BikesViewModel bikeViewModel;
     private MutableLiveData<Resource<Bike>> bikeMutableLiveData;
@@ -34,7 +35,7 @@ public class RemoveBike extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        binding.sendFixedReport.setOnClickListener(new View.OnClickListener() {
+        binding.sendRemoveBike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                removeBike();
@@ -54,14 +55,20 @@ public class RemoveBike extends AppCompatActivity {
             }
         });
 
-
+        binding.idRemoveBikeContent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    binding.idRemoveBike.setError(null);
+                    binding.idRemoveBike.setErrorEnabled(false);
+                }
+            }
+        });
     }
 
     public void removeBike(){
-        binding.idRemoveBike.setError(null);
-        binding.idRemoveBike.setErrorEnabled(false);
         if(controlloId()){
-            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
+            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminRemoveBike.this, R.style.Theme_MyTheme_Dialog);
             mMaterialDialog
                 .setTitle(R.string.confirm_dati)
                 .setMessage(getString(R.string.remove_bike_desc) + binding.idRemoveBikeContent.getText().toString()
@@ -89,7 +96,7 @@ public class RemoveBike extends AppCompatActivity {
             public void onChanged(Resource<Bike> bike) {
                 if(bike.getStatusCode() == 200) {
                     binding.idRemoveBikeContent.setText(null);
-                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(RemoveBike.this, R.style.Theme_MyTheme_Dialog);
+                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminRemoveBike.this, R.style.Theme_MyTheme_Dialog);
                     mMaterialDialog
                             .setTitle(R.string.removed_bike)
                             .setMessage(getString(R.string.correct_bike_remove))
@@ -103,6 +110,7 @@ public class RemoveBike extends AppCompatActivity {
                 }else if(bike.getStatusCode() == 404){
                     binding.idRemoveBike.setError(getString(R.string.insert_vaild_value));
                     binding.idRemoveBike.setErrorEnabled(true);
+                    binding.idRemoveBike.clearFocus();
                 }
 
             }
@@ -116,8 +124,12 @@ public class RemoveBike extends AppCompatActivity {
     private boolean controlloId() {
         if(binding.idRemoveBikeContent.getText().length() == 0){
             binding.idRemoveBike.setError(getString(R.string.should_not_be_empty));
+            binding.idRemoveBike.setErrorEnabled(true);
+            binding.idRemoveBike.clearFocus();
             return false;
         }
+        binding.idRemoveBike.setErrorEnabled(false);
+        binding.idRemoveBike.setError(null);
         return true;
     }
 
@@ -136,8 +148,7 @@ public class RemoveBike extends AppCompatActivity {
         switch(requestCode) {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
                     binding.idRemoveBikeContent.setText(String.valueOf(returnValue));
                 }
                 break;

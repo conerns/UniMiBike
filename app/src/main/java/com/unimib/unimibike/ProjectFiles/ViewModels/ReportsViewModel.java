@@ -10,8 +10,6 @@ import com.unimib.unimibike.Model.Report;
 import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.Repositories.ReportsRepository;
 
-import java.net.ResponseCache;
-
 public class ReportsViewModel extends ViewModel {
     private MutableLiveData<Resource<Report>> report;
     private MutableLiveData<Resource<Bike>> bike;

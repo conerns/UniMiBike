@@ -41,6 +41,8 @@
     <string name="altro_guasto">Other</string>
     <string name="report_sent_body">"The report has been succsesfully sent. One of our technician will solve the problem, you can choose another bike to use meanwhile. "</string>
     <string name="report_sent">Report sent</string>
+    <string name="report_after_rental_title">Report saved</string>
+    <string name="report_after_rental_message">The report has been saved and it will be send as soon as the rental in progress is concluded</string>
     <string name="apply_bike_added">Add bike</string>
     <string name="select_bike_position">Select bike position</string>
     <string name="insert_unlock_code">Insert unlock code</string>
@@ -92,4 +94,6 @@
     <string name="switch_text">Remember me</string>
     <string name="too_far_from_rack">Far from rack</string>
     <string name="too_far_from_rack_text">You are too far from the rack, please go closer to rent this bike.</string>
+    <string name="bike_not_fixable_title">Bike not fixable</string>
+    <string name="bike_not_fixable_message">Check if this bike is broken or if the rack has at least one stand available</string>
 </resources>

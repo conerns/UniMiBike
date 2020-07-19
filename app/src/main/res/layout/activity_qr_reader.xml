@@ -7,7 +7,7 @@
     tools:context="com.unimib.unimibike.Util.QrReaderActivity">
 
     <SurfaceView
-        android:id="@+id/surface_area2"
+        android:id="@+id/surface_area"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"

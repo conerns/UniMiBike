@@ -1,5 +1,6 @@
 package com.unimib.unimibike.ProjectFiles;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -7,16 +8,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -25,6 +22,7 @@ import com.unimib.unimibike.Model.User;
 import com.unimib.unimibike.ProjectFiles.ViewModels.UsersViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.CheckForInternet;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.ActivityMainBinding;
 
@@ -34,16 +32,14 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity {
-    private static final String MAIL = "Mail";
-    private static final String PASSWORD = "Password";
+public class ActivityLogin extends AppCompatActivity {
     private ActivityMainBinding binding;
     private String email;
     private String password;
     private final int REQUEST_ID_MULTIPLE_PERMISSIONS = 0;
     private static final String TAG = "MAIN ACTIVITY";
     private UsersViewModel usersViewModel;
-    private MutableLiveData<Resource<User>> recourceUserMutableLiveData;
+    private MutableLiveData<Resource<User>> resourceUserMutableLiveData;
     private MutableLiveData<User> userMutableLiveData;
 
     @Override
@@ -59,23 +55,22 @@ public class MainActivity extends AppCompatActivity {
             afterPermission();
         }
         else{
-            SaveSharedPreference.clearUserName(getApplicationContext());
             afterPermission();
         }
     }
 
     //questo metodo fa partire una nuova activity
-    public void apr_activity(User user){
+    public void openPrincipalActivity(User user){
         Log.d("APRACTIVITY",user.toString());
-        Intent pagina = new Intent(this, Principal.class);
-        pagina.putExtra("USER-ID", user.getmId());
-        pagina.putExtra("USER-MAIL", user.getEmail());
-        pagina.putExtra("USER-PERISSION", user.getmRole());
-        SaveSharedPreference.setUserName(getApplicationContext(),user.getEmail(),user.getmRole(),user.getmId(),user.getUserState());
+        Intent pagina = new Intent(this, PrincipalActivity.class);
+        pagina.putExtra(Costants.USER_ID, user.getmId());
+        pagina.putExtra(Costants.USER_MAIL, user.getEmail());
+        pagina.putExtra(Costants.USER_PERMISSION, user.getmRole());
+        SaveSharedPreference.setUserPreferences(getApplicationContext(),user.getEmail(),user.getmRole(),user.getmId(),user.getUserState());
         startActivity(pagina);
         finish();
     }
-    public boolean controlla_email(String value){
+    public boolean checkEmail(String value){
         if(value.isEmpty()){
             binding.userEmail.setError(getString(R.string.should_not_be_empty));
             return false;
@@ -92,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    public boolean controlla_pass(String value){
+    public boolean checkPassword(String value){
         if(value.isEmpty()){
             binding.userPassword.setError(getString(R.string.should_not_be_empty));
             binding.userPassword.clearFocus();
@@ -102,14 +97,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void effettua_login(String value_email, String value_password){
+    public void loginUser(String value_email, String value_password){
         binding.accediUtente.setEnabled(true);
         usersViewModel = new UsersViewModel();
         final Observer<Resource<User>> observer = new Observer<Resource<User>>() {
             @Override
             public void onChanged(Resource<User> user) {
-                if(user.getStatusCode() == 200)
+                if(user.getStatusCode() == 200) {
+                    if(binding.ricordaUtente.isChecked()) SaveSharedPreference.setLogged(getApplicationContext(), true);
                     returnUserIdRoute(user.getData().getEmail(), true);
+                }
                 else if(user.getStatusCode() == 404){
                     binding.mainActivityRelativeLayout.setVisibility(View.GONE);
                     binding.pBar.setVisibility(View.GONE);
@@ -124,24 +121,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        recourceUserMutableLiveData = usersViewModel.login(this.getApplicationContext(), value_email, value_password);
-        recourceUserMutableLiveData.observe(this, observer);
+        resourceUserMutableLiveData = usersViewModel.login(this.getApplicationContext(), value_email, value_password);
+        resourceUserMutableLiveData.observe(this, observer);
     }
 
     public void returnUserIdRoute(final String email, final boolean call){
         usersViewModel = new UsersViewModel();
+        final boolean rememberMe = SaveSharedPreference.getPrefUserRemember(this);
         final Observer<User> observer = new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 if(call)
                     if (user != null) {
                         Log.d("USERIDROUTE", "onSuccess: " + user.toString());
-                        apr_activity(user);
+                        openPrincipalActivity(user);
                     } else
                         addUser(email);
                 else{
                     SaveSharedPreference.clearUserName(getApplicationContext());
-                    apr_activity(user);
+                    SaveSharedPreference.setLogged(getApplicationContext(),rememberMe);
+                    openPrincipalActivity(user);
                 }
             }
         };
@@ -154,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         final Observer<User> observer = new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                apr_activity(user);
+                openPrincipalActivity(user);
             }
         };
         userMutableLiveData = usersViewModel.addUser(this.getApplicationContext(), email);
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         switch (requestCode) {
             case REQUEST_ID_MULTIPLE_PERMISSIONS: {
@@ -216,8 +215,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void afterPermission(){
-        if (SaveSharedPreference.getUserName(getApplicationContext()).length() != 0) {
-            //getUserRole(SaveSharedPreference.getUserName(getApplicationContext()));
+        if (SaveSharedPreference.getPrefUserRemember(this)) {
             returnUserIdRoute(SaveSharedPreference.getUserName(getApplicationContext()), false);
         } else {
             binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -226,12 +224,10 @@ public class MainActivity extends AppCompatActivity {
             binding.accediUtente.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    if(binding.ricordaUtente.isChecked()) SaveSharedPreference.setLogged(getApplicationContext(), true);
                     if (CheckForInternet.check_connection((ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE))) {
                         email = binding.testoEmail.getText().toString();
                         password = binding.testoPassword.getText().toString();
-                        if (controlla_email(email) & controlla_pass(password)) {
+                        if (checkEmail(email) & checkPassword(password)) {
                             binding.mainActivityRelativeLayout.bringToFront();
                             binding.pBar.bringToFront();
                             binding.mainActivityRelativeLayout.setVisibility(View.VISIBLE);
@@ -241,11 +237,11 @@ public class MainActivity extends AppCompatActivity {
                             binding.accediUtente.setClickable(false);
                             binding.ricordaUtente.setVisibility(View.GONE);
                             binding.accediUtente.setVisibility(View.GONE);
-                            effettua_login(email, password);
+                            loginUser(email, password);
                         }
                     } else {
                         binding.accediUtente.setVisibility(View.VISIBLE);
-                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(MainActivity.this, R.style.Theme_MyTheme_Dialog);
+                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(ActivityLogin.this, R.style.Theme_MyTheme_Dialog);
                         mMaterialDialog
                                 .setTitle(R.string.internet_connection_dialog_title)
                                 .setMessage(R.string.check_internet)
@@ -263,16 +259,20 @@ public class MainActivity extends AppCompatActivity {
             binding.testoEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus)
+                    if(hasFocus) {
                         binding.userEmail.setError(null);
+                        binding.userEmail.setErrorEnabled(false);
+                    }
                 }
             });
 
             binding.testoPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus)
+                    if(hasFocus) {
                         binding.userPassword.setError(null);
+                        binding.userPassword.setErrorEnabled(false);
+                    }
                 }
             });
 

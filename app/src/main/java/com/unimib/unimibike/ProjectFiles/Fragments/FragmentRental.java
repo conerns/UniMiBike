@@ -1,11 +1,8 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.Fragments;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,8 +11,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -30,13 +27,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Rack;
 import com.unimib.unimibike.Model.Rental;
+import com.unimib.unimibike.Model.Report;
 import com.unimib.unimibike.Model.Resource;
+import com.unimib.unimibike.ProjectFiles.BottomSheets.BottomSheetStartRental;
+import com.unimib.unimibike.ProjectFiles.BottomSheets.BottomSheetEndRental;
+import com.unimib.unimibike.ProjectFiles.BottomSheets.BottomSheetRack;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
 
 import com.unimib.unimibike.Util.CloseRentalCallback;
+import com.unimib.unimibike.Util.ForegroundService;
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
@@ -47,7 +49,7 @@ import com.unimib.unimibike.databinding.FragmentNoleggioBinding;
 import java.util.HashMap;
 import java.util.List;
 
-public class FrameNoleggio extends Fragment implements OnMapReadyCallback, FragmentCallback, GeolocationCallback, CloseRentalCallback {
+public class FragmentRental extends Fragment implements OnMapReadyCallback, FragmentCallback, GeolocationCallback, CloseRentalCallback {
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mHashMap = new HashMap<>();
     private LatLng mCurrentPosition;
@@ -62,6 +64,9 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     private MutableLiveData<List<Rental>> activeRentalMutableLiveData;
     private FragmentNoleggioBinding binding;
     private Geolocation geo;
+
+    public static Report reportAfterRentalClosed;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,20 +75,18 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         rentalCallback = this;
         geolocationCallback = this;
         closeRentalCallback = this;
-        //user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
+        //user_id = getActivity().getIntent().getIntExtra(Costants.USER_ID, 0);
         user_id = SaveSharedPreference.getUserID(getContext());
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         binding.sbloccaBici.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                BottomSheet bsdf = new BottomSheet(rentalCallback);
+                BottomSheetStartRental bsdf = new BottomSheetStartRental(rentalCallback);
                 assert getFragmentManager() != null;
                 bsdf.show(getFragmentManager() ,"bottomsheetlayout");
             }
         });
-
-
         getUserPosition();
         getRentalInProgress();
         return view;
@@ -173,6 +176,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
             public void onChanged(Rental rental) {
                 binding.sbloccaBici.setVisibility(View.GONE);
                 update_view_rental_in_progress(bike_used, rental);
+                startService(rental);
             }
         };
         rentalMutableLiveData = rentalsViewModel.starRental(getContext(), user_id,bike_used.getId());
@@ -183,7 +187,7 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
 
 
     private void startbottomSheet(Rental rental) {
-        BottomSheetEnd bsdf = new BottomSheetEnd(rental,getActivity().getApplicationContext(), closeRentalCallback);
+        BottomSheetEndRental bsdf = new BottomSheetEndRental(rental,getActivity().getApplicationContext(), closeRentalCallback);
         assert getFragmentManager() != null;
         bsdf.show(getFragmentManager() ,"un altro botto sheet");
     }
@@ -212,9 +216,11 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
         MutableLiveData<Resource<Bike>> bike;
         BikesViewModel bikesViewModel = new BikesViewModel();
         final Observer<Resource<Bike>> newObserver = new Observer<Resource<Bike>>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onChanged(Resource<Bike> bikeResource) {
                 if(bikeResource.getStatusCode() == 200) {
+                    startService(rental);
                     update_view_rental_in_progress(bikeResource.getData(), rental);
                     binding.sbloccaBici.setVisibility(View.GONE);
                 }
@@ -238,6 +244,22 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
     public void afterRentalIsClosedCallback() {
         binding.sbloccaBici.setVisibility(View.VISIBLE);
         binding.rentalUpCardview.setVisibility(View.GONE);
+        stopService();
+        if (reportAfterRentalClosed != null) {
+            FragmentReport fragmentReport = new FragmentReport();
+            fragmentReport.newReport(reportAfterRentalClosed, requireActivity(), false);
+        }
+    }
+
+    public void startService(final Rental rental) {
+        String strDate = getString(R.string.start_rental_time)+rental.getStartedOn().substring(11);
+        Intent serviceIntent = new Intent(getActivity(), ForegroundService.class);
+        serviceIntent.putExtra("inputExtra", strDate);
+        ContextCompat.startForegroundService(getActivity(), serviceIntent);
+    }
+    public void stopService() {
+        Intent serviceIntent = new Intent(getActivity(), ForegroundService.class);
+        getActivity().stopService(serviceIntent);
     }
 }
 

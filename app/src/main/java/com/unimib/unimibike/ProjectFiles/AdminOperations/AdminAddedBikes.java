@@ -13,6 +13,7 @@ import android.view.View;
 import com.unimib.unimibike.Model.BikeHistory;
 import com.unimib.unimibike.ProjectFiles.Adapters.BikeAddedListAdapter;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikeHistoryViewModel;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.databinding.ActivityListaAdminHistoryAddedBikeBinding;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class AdminAddedBikes extends AppCompatActivity {
         binding = ActivityListaAdminHistoryAddedBikeBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        getBikesHistory(getIntent().getIntExtra("user_id", 0));
+        getBikesHistory(getIntent().getIntExtra(Costants.USER_ID, 0));
     }
 
     public void getBikesHistory(int user_id){

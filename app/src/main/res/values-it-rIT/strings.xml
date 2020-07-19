@@ -89,4 +89,8 @@
     <string name="switch_text">Ricordami</string>
     <string name="too_far_from_rack">Sei lontano dalla rastrelliera</string>
     <string name="too_far_from_rack_text">Sei troppo lontano dalla rastrelliera, per poterla prenotare ti preghiamo di avvicinarti</string>
+    <string name="bike_not_fixable_title">Bicicletta non riparabile</string>
+    <string name="bike_not_fixable_message">Controlla che la bicicletta sia in manutenzione o se ci sono posti disponibili nella rastrelliera</string>
+    <string name="report_after_rental_title">Guasto salvato</string>
+    <string name="report_after_rental_message">Il guasto è stato salvato e verrà inviato non appena si concluderà il noleggio</string>
 </resources>

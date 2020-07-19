@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.BottomSheets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -23,6 +23,7 @@ import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.FragmentCallback;
 import com.unimib.unimibike.Util.Geolocation;
 import com.unimib.unimibike.Util.GeolocationCallback;
@@ -31,7 +32,7 @@ import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.databinding.BottomSheetLayoutBinding;
 
-public class BottomSheet extends BottomSheetDialogFragment implements GeolocationCallback{
+public class BottomSheetStartRental extends BottomSheetDialogFragment implements GeolocationCallback{
     private FragmentCallback    rentalCallback;
     private BottomSheetLayoutBinding binding;
     private BikesViewModel bikesViewModel;
@@ -58,6 +59,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements Geolocatio
                 }else{
                     binding.bikeCode.setError(getString(R.string.should_not_be_empty));
                     binding.bikeCode.setErrorEnabled(true);
+                    binding.bikeCode.clearFocus();
                 }
             }
         });
@@ -88,7 +90,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements Geolocatio
         return view;
     }
 
-    public BottomSheet(FragmentCallback rentalCallback){
+    public BottomSheetStartRental(FragmentCallback rentalCallback){
         this.rentalCallback = rentalCallback;
     }
     private void getUserPosition(){
@@ -173,7 +175,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements Geolocatio
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
                     binding.bikeCodeText.setText(String.valueOf(returnValue));
                 }
                 break;

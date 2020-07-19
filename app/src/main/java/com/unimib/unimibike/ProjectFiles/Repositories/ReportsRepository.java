@@ -1,6 +1,7 @@
 package com.unimib.unimibike.ProjectFiles.Repositories;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -81,6 +82,7 @@ public class ReportsRepository {
 
             @Override
             public void onError(String errorTitle, String errorMessage) {
+                Log.d("ReportOnError", errorMessage);
                 Resource<Bike> bikeResource = new Resource<>();
                 bikeResource.setStatusCode(404);
                 report.postValue(bikeResource);
