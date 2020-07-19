@@ -4,6 +4,7 @@
         android:id="@+id/id_noleggio"
         android:icon="@drawable/icona_bici"
         android:title="@string/noleggio"
+
     />
     <item
         android:id="@+id/id_rastrelliere"

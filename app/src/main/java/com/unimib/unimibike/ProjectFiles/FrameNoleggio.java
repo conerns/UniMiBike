@@ -1,5 +1,10 @@
 package com.unimib.unimibike.ProjectFiles;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +14,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -75,6 +82,8 @@ public class FrameNoleggio extends Fragment implements OnMapReadyCallback, Fragm
                 bsdf.show(getFragmentManager() ,"bottomsheetlayout");
             }
         });
+
+
         getUserPosition();
         getRentalInProgress();
         return view;
