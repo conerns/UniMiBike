@@ -82,7 +82,6 @@ public class Principal extends AppCompatActivity implements OnGeolocationActive 
 
     public void createView(){
         setContentView(R.layout.initial_page_bottom);
-
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(listener);
         utente = getIntent().getStringExtra(Costants.USER_MAIL);
