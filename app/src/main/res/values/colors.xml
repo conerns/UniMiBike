@@ -13,6 +13,7 @@
     <color name="color_black">#000000</color>
 
     <!-- dark mode -->
+    <color name="softTheme">#efedec</color>
     <color name="errorOnBlack">#B388ff</color>
     <color name="backgroundDark">#222831</color>
     <color name="strokesDark">#6200ee</color>

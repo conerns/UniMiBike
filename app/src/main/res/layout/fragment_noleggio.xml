@@ -19,7 +19,7 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <Button
-        style="@style/Widget.MyTheme.Button"
+        style="@style/Widget.MyTheme.MaterialButton"
         android:id="@+id/sblocca_bici"
         android:layout_width="150dp"
         android:layout_height="wrap_content"

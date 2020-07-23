@@ -97,7 +97,7 @@
 
         <Button
             android:id="@+id/send_fault_report"
-            style="@style/Widget.MyTheme.Button"
+            style="@style/Widget.MyTheme.MaterialButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="161dp"
@@ -181,7 +181,7 @@
 
         <Button
             android:id="@+id/send_fixed_report"
-            style="@style/Widget.MyTheme.Button"
+            style="@style/Widget.MyTheme.MaterialButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="161dp"
