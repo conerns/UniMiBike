@@ -96,4 +96,8 @@
     <string name="too_far_from_rack_text">You are too far from the rack, please go closer to rent this bike.</string>
     <string name="bike_not_fixable_title">Bike not fixable</string>
     <string name="bike_not_fixable_message">Check if this bike is broken or if the rack has at least one stand available</string>
+    <string name="incorrect_bike_add">No space</string>
+    <string name="incorrect_bike_add_text">You can not add a new bike in this space. Rack spaces are no longer available.</string>
+    <string name="not_modifed_position">Unmodified position</string>
+    <string name="not_correct_bike_modify">Current position can not be modified, it is not possible at the due to the bike status or rack space availabale. Please insert vali data and retry.</string>
 </resources>

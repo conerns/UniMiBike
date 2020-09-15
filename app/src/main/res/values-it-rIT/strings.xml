@@ -64,8 +64,8 @@
     <string name="confirm_fh_modify">"Sei sicuro di voler spostare la bicicletta con id "</string>
     <string name="confirm_sh_modify">", nella rasterlliera "</string>
     <string name="delete_bike">Rimuovi bicicletta</string>
-    <string name="remove_bike_desc">Stai per rimuovere la bicicletta</string>
-    <string name="remove_bike_desc_finale">" ? Questa bicicletta non sarà più disponibile"</string>
+    <string name="remove_bike_desc">"Stai per rimuovere la bicicletta "</string>
+    <string name="remove_bike_desc_finale">\? Questa bicicletta non sarà più disponibile</string>
     <string name="confirm_message">Conferma</string>
     <string name="cancel_message">Cancella</string>
     <string name="removed_bike">La bicicletta è stata rimossa</string>
@@ -93,4 +93,8 @@
     <string name="bike_not_fixable_message">Controlla che la bicicletta sia in manutenzione o se ci sono posti disponibili nella rastrelliera</string>
     <string name="report_after_rental_title">Guasto salvato</string>
     <string name="report_after_rental_message">Il guasto è stato salvato e verrà inviato non appena si concluderà il noleggio</string>
+    <string name="incorrect_bike_add">Nessuna dispobilità</string>
+    <string name="incorrect_bike_add_text">Non è possibile aggiungere una nuova bicicletta nella rastrelliera indicata. Nessun posto disponibile.</string>
+    <string name="not_modifed_position">Posizione non modificata</string>
+    <string name="not_correct_bike_modify">La posizione corrente non è modificabile, non è possibile eseguire la modifica con i dati inseriti. Si prega di inserire dati validi e riprovare.</string>
 </resources>
