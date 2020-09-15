@@ -47,9 +47,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:hint="@string/select_end_rack"
+        app:boxStrokeColor="@null"
+
         app:endIconCheckable="true"
         app:endIconDrawable="@drawable/baseline_center_focus_weak_24"
         app:endIconMode="custom"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_posizione_bici">

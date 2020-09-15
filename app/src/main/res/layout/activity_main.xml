@@ -6,7 +6,22 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".ProjectFiles.ActivityLogin">
+    tools:context=".ProjectFiles.MainActivity">
+
+    <Button
+        android:id="@+id/accedi_utente"
+        style="@style/Widget.MyTheme.Button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginLeft="161dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginRight="162dp"
+        android:text="@string/accedi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_password" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/user_email"
@@ -39,13 +54,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="26dp"
         android:hint="@string/utente_password"
+        app:layout_constraintBottom_toTopOf="@+id/accedi_utente"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_email"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -92,6 +107,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#66000000"
+        android:elevation="8dp"
+
         android:gravity="center|center_horizontal|center_vertical"
         android:visibility="gone">
 
@@ -99,44 +116,9 @@
             android:id="@+id/pBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/main_activity_relative_layout"
             android:theme="@style/Theme.MyApp.UnimibAccent"
-            android:visibility="gone"
-            tools:ignore="NotSibling" />
+            android:visibility="gone" />
     </RelativeLayout>
 
-   <Switch
-        android:id="@+id/ricorda_utente"
-        android:theme="@style/SwitchTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:textSize="16sp"
-        android:checked="true"
-        android:textColor="@color/color_grey"
-        android:text="@string/switch_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_password" />
-
-    <Button
-        android:id="@+id/accedi_utente"
-        style="@style/Widget.MyTheme.Button"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginLeft="161dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginRight="162dp"
-        android:text="@string/accedi"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.425"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ricorda_utente" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

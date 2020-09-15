@@ -3,6 +3,8 @@ package com.unimib.unimibike.ProjectFiles.Repositories;
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.unimib.unimibike.Model.BikeHistory;
 import com.unimib.unimibike.Util.ServerResponseParserCallback;

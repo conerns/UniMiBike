@@ -1,7 +1,8 @@
-package com.unimib.unimibike.ProjectFiles.Fragments;
+package com.unimib.unimibike.ProjectFiles;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -13,37 +14,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Report;
 import com.unimib.unimibike.Model.Resource;
-import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.AggiungiNuovaBici;
 import com.unimib.unimibike.ProjectFiles.ViewModels.ReportsViewModel;
 import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.FragmentGuastiBinding;
 
-public class FragmentReport extends Fragment{
-    //private String get_email;
+public class FrameGuasti extends Fragment {
+    private String get_email;
     private String get_role;
     private int get_id;
     private ReportsViewModel reportsViewModel;
-    private BikesViewModel bikesViewModel;
     private MutableLiveData <Resource<Report>> reportMutableLiveDate;
-    private MutableLiveData <Resource<Bike>> bikeMutableLiveData;
     private FragmentGuastiBinding binding;
+    View w;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
@@ -54,17 +54,15 @@ public class FragmentReport extends Fragment{
                                             getString(R.string.absent_tire), getString(R.string.malfunctioning_breaks), getString(R.string.altro_guasto)
                             };
 
-        //if(SaveSharedPreference.getUserName(getContext().getApplicationContext()).length() != 0) {
-            //get_email = SaveSharedPreference.getUserName(getContext().getApplicationContext());
+        if(SaveSharedPreference.getUserName(getContext().getApplicationContext()).length() != 0) {
+            get_email = SaveSharedPreference.getUserName(getContext().getApplicationContext());
             get_role = SaveSharedPreference.getPrefUserRole(getContext().getApplicationContext());
             get_id = SaveSharedPreference.getUserID(getContext().getApplicationContext());
-        /*}else {
-            get_role = getArguments().getString(Costants.USER_ROLE);
-            get_email = getArguments().getString(Costants.USER_MAIL);
-            get_id = getArguments().getInt(Costants.USER_ID);
-        }*/
-
-
+        }else {
+            get_role = getArguments().getString("USER-ROLE");
+            get_email = getArguments().getString("USER-MAIL");
+            get_id = getArguments().getInt("USER-ID");
+        }
         binding = FragmentGuastiBinding.inflate(getLayoutInflater());
         binding.bikeFalutDesciptionText.setFilters((new InputFilter[]{new InputFilter.LengthFilter(120)}));
         View view = binding.getRoot();
@@ -122,57 +120,41 @@ public class FragmentReport extends Fragment{
     }
 
     private void sendFixReport() {
+        MutableLiveData<Resource<Bike>> bike;
         reportsViewModel = new ReportsViewModel();
         Observer<Resource<Bike>> observer = new Observer<Resource<Bike>>() {
             @Override
             public void onChanged(Resource<Bike> bikeResource) {
-                Log.d("TAGunico", bikeResource.getStatusCode()+"");
                 if(bikeResource.getStatusCode() == 200) {
+                    Log.d("TAGunico", bikeResource.toString());
                     if(bikeResource.getData() != null) {
                         binding.valoriRastrelliereFine.setText(null);
                         binding.bikeCodeTextFixed.setText(null);
-                        bikeFixedDialog();
+                        funzione_dialog();
                     }
-                    else{
-                        bikeNotFixableDialog();
+                    else {
+                        binding.bikeCodeFixed.setErrorEnabled(true);
+                        binding.bikeCodeFixed.setError(getString(R.string.insert_vaild_value));
+                        binding.posizioneBiciNuova.setErrorEnabled(true);
+                        binding.posizioneBiciNuova.setError(getString(R.string.insert_vaild_value));
                     }
-                }else if(bikeResource.getStatusCode() == 404){
-                    binding.bikeCodeFixed.setErrorEnabled(true);
-                    binding.bikeCodeFixed.setError(getString(R.string.insert_vaild_value));
-                    binding.posizioneBiciNuova.setErrorEnabled(true);
-                    binding.posizioneBiciNuova.setError(getString(R.string.insert_vaild_value));
-                    binding.bikeCodeFixed.clearFocus();
-                    binding.posizioneBiciNuova.clearFocus();
                 }
             }
         };
-        bikeMutableLiveData = reportsViewModel.fixReport(getActivity().getApplicationContext(),
+        bike = reportsViewModel.fixReport(getActivity().getApplicationContext(),
                 SaveSharedPreference.getUserID(getActivity().getApplicationContext()),
                 Integer.parseInt(binding.valoriRastrelliereFine.getText().toString()),
                 Integer.parseInt(binding.bikeCodeTextFixed.getText().toString())
         );
-        bikeMutableLiveData.observe(this, observer);
+        bike.observe(this, observer);
     }
 
-    private void bikeFixedDialog() {
+    private void funzione_dialog() {
         DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.fixed_message), getString(R.string.fixed_message_text));
         newFragment.show(getFragmentManager(), "dialog");
     }
 
-    private void bikeNotFixableDialog(){
-        DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.bike_not_fixable_title), getString(R.string.bike_not_fixable_message));
-        newFragment.show(getFragmentManager(), "dialog");
-    }
 
-    private void bikeInRentalDialog(){
-        DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.report_after_rental_title), getString(R.string.report_after_rental_message));
-        newFragment.show(getFragmentManager(), "dialog");
-    }
-
-    private void bikeReportSuccessDialog(){
-        DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.report_sent), getString(R.string.report_sent_body));
-        newFragment.show(getFragmentManager(), "dialog");
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -186,11 +168,10 @@ public class FragmentReport extends Fragment{
         binding.sendFaultReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("sendFaultReport", binding.typeFaultReport.getEditText().getText().toString());
-                Log.d("sendFaultReport", binding.bikeCodeFault.getEditText().getText().toString());
                 if(checkType(binding.typeFaultReport.getEditText().getText().toString())
                     & checkIdBike(binding.bikeCodeFault.getEditText().getText().toString())) {
-                    checkIfBikeIsInRental();
+                    Report r = createReport();
+                    newReport(r);
                 }
             }
         });
@@ -242,40 +223,9 @@ public class FragmentReport extends Fragment{
         });
     }
 
-    public void checkIfBikeIsInRental(){
-        bikesViewModel = new BikesViewModel();
-        final Report r = createReport();
-        Observer<Resource<Bike>> observer = new Observer<Resource<Bike>>() {
-            @Override
-            public void onChanged(Resource<Bike> bikeResource) {
-                Log.d("aaa", bikeResource.getData().getBikeState().describeContents()+"");
-                if(bikeResource.getStatusCode() == 200) {
-                    if(bikeResource.getData() != null) {
-                        if(bikeResource.getData().getBikeState().getDescription().equals("Noleggiata")){
-                            FragmentRental.reportAfterRentalClosed = r;
-                            bikeInRentalDialog();
-                            binding.bikeCodeFault.getEditText().setText("");
-                            binding.typeFaultReport.getEditText().setText("");
-                            binding.bikeFalutDesciption.getEditText().setText("");
-                        }
-                        else
-                            newReport(r, requireActivity(), true);
-                    }
-                }
-            }
-        };
-        Log.d("aaa", "inserito:"+binding.bikeCodeFault.getEditText().getText().toString());
-        bikeMutableLiveData = bikesViewModel.getBike(getActivity().getApplicationContext(),
-                Integer.parseInt(binding.bikeCodeFault.getEditText().getText().toString())
-        );
-        bikeMutableLiveData.observe(this, observer);
-    }
-
     public boolean checkType(String value){
         if(value.isEmpty()){
             binding.typeFaultReport.setError(getString(R.string.should_not_be_empty));
-            binding.typeFaultReport.setErrorEnabled(true);
-            binding.typeFaultReport.clearFocus();
             return false;
         }
         binding.typeFaultReport.setError(null);
@@ -286,8 +236,6 @@ public class FragmentReport extends Fragment{
     public boolean checkIdBike(String value){
         if(value.isEmpty()){
             binding.bikeCodeFault.setError(getString(R.string.should_not_be_empty));
-            binding.bikeCodeFault.setErrorEnabled(true);
-            binding.bikeCodeFault.clearFocus();
             return false;
         }
         binding.bikeCodeFault.setError(null);
@@ -298,7 +246,6 @@ public class FragmentReport extends Fragment{
         if(binding.valoriRastrelliereFine.getText().length() == 0){
             binding.posizioneBiciNuova.setErrorEnabled(true);
             binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
-            binding.posizioneBiciNuova.clearFocus();
             return false;
         }
         binding.posizioneBiciNuova.setErrorEnabled(false);
@@ -310,7 +257,6 @@ public class FragmentReport extends Fragment{
         if(binding.bikeCodeTextFixed.getText().length() == 0){
             binding.bikeCodeFixed.setErrorEnabled(true);
             binding.bikeCodeFixed.setError(getString(R.string.should_not_be_empty));
-            binding.bikeCodeFixed.clearFocus();
             return false;
         }
         binding.bikeCodeFixed.setError(null);
@@ -340,27 +286,27 @@ public class FragmentReport extends Fragment{
     }
 
 
-    public void newReport(Report report, FragmentActivity fragmentActivity, final boolean type){
+    public void newReport(Report report){
         reportsViewModel = new ReportsViewModel();
         final Observer<Resource<Report>> observer = new Observer<Resource<Report>>() {
             @Override
             public void onChanged(Resource<Report> report) {
-                if(type)
-                    if(report.getStatusCode() == 200) {
-                        bikeReportSuccessDialog();
-                        binding.bikeCodeFault.getEditText().setText("");
-                        binding.typeFaultReport.getEditText().setText("");
-                        binding.bikeFalutDesciption.getEditText().setText("");
-                    }else if(report.getStatusCode() == 404){
-                        binding.bikeCodeFault.setErrorEnabled(true);
-                        binding.bikeCodeFault.setError(getString(R.string.insert_vaild_value));
-                        binding.bikeCodeFault.clearFocus();
-                    }
+                if(report.getStatusCode() == 200) {
+                    DialogFragment newFragment = MyAlertDialogFragment.newInstance(getString(R.string.report_sent), getString(R.string.report_sent_body));
+
+                    newFragment.show(getFragmentManager(), "dialog");
+                    binding.bikeCodeFault.getEditText().setText("");
+                    binding.typeFaultReport.getEditText().setText("");
+                    binding.bikeFalutDesciption.getEditText().setText("");
+                }else if(report.getStatusCode() == 404){
+                    binding.bikeCodeFault.setErrorEnabled(true);
+                    binding.bikeCodeFault.setError(getString(R.string.insert_vaild_value));
+                }
             }
         };
         reportMutableLiveDate = reportsViewModel.sendReport(getContext(), report);
-//        reportMutableLiveDate.observe(requireActivity(), observer);
-        reportMutableLiveDate.observe(fragmentActivity, observer);
+
+        reportMutableLiveDate.observe(requireActivity(), observer);
     }
 
     private void checkCameraPermission(final int caller) {
@@ -378,21 +324,24 @@ public class FragmentReport extends Fragment{
         switch(requestCode) {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
+                    // TODO Extract the data returned from the child Activity.
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
                     binding.bikeCodeTextFault.setText(String.valueOf(returnValue));
                 }
                 break;
             }
             case (1) :{
                 if (resultCode == Activity.RESULT_OK) {
-                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
+                    // TODO Extract the data returned from the child Activity.
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
                     binding.bikeCodeTextFixed.setText(String.valueOf(returnValue));
                 }
                 break;
             }
             case (2) :{
                 if (resultCode == Activity.RESULT_OK) {
-                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
+                    // TODO Extract the data returned from the child Activity.
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
                     binding.valoriRastrelliereFine.setText(String.valueOf(returnValue));
                 }
                 break;

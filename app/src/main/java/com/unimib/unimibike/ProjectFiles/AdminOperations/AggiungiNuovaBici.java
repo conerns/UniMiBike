@@ -1,14 +1,20 @@
 package com.unimib.unimibike.ProjectFiles.AdminOperations;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -19,7 +25,7 @@ import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.Costants;
+import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
@@ -27,7 +33,7 @@ import com.unimib.unimibike.databinding.ActivityAggiungiNuovaBiciBinding;
 
 import java.util.List;
 
-public class AdminAddNewBike extends AppCompatActivity {
+public class AggiungiNuovaBici extends AppCompatActivity {
     private ActivityAggiungiNuovaBiciBinding binding;
     private RacksViewModel racksViewModel;
     private BikesViewModel bikeViewModel;
@@ -85,7 +91,7 @@ public class AdminAddNewBike extends AppCompatActivity {
         });
     }
     private void funzione_dialog() {
-        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminAddNewBike.this, R.style.Theme_MyTheme_Dialog);
+        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);
         mMaterialDialog
                 .setTitle(R.string.correct_bike_add)
                 .setMessage(getString(R.string.correct_bike_add_text))
@@ -102,10 +108,13 @@ public class AdminAddNewBike extends AppCompatActivity {
         final Observer<List<Rack>> observer = new Observer<List<Rack>>() {
             @Override
             public void onChanged(List<Rack> racks) {
-                if(checkRackValue()){
-                    if(checkRackExistence(racks) && controlloCodice()) {
-                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminAddNewBike.this, R.style.Theme_MyTheme_Dialog);
-                        mMaterialDialog
+                if(binding.valoriRastrelliereFine.getText().length() != 0){
+                    for(Rack rack: racks) {
+                        if (rack.getId() == Integer.parseInt(binding.valoriRastrelliereFine.getText().toString()) &
+                            controlloCodice()) {
+                            Log.d("Controllo", String.valueOf(binding.valoriRastrelliereFine.getId() == Integer.parseInt(binding.valoriRastrelliereFine.getText().toString())));
+                            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AggiungiNuovaBici.this, R.style.Theme_MyTheme_Dialog);
+                            mMaterialDialog
                                 .setTitle(R.string.confirm_dati)
                                 .setMessage(getString(R.string.confirm_first_half) + binding.valoriRastrelliereFine.getText().toString()
                                         + getString(R.string.confirm_second_half) + binding.contenutoCodeBike.getText().toString())
@@ -122,9 +131,15 @@ public class AdminAddNewBike extends AppCompatActivity {
                                     }
                                 })
                                 .show();
-                        return;
+
+                            return;
+                        }
                     }
+                    binding.posizioneBiciNuova.setError(getString(R.string.insert_vaild_value));
+                    return;
                 }
+                binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
+                return;
             }
         };
         racksliveData = racksViewModel.getListOfRacks(this.getApplicationContext());
@@ -150,51 +165,17 @@ public class AdminAddNewBike extends AppCompatActivity {
         bikeLiveData.observe(this, observer);
     }
 
-    public boolean checkRackValue(){
-        if(binding.valoriRastrelliereFine.getText().length() == 0){
-            binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
-            binding.posizioneBiciNuova.setErrorEnabled(true);
-            binding.posizioneBiciNuova.clearFocus();
-            binding.idCodiceSblocco.clearFocus();
-            return false;
-        }
-        binding.posizioneBiciNuova.setError(null);
-        binding.posizioneBiciNuova.setErrorEnabled(false);
-        return true;
-    }
 
-    public boolean checkRackExistence(final List<Rack> racks){
-        for(Rack rack: racks) {
-            if (rack.getId() == Integer.parseInt(binding.valoriRastrelliereFine.getText().toString())) {
-                binding.posizioneBiciNuova.setError(null);
-                binding.posizioneBiciNuova.setErrorEnabled(false);
-                return true;
-            }
-        }
-        binding.posizioneBiciNuova.setError(getString(R.string.should_not_be_empty));
-        binding.posizioneBiciNuova.setErrorEnabled(true);
-        binding.posizioneBiciNuova.clearFocus();
-        binding.idCodiceSblocco.clearFocus();
-        return false;
-    }
 
     private boolean controlloCodice(){
         if(binding.contenutoCodeBike.getText().length() == 0){
             binding.idCodiceSblocco.setError(getString(R.string.should_not_be_empty));
-            binding.idCodiceSblocco.setErrorEnabled(true);
-            binding.idCodiceSblocco.clearFocus();
-            binding.posizioneBiciNuova.clearFocus();
             return false;
         }
         if(binding.contenutoCodeBike.getText().length() != 4){
             binding.idCodiceSblocco.setError(getString(R.string.only_four_digits));
-            binding.idCodiceSblocco.setErrorEnabled(true);
-            binding.idCodiceSblocco.clearFocus();
-            binding.posizioneBiciNuova.clearFocus();
             return false;
         }
-        binding.idCodiceSblocco.setError(null);
-        binding.idCodiceSblocco.setErrorEnabled(false);
         return true;
     }
 
@@ -214,7 +195,7 @@ public class AdminAddNewBike extends AppCompatActivity {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
                     binding.valoriRastrelliereFine.setText(String.valueOf(returnValue));
                 }
                 break;

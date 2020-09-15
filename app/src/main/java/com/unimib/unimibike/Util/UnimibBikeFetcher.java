@@ -24,6 +24,10 @@ import java.util.List;
 public class UnimibBikeFetcher {
 
     private static final String TAG = "UnimibBikeFetcher";
+    private static final String LAT = "?lat=";
+    private static final String LONG = "&long=";
+    private static final String MAX_DISTANCE = "&max_distance=";
+    private static final String ACTIVE = "?active=yes";
 
     public static void postUserLogin(final Context context, String email, String password, final ServerResponseParserCallback<User> return_value){
         final JSONObject dati_json_form = createJSONLogin(email, password);
@@ -412,10 +416,7 @@ public class UnimibBikeFetcher {
             public void onSuccess(JSONObject response) {
                 if(active){
                     List<Rental> rentalInProgress = new ArrayList<>();
-                    if(!response.isNull("rental"))
-                        rentalInProgress.add(getRentalFromJSONObject(response));
-                    else
-                        rentalInProgress.add(new Rental());
+                    rentalInProgress.add(getRentalFromJSONObject(response));
                     serverResponseParserCallback.onSuccess(rentalInProgress);
                 }
                 else serverResponseParserCallback.onSuccess(getRentalsFromJSONObject(response));
@@ -570,14 +571,12 @@ public class UnimibBikeFetcher {
                 rack.setAddressLocality(mJson.getString("address_locality"));
                 rack.setStreetAddress(mJson.getString("street_address"));
                 rack.setLocationDescription(mJson.getString("location_description"));
-                if(!mJson.isNull("buildings")) {
-                    List<Building> buildings = new ArrayList<>();
-                    JSONArray buildingsArray = mJson.getJSONArray("buildings");
-                    for (int i = 0; i < buildingsArray.length(); i++) {
-                        buildings.add(createBuildingFromJSONObject(buildingsArray.getJSONObject(i)));
-                    }
-                    rack.setBuildings(buildings);
+                List<Building> buildings = new ArrayList<>();
+                JSONArray buildingsArray = mJson.getJSONArray("buildings");
+                for (int i = 0; i < buildingsArray.length(); i++) {
+                    buildings.add(createBuildingFromJSONObject(buildingsArray.getJSONObject(i)));
                 }
+                rack.setBuildings(buildings);
                 if (mJson.has("distance")) {
                     rack.setDistance(mJson.getDouble("distance"));
                 }

@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="MapRentalTag"
-        tools:context="com.unimib.unimibike.ProjectFiles.Fragments.FragmentRental"
+        tools:context="com.unimib.unimibike.ProjectFiles.FrameNoleggio"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
@@ -29,7 +29,6 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
         android:text="@string/sblocco_bici"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

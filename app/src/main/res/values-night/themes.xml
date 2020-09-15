@@ -8,7 +8,7 @@
         <item name="colorPrimary">@color/unimibDark</item>
         <item name="colorPrimaryVariant">@color/unimibDarkVariant</item>
 
-        <item name="colorSecondary">@color/darkGrey</item>
+        <item name="colorSecondary">@color/purple_link</item>
         <item name="colorSecondaryVariant">@color/purple_link_variant</item>
 
         <!-- colore dello sfondo nei fragment -->

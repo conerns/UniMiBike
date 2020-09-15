@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles.BottomSheets;
+package com.unimib.unimibike.ProjectFiles;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,13 +24,12 @@ import com.unimib.unimibike.ProjectFiles.ViewModels.RacksViewModel;
 import com.unimib.unimibike.ProjectFiles.ViewModels.RentalsViewModel;
 import com.unimib.unimibike.R;
 import com.unimib.unimibike.Util.CloseRentalCallback;
-import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.databinding.BottomSheetEndBinding;
 
-public class BottomSheetEndRental extends BottomSheetDialogFragment {
+public class BottomSheetEnd extends BottomSheetDialogFragment {
     private BottomSheetEndBinding binding;
     private RacksViewModel racksViewModel;
     private MutableLiveData<Resource<Rack>> bikeLiveData;
@@ -38,7 +37,7 @@ public class BottomSheetEndRental extends BottomSheetDialogFragment {
     private MutableLiveData<Rental> rentalMutableLiveData;
     private Rental mRental;
     private CloseRentalCallback closeRentalCallback;
-    public BottomSheetEndRental(Rental element, Context context, CloseRentalCallback closeRentalCallback){
+    public BottomSheetEnd(Rental element, Context context, CloseRentalCallback closeRentalCallback){
         mRental = element;
         this.closeRentalCallback = closeRentalCallback;
     }
@@ -53,10 +52,6 @@ public class BottomSheetEndRental extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 if(binding.bikeCodeText.getText().length()!=0) {
                     functionGetRack(Integer.parseInt(binding.bikeCodeText.getText().toString()),view);
-                }else{
-                    binding.bikeCode.setError(getString(R.string.should_not_be_empty));
-                    binding.bikeCode.setErrorEnabled(true);
-                    binding.bikeCode.clearFocus();
                 }
             }
         });
@@ -97,9 +92,8 @@ public class BottomSheetEndRental extends BottomSheetDialogFragment {
                 if(rack.getStatusCode() == 200) {
                     DialogFragment newFragment;
                     //se ho una bici e ho posto posso lasciarla nella rastrelliera
-                    if (rack.getData().getAvailableStands() > 0) {
+                    if (rack.getData().getAvailableStands() > 0)
                         ending_rental(mRental, view, getFragmentManager());
-                    }
                     else {
                         newFragment = MyAlertDialogFragment.newInstance(getString(R.string.no_available_stands),
                                 getString(R.string.no_avaliable_stands_message));
@@ -133,7 +127,7 @@ public class BottomSheetEndRental extends BottomSheetDialogFragment {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
                     binding.bikeCodeText.setText(String.valueOf(returnValue));
                 }
                 break;
@@ -148,7 +142,7 @@ public class BottomSheetEndRental extends BottomSheetDialogFragment {
             public void onChanged(Rental rental) {
                 //qui devo fare tutto
                 //prima idea, inserisce il coso di fine
-               // FragmentRental.finishRent();
+               // FrameNoleggio.finishRent();
 
                 DialogFragment newFragment= MyAlertDialogFragment.newInstance(view.getContext().getString(R.string.ended_succs),
                         view.getContext().getString(R.string.rent_ended_mess));

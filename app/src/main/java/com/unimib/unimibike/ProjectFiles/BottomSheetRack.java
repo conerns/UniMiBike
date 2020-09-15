@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles.BottomSheets;
+package com.unimib.unimibike.ProjectFiles;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

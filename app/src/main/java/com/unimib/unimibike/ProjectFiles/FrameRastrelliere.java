@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles.Fragments;
+package com.unimib.unimibike.ProjectFiles;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -26,7 +26,7 @@ import com.unimib.unimibike.databinding.FrameListaRastrelliereBinding;
 
 import java.util.List;
 
-public class FragmentRacks extends Fragment implements GeolocationCallback {
+public class FrameRastrelliere extends Fragment implements GeolocationCallback {
     private RacksListAdapter adapter;
     private LatLng mCurrentPosition;
     private GeolocationCallback geolocationCallback;

@@ -1,4 +1,4 @@
-package com.unimib.unimibike.ProjectFiles.Fragments;
+package com.unimib.unimibike.ProjectFiles;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,16 +14,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.unimib.unimibike.ProjectFiles.AdminOperations.AdminAddedBikes;
-import com.unimib.unimibike.ProjectFiles.AdminOperations.AdminAddNewBike;
-import com.unimib.unimibike.ProjectFiles.AdminOperations.AdminModifyBikePosition;
-import com.unimib.unimibike.ProjectFiles.AdminOperations.AdminRemoveBike;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.AggiungiNuovaBici;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.ModificaPosizione;
+import com.unimib.unimibike.ProjectFiles.AdminOperations.RemoveBike;
 
-import com.unimib.unimibike.ProjectFiles.ActivityLogin;
-import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.FragmentUtenteBinding;
 
-public class FragmentUser extends Fragment {
+public class FrameUtente extends Fragment {
     private String get_email;
     private String get_role;
     private FragmentUtenteBinding binding;
@@ -37,13 +35,13 @@ public class FragmentUser extends Fragment {
             get_role = SaveSharedPreference.getPrefUserRole(getContext().getApplicationContext());
         }
         else {
-            get_role = getArguments().getString(Costants.USER_ROLE);
-            get_email = getArguments().getString(Costants.USER_MAIL);
+            get_role = getArguments().getString("USER-ROLE");
+            get_email = getArguments().getString("USER-MAIL");
         }
         binding.logoutUtente.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                logoutUser();
+                apr_activity();
             }
         });
         return view;
@@ -93,33 +91,32 @@ public class FragmentUser extends Fragment {
 
     }
 
-    public void logoutUser(){
-        SaveSharedPreference.clearUserName(getContext());
-        Intent mPagina = new Intent(getActivity(), ActivityLogin.class);
+    public void apr_activity(){
+        SaveSharedPreference.clearUserName(getContext().getApplicationContext());
+        Intent mPagina = new Intent(getActivity(), MainActivity.class);
         startActivity(mPagina);
         Activity activity = getActivity();
-        assert activity != null;
         activity.finish();
     }
 
     public void apri_modifica_posizione(){
-        Intent mPagina = new Intent(getActivity(), AdminModifyBikePosition.class);
+        Intent mPagina = new Intent(getActivity(), ModificaPosizione.class);
         startActivity(mPagina);
     }
     public void apri_remove_biciletta(){
-        Intent mPagina = new Intent(getActivity(), AdminRemoveBike.class);
+        Intent mPagina = new Intent(getActivity(), RemoveBike.class);
         startActivity(mPagina);
     }
     public void apri_aggiungi_biciletta(){
-        Intent mPagina = new Intent(getActivity(), AdminAddNewBike.class);
+        Intent mPagina = new Intent(getActivity(), AggiungiNuovaBici.class);
         startActivity(mPagina);
     }
 
     public void apri_storico_biciclette_aggiunte(){
         Intent mPagina = new Intent(getActivity(), AdminAddedBikes.class);
-        int user_id = getActivity().getIntent().getIntExtra(Costants.USER_ID, 0);
+        int user_id = getActivity().getIntent().getIntExtra("USER-ID", 0);
         Log.d("FRAMEUTENTE", user_id+"");
-        mPagina.putExtra(Costants.USER_ID, user_id);
+        mPagina.putExtra("user_id", user_id);
         startActivity(mPagina);
     }
 }

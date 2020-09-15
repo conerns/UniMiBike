@@ -18,13 +18,12 @@ import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
-import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.Util.SaveSharedPreference;
 import com.unimib.unimibike.databinding.ModificaPosizioneBiciBinding;
 
-public class AdminModifyBikePosition extends AppCompatActivity {
+public class ModificaPosizione extends AppCompatActivity {
     private BikesViewModel bikesViewModel;
     private MutableLiveData<Resource<Bike>> mutableLiveData;
     private ModificaPosizioneBiciBinding binding;
@@ -92,8 +91,12 @@ public class AdminModifyBikePosition extends AppCompatActivity {
 
 
     public void applyModify(){
+        binding.posizioneBiciFinale.setError(null);
+        binding.idPosizioneBici.setError(null);
+        binding.posizioneBiciFinale.setErrorEnabled(false);
+        binding.idPosizioneBici.setErrorEnabled(false);
         if(controlloId() & controlloRack()){
-            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminModifyBikePosition.this, R.style.Theme_MyTheme_Dialog);
+            MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(ModificaPosizione.this, R.style.Theme_MyTheme_Dialog);
             mMaterialDialog
                 .setTitle(R.string.confirm_dati)
                 .setMessage(getString(R.string.confirm_fh_modify) + binding.bikeCodeTextFault.getText().toString()
@@ -115,24 +118,19 @@ public class AdminModifyBikePosition extends AppCompatActivity {
     }
 
     private boolean controlloRack() {
+        binding.valoriRastrelliereFine.setError(null);
         if(binding.valoriRastrelliereFine.getText().length() == 0){
             binding.posizioneBiciFinale.setError(getString(R.string.should_not_be_empty));
-            binding.posizioneBiciFinale.setErrorEnabled(true);
             return false;
         }
-        binding.valoriRastrelliereFine.setError(null);
-        binding.posizioneBiciFinale.setErrorEnabled(false);
         return true;
     }
 
     private boolean controlloId() {
         if(binding.bikeCodeTextFault.getText().length() == 0){
             binding.idPosizioneBici.setError(getString(R.string.should_not_be_empty));
-            binding.idPosizioneBici.setErrorEnabled(true);
             return false;
         }
-        binding.idPosizioneBici.setError(null);
-        binding.idPosizioneBici.setErrorEnabled(false);
         return true;
     }
 
@@ -145,7 +143,7 @@ public class AdminModifyBikePosition extends AppCompatActivity {
                 if(bike.getStatusCode() == 200){
                     binding.bikeCodeTextFault.setText(null);
                     binding.valoriRastrelliereFine.setText(null);
-                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminModifyBikePosition.this, R.style.Theme_MyTheme_Dialog);
+                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(ModificaPosizione.this, R.style.Theme_MyTheme_Dialog);
                     mMaterialDialog
                             .setTitle(R.string.modifed_position)
                             .setMessage(getString(R.string.correct_bike_modify))
@@ -185,7 +183,7 @@ public class AdminModifyBikePosition extends AppCompatActivity {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
                     binding.bikeCodeTextFault.setText(String.valueOf(returnValue));
                 }
                 break;
@@ -193,7 +191,7 @@ public class AdminModifyBikePosition extends AppCompatActivity {
             case (1) :{
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
+                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
                     binding.valoriRastrelliereFine.setText(String.valueOf(returnValue));
                 }
                 break;
