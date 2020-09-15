@@ -1,8 +1,9 @@
-package com.unimib.unimibike.ProjectFiles;
+package com.unimib.unimibike.ProjectFiles.BottomSheets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,28 +17,37 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.unimib.unimibike.Model.Bike;
 import com.unimib.unimibike.Model.Resource;
 import com.unimib.unimibike.ProjectFiles.ViewModels.BikesViewModel;
 import com.unimib.unimibike.R;
+import com.unimib.unimibike.Util.Costants;
 import com.unimib.unimibike.Util.FragmentCallback;
+import com.unimib.unimibike.Util.Geolocation;
+import com.unimib.unimibike.Util.GeolocationCallback;
 import com.unimib.unimibike.Util.MyAlertDialogFragment;
 import com.unimib.unimibike.Util.MyUtils;
 import com.unimib.unimibike.Util.QrReaderActivity;
 import com.unimib.unimibike.databinding.BottomSheetLayoutBinding;
 
-public class BottomSheet extends BottomSheetDialogFragment {
+public class BottomSheetStartRental extends BottomSheetDialogFragment implements GeolocationCallback{
     private FragmentCallback    rentalCallback;
     private BottomSheetLayoutBinding binding;
     private BikesViewModel bikesViewModel;
     private MutableLiveData<Resource<Bike>> bikeLiveData;
+    private Geolocation geo;
+    private GeolocationCallback geolocationCallback;
+    private LatLng mCurrentPosition;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = BottomSheetLayoutBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+        geolocationCallback = this;
+        getUserPosition();
         binding.buttonUnlockBike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,6 +59,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 }else{
                     binding.bikeCode.setError(getString(R.string.should_not_be_empty));
                     binding.bikeCode.setErrorEnabled(true);
+                    binding.bikeCode.clearFocus();
                 }
             }
         });
@@ -79,8 +90,22 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
-    public BottomSheet(FragmentCallback rentalCallback){
+    public BottomSheetStartRental(FragmentCallback rentalCallback){
         this.rentalCallback = rentalCallback;
+    }
+    private void getUserPosition(){
+        if (MyUtils.checkPermissions(getActivity())) {
+            if (MyUtils.isLocationEnabled(getActivity())) {
+                geo = new Geolocation(getActivity(), geolocationCallback);
+                geo.getLastLocation();
+                Log.d("BOTTOM-POSITION", geo.toString());
+            }
+        }
+    }
+
+    @Override
+    public void positionCallback(Location mCurrentPosition) {
+        this.mCurrentPosition = new LatLng(mCurrentPosition.getLatitude(), mCurrentPosition.getLongitude());
     }
 
 
@@ -90,18 +115,35 @@ public class BottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onChanged(Resource<Bike> bike) {
                 DialogFragment newFragment;
+                double distance = -999;
                 if(bike.getStatusCode() == 200) {
-                    if (bike.getData().getBikeState().getDescription().equals("Disponibile")) {
-                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),
-                                getString(R.string.unlock_first_half_message) + bike.getData().getUnlockCode() +
-                                        getString(R.string.unlock_second_half_message));
-                        newFragment.show(getFragmentManager(), "dialog");
+                    if (MyUtils.checkPermissions(getActivity())) {
+                        if (MyUtils.isLocationEnabled(getActivity()) && mCurrentPosition != null) {
+                            distance = Geolocation.distance(mCurrentPosition,
+                                    new LatLng(bike.getData().getRack().getLatitude(),bike.getData().getRack().getLongitude())
+                            );
 
-                        rentalCallback.callbackMethod(true, bike.getData());
-                    } else {
-                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
-                                getString(R.string.not_avaible_message));
+                        }
+                    }
+                    if(distance == -999 || distance > 30000){ //possiamo prenotare nel raggio di 300 metri, sono elastico
+                        Log.d("DISTANCE-RACK", distance + "");
+                        newFragment = MyAlertDialogFragment.newInstance(getString(R.string.too_far_from_rack),
+                                getString(R.string.too_far_from_rack_text));
                         newFragment.show(getFragmentManager(), "dialog");
+                    }
+                    else {
+                        if (bike.getData().getBikeState().getDescription().equals("Disponibile")) {
+                            newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_id_header),
+                                    getString(R.string.unlock_first_half_message) + bike.getData().getUnlockCode() +
+                                            getString(R.string.unlock_second_half_message));
+                            newFragment.show(getFragmentManager(), "dialog");
+
+                            rentalCallback.callbackMethod(true, bike.getData());
+                        } else {
+                            newFragment = MyAlertDialogFragment.newInstance(getString(R.string.unlock_bike_not_avaible),
+                                    getString(R.string.not_avaible_message));
+                            newFragment.show(getFragmentManager(), "dialog");
+                        }
                     }
                     dismiss();
                 }
@@ -133,7 +175,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    int returnValue = data.getBundleExtra("data_detect").getInt("qr_code_detection");
+                    int returnValue = data.getBundleExtra(Costants.DATA_DETECT).getInt(Costants.QR_CODE_DETECTION);
                     binding.bikeCodeText.setText(String.valueOf(returnValue));
                 }
                 break;

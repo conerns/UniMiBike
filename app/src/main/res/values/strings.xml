@@ -4,7 +4,7 @@
     <string name="accedi">Login</string>
     <string name="utente_mail">Insert email</string>
     <string name="utente_password">Insert password</string>
-    <string name="sblocco_bici">Unlock</string>
+    <string name="sblocco_bici">Start</string>
     <!--
         Nomi delle stringhe utilizzate per creare il bottom app navigator
     -->
@@ -26,7 +26,7 @@
     <string name="remove_bike">Remove bike</string>
     <string name="fault_type">Fault type</string>
     <string name="fault_description">Fault description</string>
-    <string name="send_fault_report">Send fault report</string>
+    <string name="send_fault_report">Send report</string>
     <string name="optional">Optional</string>
     <string name="send_fix_report">Set available</string>
     <string name="select_end_rack">Select end rack</string>
@@ -41,6 +41,8 @@
     <string name="altro_guasto">Other</string>
     <string name="report_sent_body">"The report has been succsesfully sent. One of our technician will solve the problem, you can choose another bike to use meanwhile. "</string>
     <string name="report_sent">Report sent</string>
+    <string name="report_after_rental_title">Report saved</string>
+    <string name="report_after_rental_message">The report has been saved and it will be send as soon as the rental in progress is concluded</string>
     <string name="apply_bike_added">Add bike</string>
     <string name="select_bike_position">Select bike position</string>
     <string name="insert_unlock_code">Insert unlock code</string>
@@ -89,4 +91,9 @@
     <string name="request_bad_ending_text">Make sure that all the information you inserted are correct and try again,</string>
     <string name="no_available_stands">There isn\'t available stands</string>
     <string name="no_avaliable_stands_message">You can\'t close rental in this rack, find another</string>
+    <string name="switch_text">Remember me</string>
+    <string name="too_far_from_rack">Far from rack</string>
+    <string name="too_far_from_rack_text">You are too far from the rack, please go closer to rent this bike.</string>
+    <string name="bike_not_fixable_title">Bike not fixable</string>
+    <string name="bike_not_fixable_message">Check if this bike is broken or if the rack has at least one stand available</string>
 </resources>

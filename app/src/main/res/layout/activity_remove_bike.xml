@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.unimib.unimibike.ProjectFiles.AdminOperations.RemoveBike">
+    tools:context="com.unimib.unimibike.ProjectFiles.AdminOperations.AdminRemoveBike"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/id_remove_bike"
         style="@style/Widget.MyTheme.TextInputLayout.OutlinedBox"
@@ -37,14 +39,12 @@
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MyTheme.MaterialButton"
-        android:id="@+id/send_fixed_report"
+        android:id="@+id/send_remove_bike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"
-        android:layout_marginLeft="161dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="162dp"
-        android:layout_marginRight="162dp"
         android:text="@string/delete_bike"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
