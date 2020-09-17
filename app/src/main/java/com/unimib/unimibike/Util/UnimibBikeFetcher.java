@@ -52,8 +52,9 @@ public class UnimibBikeFetcher {
         ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.ADD_BIKES, oggetto_add_bike, new NetworkCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
-                    return_value.onSuccess(new Bike());
-
+                if(!response.isNull("bike")) {
+                    return_value.onSuccess(getBikeFromJSONObject(response));
+                }else return_value.onSuccess(null);
             }
 
             @Override
@@ -85,7 +86,10 @@ public class UnimibBikeFetcher {
         ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.MOD_POSITION, oggettoModifica, new NetworkCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
-                return_value.onSuccess(new Bike());
+                if(!response.isNull("bike")) {
+                    return_value.onSuccess(getBikeFromJSONObject(response));
+                }
+                else return_value.onSuccess(null);
             }
 
             @Override
@@ -100,7 +104,9 @@ public class UnimibBikeFetcher {
         ServerRequest.getInstance(context).postBasicRequest(ServerRoutes.REMOVE_BIKES, oggettoModifica, new NetworkCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
-                return_value.onSuccess(new Bike());
+                if(!response.isNull("bike")) {
+                    return_value.onSuccess(getBikeFromJSONObject(response));
+                }else return_value.onSuccess(null);
             }
 
             @Override

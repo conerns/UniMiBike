@@ -142,22 +142,36 @@ public class AdminModifyBikePosition extends AppCompatActivity {
         final Observer<Resource<Bike>> observer = new Observer<Resource<Bike>>() {
             @Override
             public void onChanged(Resource<Bike> bike) {
-                if(bike.getStatusCode() == 200){
-                    binding.bikeCodeTextFault.setText(null);
-                    binding.valoriRastrelliereFine.setText(null);
+                if(bike.getData() != null) {
+                    if (bike.getStatusCode() == 200) {
+                        binding.bikeCodeTextFault.setText(null);
+                        binding.valoriRastrelliereFine.setText(null);
+                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminModifyBikePosition.this, R.style.Theme_MyTheme_Dialog);
+                        mMaterialDialog
+                                .setTitle(R.string.modifed_position)
+                                .setMessage(getString(R.string.correct_bike_modify))
+                                .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                })
+                                .show();
+                    } else if (bike.getStatusCode() == 404) {
+                        binding.idPosizioneBici.setError(getString(R.string.insert_vaild_value));
+                        binding.posizioneBiciFinale.setError(getString(R.string.insert_vaild_value));
+                    }
+                }
+                else{
                     MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminModifyBikePosition.this, R.style.Theme_MyTheme_Dialog);
                     mMaterialDialog
-                            .setTitle(R.string.modifed_position)
-                            .setMessage(getString(R.string.correct_bike_modify))
+                            .setTitle(R.string.not_modifed_position)
+                            .setMessage(getString(R.string.not_correct_bike_modify))
                             .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                 }
                             })
                             .show();
-                }else if(bike.getStatusCode() == 404){
-                    binding.idPosizioneBici.setError(getString(R.string.insert_vaild_value));
-                    binding.posizioneBiciFinale.setError(getString(R.string.insert_vaild_value));
                 }
             }
         };

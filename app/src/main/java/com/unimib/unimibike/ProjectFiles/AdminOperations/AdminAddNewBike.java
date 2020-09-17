@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -96,6 +97,18 @@ public class AdminAddNewBike extends AppCompatActivity {
                     }
                 }).show();
     }
+    private void funzione_dialog_error() {
+        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminAddNewBike.this, R.style.Theme_MyTheme_Dialog);
+        mMaterialDialog
+                .setTitle(R.string.incorrect_bike_add)
+                .setMessage(getString(R.string.incorrect_bike_add_text))
+                .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).show();
+    }
 
     private void controlloPresente(){
         racksViewModel = new RacksViewModel();
@@ -136,10 +149,16 @@ public class AdminAddNewBike extends AppCompatActivity {
         final Observer<Resource<Bike>> observer = new Observer<Resource<Bike>>() {
             @Override
             public void onChanged(Resource<Bike> bike) {
-                if(bike.getStatusCode() == 200) {
-                    binding.contenutoCodeBike.setText(null);
-                    binding.valoriRastrelliereFine.setText(null);
-                    funzione_dialog();
+                if(bike.getData() != null) {
+                    Log.d("asd", bike.getData().toString());
+                    if(bike.getStatusCode() == 200) {
+                        binding.contenutoCodeBike.setText(null);
+                        binding.valoriRastrelliereFine.setText(null);
+                        funzione_dialog();
+                    }
+                }
+                else{
+                    funzione_dialog_error();
                 }
             }
         };

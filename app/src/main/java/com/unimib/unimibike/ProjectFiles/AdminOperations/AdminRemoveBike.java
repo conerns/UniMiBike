@@ -95,18 +95,25 @@ public class AdminRemoveBike extends AppCompatActivity {
             @Override
             public void onChanged(Resource<Bike> bike) {
                 if(bike.getStatusCode() == 200) {
-                    binding.idRemoveBikeContent.setText(null);
-                    MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminRemoveBike.this, R.style.Theme_MyTheme_Dialog);
-                    mMaterialDialog
-                            .setTitle(R.string.removed_bike)
-                            .setMessage(getString(R.string.correct_bike_remove))
-                            .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
+                    if(bike.getData() != null) {
+                        binding.idRemoveBikeContent.setText(null);
+                        MaterialAlertDialogBuilder mMaterialDialog = new MaterialAlertDialogBuilder(AdminRemoveBike.this, R.style.Theme_MyTheme_Dialog);
+                        mMaterialDialog
+                                .setTitle(R.string.removed_bike)
+                                .setMessage(getString(R.string.correct_bike_remove))
+                                .setPositiveButton(R.string.confirm_message, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                                }
-                            })
-                            .show();
+                                    }
+                                })
+                                .show();
+                    }
+                    else{
+                        binding.idRemoveBike.setError(getString(R.string.insert_vaild_value));
+                        binding.idRemoveBike.setErrorEnabled(true);
+                        binding.idRemoveBike.clearFocus();
+                    }
                 }else if(bike.getStatusCode() == 404){
                     binding.idRemoveBike.setError(getString(R.string.insert_vaild_value));
                     binding.idRemoveBike.setErrorEnabled(true);
