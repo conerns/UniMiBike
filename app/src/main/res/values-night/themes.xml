@@ -6,13 +6,13 @@
 
     <style name="Base.Theme.MyApp" parent="Base.Theme.UnimiBike">
 
-        <item name="colorPrimary">@color/darkThemeCard</item>
+        <item name="colorPrimary">@color/gray_principal</item>
         <item name="colorPrimaryVariant">@color/unimibDarkVariant</item>
         <item name="colorSecondary">@color/color_white</item>
         <item name="colorSecondaryVariant">@color/purple_link_variant</item>
 
         <!-- colore dello sfondo nei fragment -->
-        <item name="android:colorBackground">@color/darkThemeCard</item>
+        <item name="android:colorBackground">@color/backgroundDark</item>
         <item name="colorSurface">@color/darkThemeCard</item> <!-- colore dello sfondo delle card, va bene-->
         <item name="colorError">@color/errorOnBlack</item> <!-- colore dello sfondo delle card, va bene-->
 

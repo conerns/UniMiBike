@@ -11,6 +11,10 @@
     </style>
 
     <style name="Widget.MyTheme.BottomNavigationView.Dark" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@color/backgroundDark</item>
+        <item name="itemBackground">@color/unimibDark</item>
+        <item name="itemIconTint">?attr/colorOnPrimary</item>
+        <item name="itemTextColor">?attr/colorOnPrimary</item>
     </style>
     <style name="Widget.MyTheme.MyCard" parent="CardView">
         <item name="android:tint">?colorPrimary</item>
@@ -23,6 +27,7 @@
     <style name="Widget.MyTheme.MaterialButtonAdmin" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">?attr/colorOnSecondary</item>
         <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="drawableTint">?attr/colorOnSecondary</item>
     </style>
 
     <style name="Widget.MyTheme.Button" parent="Widget.AppCompat.Button">

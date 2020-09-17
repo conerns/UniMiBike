@@ -15,11 +15,16 @@
     <!-- dark mode -->
     <color name="softTheme">#efedec</color>
     <color name="errorOnBlack">#B388ff</color>
-    <color name="backgroundDark">#222831</color>
+    <color name="backgroundDark">#222835</color>
     <color name="strokesDark">#6200ee</color>
     <color name="unimibDark">#1b2027</color>
     <color name="unimibDarkVariant">#7f6d9d</color>
     <color name="darkGrey">#bcbec1</color>
     <color name="darkThemeCard">#222831</color>
+    <color name="gray_principal">#606B82</color>
 
+    <!-- 6A6978
+    6A7791
+    606B82
+    -->
 </resources>
